@@ -29,7 +29,7 @@ public class ReservaController {
 
     @GetMapping("/{id}")
     public ResponseEntity< Reserva> obtenerReservaPorId(@PathVariable("id")Integer id){
-        Optional<Reserva> reservaBuscado=reservaService.busarReserva(id);
+        Optional<Reserva> reservaBuscado=reservaService.buscarReserva(id);
         return reservaBuscado.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
@@ -52,7 +52,7 @@ public class ReservaController {
     @PutMapping
     public ResponseEntity<Reserva> actualizarReserva(@RequestBody Reserva reserva){
 
-        Optional<Reserva> reservaBuscado=reservaService.busarReserva(reserva.getId());
+        Optional<Reserva> reservaBuscado=reservaService.buscarReserva(reserva.getId());
         if (reservaBuscado.isPresent() ){
             return ResponseEntity.ok(reservaService.actualizarReserva(reserva));
         }else{
