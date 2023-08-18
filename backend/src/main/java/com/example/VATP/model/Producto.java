@@ -3,6 +3,9 @@ package com.example.VATP.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 
 @Entity
 @Table(name = "productos")
@@ -11,11 +14,23 @@ public class Producto {
     @SequenceGenerator(name = "producto_sequence",sequenceName = "producto_sequence",allocationSize =1 )
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "producto_sequence")
     private Integer id;
+    @Column
     private String nombre;
+    @Column
     private double precio;
+    @Column
     private String descripcion;
+    @Column
+    private String imagenUrl;
 
 
+    public String getImagenUrl() {
+        return imagenUrl;
+    }
+
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
+    }
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
@@ -35,11 +50,15 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(String nombre, double precio, String descripcion, Categoria categoria) {
+
+    public Producto(Integer id, String nombre, double precio, String descripcion, String imagenUrl, Categoria categoria, Reserva reservas) {
+        this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
+        this.imagenUrl = imagenUrl;
         this.categoria = categoria;
+        this.reservas = reservas;
     }
 
     public Integer getId() {
@@ -73,5 +92,3 @@ public class Producto {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }}
-
-
