@@ -13,6 +13,9 @@ public class Categoria {
 
     private String nombre;
 
+
+    private String imagenUrl;
+
     @OneToMany(mappedBy = "categoria")
     private List<Producto> productos;
 
@@ -20,12 +23,19 @@ public class Categoria {
 
     }
 
-    public Categoria(String nombre, List<Producto> productos) {
+    public Categoria(String nombre, String imagenUrl, List<Producto> productos) {
         this.nombre = nombre;
+        this.imagenUrl = imagenUrl;
         this.productos = productos;
     }
 
+    public String getImagenUrl() {
+        return imagenUrl;
+    }
 
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
+    }
 
     public Integer getId() {
         return id;
