@@ -19,12 +19,16 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
 
+    private final EmailService emailService;
+
     public UserServiceImpl(UserRepository userRepository,
                            RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           EmailService emailService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @Override
@@ -53,7 +57,11 @@ public class UserServiceImpl implements UserService {
         // Assign user role
         user.setRoles(Arrays.asList(userRole));
         userRepository.save(user);
+
+        emailService.sendRegistrationConfirmationEmail(user.getEmail());
     }
+
+
 
     public void grantAdminPrivileges(String userEmail) {
         User user = userRepository.findByEmail(userEmail);
