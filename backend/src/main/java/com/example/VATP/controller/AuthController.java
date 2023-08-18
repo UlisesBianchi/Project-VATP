@@ -3,6 +3,7 @@ package com.example.VATP.controller;
 
 import com.example.VATP.dto.UserDto;
 import com.example.VATP.model.User;
+import com.example.VATP.service.EmailService;
 import com.example.VATP.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -18,9 +19,11 @@ import java.util.List;
 public class AuthController {
 
     private final UserService userService;
+    private final EmailService emailService;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, EmailService emailService) {
         this.userService = userService;
+        this.emailService = emailService;
     }
 
     @GetMapping("index")
@@ -55,6 +58,7 @@ public class AuthController {
             return "register";
         }
         userService.saveUser(user);
+        emailService.sendRegistrationConfirmationEmail(user.getEmail());
         return "redirect:/register?success";
     }
 
