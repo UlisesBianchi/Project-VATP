@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(Arrays.asList(userRole));
         userRepository.save(user);
 
-        emailService.sendRegistrationConfirmationEmail(user.getEmail());
+        emailService.sendRegistrationConfirmationEmail(user.getEmail(), user.getFirstName());
     }
 
 
