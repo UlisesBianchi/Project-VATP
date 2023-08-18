@@ -3,6 +3,9 @@ package com.example.VATP.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 
 @Entity
 @Table(name = "productos")
@@ -19,6 +22,7 @@ public class Producto {
     private String descripcion;
     @Column
     private String imagenUrl;
+
 
     public String getImagenUrl() {
         return imagenUrl;

@@ -9,6 +9,8 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.enabled;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -39,4 +41,11 @@ public class User
             inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
     private List<Role> roles = new ArrayList<>();
 
+    public void setEnable(boolean b) {
+    }
+
+
+    public boolean isEnabled() {
+        return enabled;
+    }
 }

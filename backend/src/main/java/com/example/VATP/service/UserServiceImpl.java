@@ -10,26 +10,40 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    private final VerificacionTokenService verificacionTokenService;
+    private final EmailService emailService;
+
 
     public UserServiceImpl(UserRepository userRepository,
                            RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder) {
+                           VerificacionTokenService verificacionTokenService,
+                           PasswordEncoder passwordEncoder,
+                            EmailService emailService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.verificacionTokenService= verificacionTokenService;
+        this.emailService = emailService;
     }
 
     @Override
-    public void saveUser(UserDto userDto) {
+    public User saveUser(UserDto userDto) {
         User user = new User();
+
+        user.setEnable(false); // nose si va aqui
         user.setName(userDto.getFirstName() + " " + userDto.getLastName());
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
@@ -49,10 +63,27 @@ public class UserServiceImpl implements UserService {
             roleRepository.save(adminRole);
         }
 
+
         // Assign user role
         user.setRoles(Arrays.asList(userRole));
         userRepository.save(user);
+        // nose si va aqui  revisar
+
+        Optional<User>saved = Optional.of(saveUser(userDto));
+        saved.ifPresent( u -> {
+            try {
+                String token = UUID.randomUUID().toString();
+                verificacionTokenService.save(saved.get(), token);
+                // send verification email
+                emailService.sendHtmlMail(u);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        saved.get();
+        return user;
     }
+
 
     public void grantAdminPrivileges(String userEmail) {
         User user = userRepository.findByEmail(userEmail);
@@ -90,4 +121,5 @@ public class UserServiceImpl implements UserService {
         userDto.setEmail(user.getEmail());
         return userDto;
     }
+
 }
