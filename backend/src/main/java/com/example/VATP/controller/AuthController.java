@@ -5,16 +5,16 @@ import com.example.VATP.dto.UserDto;
 import com.example.VATP.model.User;
 import com.example.VATP.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class AuthController {
 
     private final UserService userService;
@@ -43,19 +43,16 @@ public class AuthController {
 
     // handler method to handle register user form submit request
     @PostMapping("/register/save")
-    public String registration(@Valid @ModelAttribute("user") UserDto user,
-                               BindingResult result,
-                               Model model){
-        User existing = userService.findUserByEmail(user.getEmail());
-        if (existing != null) {
-            result.rejectValue("email", null, "There is already an account registered with that email");
+    public ResponseEntity<String> registerUser(@Valid @RequestBody UserDto userDto) {
+        User existingUser = userService.findUserByEmail(userDto.getEmail());
+        if (existingUser != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ya existe una cuenta registrada con ese correo electrónico");
         }
-        if (result.hasErrors()) {
-            model.addAttribute("user", user);
-            return "register";
-        }
-        userService.saveUser(user);
-        return "redirect:/register?success";
+
+        // Aquí debes llamar al servicio para guardar el usuario en la base de datos
+        userService.saveUser(userDto);
+
+        return ResponseEntity.ok("Usuario registrado exitosamente");
     }
 
     @GetMapping("/users")
