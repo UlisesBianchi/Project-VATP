@@ -19,11 +19,10 @@ import java.util.List;
 public class AuthController {
 
     private final UserService userService;
-    private final EmailService emailService;
 
-    public AuthController(UserService userService, EmailService emailService) {
+
+    public AuthController(UserService userService) {
         this.userService = userService;
-        this.emailService = emailService;
     }
 
     @GetMapping("index")
@@ -58,8 +57,13 @@ public class AuthController {
             return "register";
         }
         userService.saveUser(user);
-        emailService.sendRegistrationConfirmationEmail(user.getEmail());
-        return "redirect:/register?success";
+
+        return "redirect:/registrationok";
+    }
+
+    @GetMapping("/registrationok")
+    public String registrationSuccess() {
+        return "registrationok";
     }
 
     @GetMapping("/users")
@@ -68,5 +72,6 @@ public class AuthController {
         model.addAttribute("users", users);
         return "users";
     }
+
 }
 
