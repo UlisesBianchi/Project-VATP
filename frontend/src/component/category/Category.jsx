@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CardCategory from "./CardCategory";
 import { Box, Typography } from "@mui/material";
 import axios from "axios";
-import Filter from "./Filter";
+
 
 const Category = () => {
   const [category, setCategory] = useState([]);
@@ -22,8 +22,7 @@ const Category = () => {
         Categorias
       </Typography>
       
-      <Filter category={category} /> {/* Renderiza el componente Filter arriba de todo */}
-      <Box sx={{ display: "flex", justifyContent: "space-evenly", margin: "2vh" }}>
+       <Box sx={{ display: "flex", justifyContent: "space-evenly", margin: "2vh" }}>
         {category.map((data) => (
           <CardCategory data={data} key={data.id} />
         ))}
