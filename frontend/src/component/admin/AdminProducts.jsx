@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
-import CardProduct from "./CardProducts";
-import { Link } from "react-router-dom";
+import { Box, Button, Typography } from '@mui/material';
+import { useEffect, useState } from 'react'
 
+import { Link } from 'react-router-dom';
+import CardProduct from '../product/CardProducts';
 
-const Products = () => {
-
+const AdminProducts = () => {
     let producto = [
 
         {
@@ -76,21 +75,32 @@ const Products = () => {
     setProducts(producto);
   }, []);
 
+  
+
 
   return (
-    <Box sx={{ marginTop: "3vh", background: "#E9EEFC" }}>
-        <Typography color="secondary" variant="h5" sx={{ marginLeft: "2vw" }}>Productos recomendados</Typography>
+    <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box sx={{width:"12vw", marginTop:"5vh", display:"flex"}}>
+    <Link to={'product-form'}>    
+    <Button >Agregar Producto</Button>
+    </Link>
+    </Box>
+    <Box sx={{ marginTop: "3vh", background: "#E9EEFC", paddingBottom: "10vh" }}>
+        <Typography color="secondary" variant="h5" sx={{ marginLeft: "2vw", paddingTop: "5vh" }}>Productos</Typography>
         <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-around", alignItems: "center" }}>
-            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2 ,1fr)', gap: '3rem', marginTop: '2rem', columnGap: "3rem" }}>
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xl: "repeat(2 ,1fr)", xs: "repeat(1 ,1fr)" }, gap: '3rem', marginTop: '2rem', columnGap: "3rem" }}>
                 {product.map((data) => (
-                    <Link key={data.id} to={`/product/${data.id}`}>
+                    <Box key={data.id}>
                         <CardProduct data={data} />
-                    </Link>
+                        <Button>Eliminar</Button>
+                        <Button>Editar</Button>
+                    </Box>
                 ))}
             </Box>
         </Box>
     </Box>
-);
+</Box>
+  )
 }
 
-export default Products
+export default AdminProducts

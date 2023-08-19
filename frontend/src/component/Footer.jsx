@@ -29,13 +29,13 @@ function Footer() {
         <Box
           component="img"
           sx={{
-            height: "8rem",
-            width: "8rem",
-            maxHeight: { xs: "4rem", md: "8rem" },
-            maxWidth: { xs: "4rem", md: "8rem" },
+            height: "6rem",
+            width: "12rem",
+            maxHeight: { xs: "4rem", md: "6rem" },
+            maxWidth: { xs: "4rem", md: "12rem" },
           }}
           alt="The house from the offer."
-          src="images\viajar-al-paladar-1.png"
+          src="images\Logo.png"
         />
     
         </Box>

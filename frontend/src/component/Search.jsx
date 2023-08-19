@@ -83,9 +83,12 @@ const Search = () => {
           }}
         >
           Buscar
+          
         </Button>
       </Box>
     </Box>
+
+    
   );
 };
 

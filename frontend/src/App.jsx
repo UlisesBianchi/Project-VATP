@@ -1,12 +1,10 @@
-import NavBar from "./component/navBar";
+import NavBar from "./component/navBar/navBar";
 import Home from "./routes/Home";
 import Footer from "./component/Footer";
 import { Navigate, Route, Routes } from "react-router-dom";
-import AdminProducts from "./component/AdminProducts";
-import FormRegistationProducts from "./component/FormRegistationProducts";
-import ProductDetail from "./component/ProductDetail";
-import { Switch } from "@mui/material";
-import Products from "./component/Products";
+import AdminProducts from "./component/admin/AdminProducts";
+import FormRegistationProducts from "./component/admin/FormRegistationProducts";
+import ProductDetail from "./component/product/ProductDetail";
 import RegistrationUser from "./routes/RegistrationUser";
 
 

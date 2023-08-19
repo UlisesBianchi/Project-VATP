@@ -10,14 +10,6 @@ import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 
 
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  >
-    •
-  </Box>
-);
 
 const CardProduct = ({ data }) => {
     return (
@@ -28,7 +20,7 @@ const CardProduct = ({ data }) => {
           component="img"
           height="250"
           width="200"
-          image={`${data.imgUrl}`}
+          image={`${data.imagenUrl}`}
           alt={`${data.name}`}
         />
         <CardContent>

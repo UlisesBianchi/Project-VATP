@@ -1,6 +1,6 @@
 import Search from "../component/Search";
-import Category from "../component/Category";
-import Recomendation from "../component/Recomendation";
+import Category from "../component/category/Category";
+import Recomendation from "../component/product/Recomendation";
 
 const Home = () => {
  

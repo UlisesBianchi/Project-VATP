@@ -11,13 +11,11 @@
     "deploy": "aws s3 sync dist/ s3://g6-frontend --acl public-read"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^2.1.0",
-    "@chakra-ui/react": "^2.8.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.7",
     "@mui/icons-material": "^5.14.3",
-    "@mui/material": "^5.14.3",
+    "@mui/material": "^5.14.5",
     "@mui/x-date-pickers": "^6.11.0",
     "@mui/x-date-pickers-pro": "^6.11.0",
     "axios": "^1.4.0",

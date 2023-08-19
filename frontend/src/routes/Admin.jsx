@@ -1,4 +1,4 @@
-import AdminProducts from "../component/AdminProducts";
+import AdminProducts from "../component/admin/AdminProducts";
 
 
 
