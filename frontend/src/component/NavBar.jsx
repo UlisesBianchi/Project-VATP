@@ -4,7 +4,7 @@ import {
   Toolbar,
   Button,
   IconButton,
-  Typography,
+
   Menu,
   Tooltip,
   Avatar,
@@ -27,13 +27,13 @@ const NavBar = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, display:"flex", justifyContent:"space-around"}}>
 
 
 
 
       <AppBar position="static">
-        <Toolbar sx={{ height: "5rem", background: "#E9EEFC" }}>
+        <Toolbar sx={{ height: "5rem", background: "white", display:"flex", justifyContent:"space-around"}}>
 
        
 
@@ -47,35 +47,23 @@ const NavBar = () => {
             <Box
               component="img"
               sx={{
-                height: "4rem",
-                width: "4rem",
-                maxHeight: { xs: "4rem", md: "4rem" },
-                maxWidth: { xs: "4rem", md: "4rem" },
+                height: "5rem",
+                width: "15rem",
+                maxHeight: { xs: "4rem", md: "10rem" },
+                maxWidth: { xs: "10rem", md: "15rem" },
                 marginRight: "2vw",
               }}
               alt="The house from the offer."
-              src="images\viajar-al-paladar-1.png"
+              src="images\Logo.png"
             />
           </Link>
-
-          <Typography
-            color="primary"
-            href="/"
-            variant="h6"
-            component="a"
-            sx={{
-              display: { xs: "flex", md: "flex", xl: "flex" },
-              flexGrow: 1,
-              textDecoration: "none",
-            }}
-          >
-            Un viaje a tu paladar
-          </Typography>
           <Box sx={{ display: { xs: "none", md: "flex", xl: "flex" } }}>
-            <Button variant="outlined" sx={{ margin: "3vh" }}>
+            <Link to={"/form-registration"}>
+            <Button variant="text" sx={{ margin: "3vh", fontSize:"0.75rem" }}>
               Crear cuenta
             </Button>
-            <Button variant="outlined" sx={{ margin: "3vh" }}>
+            </Link>
+            <Button variant="text" sx={{ margin: "3vh", fontSize:"0.75rem" }}>
               Iniciar Sesión
             </Button>
           </Box>

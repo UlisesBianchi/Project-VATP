@@ -1,36 +1,17 @@
 import { useEffect, useState } from "react";
 import CardCategory from "../component/CardCategory";
 import { Box, Typography } from "@mui/material";
+import axios from "axios";
 
 const Category = () => {
 
-    let categoria = [
-        {
-          id: "1",
-          imgUrl: "https://i.imgur.com/mCha6F0.jpeg",
-          name: "Argentina",
-        },
-        { 
-          id: "2",
-          imgUrl: "https://i.imgur.com/SIpILdE.jpeg",
-          name: "Internacional",
-        },
-        {
-          id: "3",
-          imgUrl: "https://i.imgur.com/6Lp4IHE.jpeg",
-          name: "Dia de campo",
-        },
-        {
-          id: "4",
-          imgUrl: "https://i.imgur.com/Awor6c1.jpeg",
-          name: "Vegana & Vegetariana",
-        },
-      ];
+   
     
       const [category, setCategory] = useState([]);
+      const url = "http://localhost:8082/categorias"
     
       useEffect(() => {
-        setCategory(categoria);
+        axios.get(url).then(res=> setCategory(res.data))
       }, []);
 
   

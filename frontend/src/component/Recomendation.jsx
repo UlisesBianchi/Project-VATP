@@ -1,83 +1,26 @@
 import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import CardProduct from "./CardProducts";
+import axios from "axios";
 
 
 const Recomendation = () => {
 
-    let producto = [
+  
 
-        {
-            id:"1",
-            name:"producto 1",
-            imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-            descripcion:""
-        },
-        {
-          id:"2",
-          name:"producto 2",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"3",
-          name:"producto 3",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"4",
-          name:"producto 4",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"5",
-          name:"producto 5",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"6",
-          name:"producto 6",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"7",
-          name:"producto 7",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"8",
-          name:"producto 8",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"9",
-          name:"producto 9",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"10",
-          name:"producto 10",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-    ]
-
-    const [product, setProducts] = useState([]);
+    const [product, setProduct] = useState([]);
+    const url = "http://localhost:8082/productos"
 
   useEffect(() => {
-    setProducts(producto);
+    axios.get(url).then(res=> setProduct(res.data))
   }, []);
   
 
+console.log(product);
 
   return (
+
+   
     <Box sx={{  marginTop:"3vh", background:"#E9EEFC", paddingBottom:"10vh"}}>
     <Typography color="secondary" variant="h5" sx={{marginLeft:"2vw", paddingTop:"5vh"}}>Productos recomendados</Typography>
     <Box sx={{display:"flex", flexDirection:"row", flexWrap:"wrap",justifyContent:"space-around", alignItems:"center"}}>
@@ -90,6 +33,7 @@ const Recomendation = () => {
     </Box>
     </Box>
   )
+
 }
 
 export default Recomendation

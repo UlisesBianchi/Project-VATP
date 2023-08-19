@@ -36,21 +36,19 @@ const CardProduct = ({ data }) => {
         </CardContent>
       </CardActionArea>
     </Card>
-    <Card sx={{ width: 345, height: 250, display:"flex", flexDirection:"column", alignItems:"center" }}>
+    <Card sx={{ width: 345, height: 250, display:"flex", flexDirection:"column" }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           Word of the Day
         </Typography>
         <Typography variant="h5" component="div">
-          be{bull}nev{bull}o{bull}lent
+         {data.nombre}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          adjective
+          {data.descripcion}
         </Typography>
         <Typography variant="body2">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
+         ${data.precio}
         </Typography>
       </CardContent>
       <CardActions>

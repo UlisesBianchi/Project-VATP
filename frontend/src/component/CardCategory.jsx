@@ -17,7 +17,7 @@ const CardCategory = ({ data }) => {
         />
         <CardContent>
           <Typography color='primary' gutterBottom variant="h5" component="div">
-            {`${data.name}`}
+            {`${data.nombre}`}
           </Typography>          
         </CardContent>
       </CardActionArea>
