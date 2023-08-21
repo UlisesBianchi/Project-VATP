@@ -19,17 +19,25 @@ const Search = () => {
         alignItems: "center",
         height: "50vh",
         gap: "1vw",
-        backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url('https://media.discordapp.net/attachments/1136794062238777474/1141905173371965532/5-consejos-para-comer-bien-cuando-viajes-1.jpg?width=1415&height=490')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        
+        backgroundImage:
+          "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url('https://media.discordapp.net/attachments/1136794062238777474/1141905173371965532/5-consejos-para-comer-bien-cuando-viajes-1.jpg?width=1415&height=490')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        overflowX: "hidden",
       }}
     >
-    
       <Typography
         variant="h5"
-        sx={{ color: "#ffff", display:{xs:"none", md:"flex"} , textAlign: "start", maxWidth:"28vw", flexWrap:"wrap", fontSize:"2rem", fontWeight:"700", }}
+        sx={{
+          color: "#ffff",
+          display: { xs: "none", md: "flex" },
+          textAlign: "start",
+          maxWidth: "28vw",
+          flexWrap: "wrap",
+          fontSize: "2rem",
+          fontWeight: "700",
+        }}
       >
         Busca la experiencia que mas se adapte a tu paladar!
       </Typography>
@@ -49,7 +57,6 @@ const Search = () => {
             display: "flex",
             alignItems: "center",
             width: { xl: "30vw" },
-           
           }}
         >
           <IconButton sx={{ p: "10px" }} aria-label="menu">
@@ -83,12 +90,9 @@ const Search = () => {
           }}
         >
           Buscar
-          
         </Button>
       </Box>
     </Box>
-
-    
   );
 };
 
