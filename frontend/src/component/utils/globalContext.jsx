@@ -27,14 +27,15 @@
     .then((res)=>{
       setCategory(res.data)
     })
-  })
+  },[])
 
 
   const obj ={
       product,
       category
     }
-
+  
+    console.log(obj.product);
 
   return (
     <ContextGlobal.Provider value={{ obj }}>

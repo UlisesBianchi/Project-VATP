@@ -3,6 +3,7 @@ import { Box, Typography, Button } from "@mui/material";
 import CardProduct from "./CardProducts";
 import { ContextGlobal } from "../utils/globalContext";
 import Filter from "../category/Filter";
+import { Link } from "react-router-dom";
 
 const Recomendation = () => {
   const { obj } = useContext(ContextGlobal);
@@ -32,10 +33,12 @@ const Recomendation = () => {
   
 
   return (
+
     <Box sx={{ marginTop: "3vh", background: "#E9EEFC", paddingBottom: "10vh" }}>
       <Typography color="primary" variant="h5" sx=  {{ marginLeft: "2vw", paddingTop: "5vh" }}>
         Productos recomendados
       </Typography>
+
       <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-around", alignItems: "center" }}>
         <Filter category={obj.category} onSelectCategory={setSelectedCategoryId} />
         <Box sx={{ display: "grid", gridTemplateColumns: { xl: "repeat(2 ,1fr)", xs: "repeat(1 ,1fr)" }, gap: '3rem', marginTop: '2rem', columnGap: "3rem" }}>

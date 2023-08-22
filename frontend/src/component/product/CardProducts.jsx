@@ -8,6 +8,7 @@ import { Box, CardActionArea } from '@mui/material';
 import CardActions from '@mui/material/CardActions';
 
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
 
 
 
@@ -24,6 +25,8 @@ const CardProduct = ({ data }) => {
           alt={`${data.name}`}
         />
         <CardContent>
+
+          console.log(data.id);
                 
         </CardContent>
       </CardActionArea>
@@ -43,9 +46,11 @@ const CardProduct = ({ data }) => {
          ${data.precio}
         </Typography>
       </CardContent>
+      <Link to={`/product/${data.id}`}>
       <CardActions>
         <Button size="small">Learn More</Button>
       </CardActions>
+      </Link>
     </Card>
    </Box>
       );
