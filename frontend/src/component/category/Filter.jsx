@@ -1,30 +1,35 @@
+import React, { useState } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { Box } from '@mui/material'; // Importa el componente Box
+import { Box } from '@mui/material';
 
-const Filter = ({ category }) => {
-  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-  const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const Filter = ({ category, onSelectCategory }) => {
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const checkboxes = category.map((data) => (
-    <FormControlLabel
-      key={data.id}
-      control={<Checkbox icon={icon} checkedIcon={checkedIcon} />}
-      label={data.nombre}
-    />
-    
-  ));
+const handleCategoryChange = (categoryId) => {
+onSelectCategory(categoryId);
+setSelectedCategory(categoryId);
+};
 
-  return (
-    
-    <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-      {checkboxes}
+const checkboxes = category.map((data) => (
+<FormControlLabel
+key={data.id}
+control={<Checkbox icon={icon} checkedIcon={checkedIcon} />}
+label={data.nombre}
+checked={selectedCategory === data.id}
+onChange={() => handleCategoryChange(data.id)}
+/>
+));
 
-      
-    </Box>
-  );
+return (
+<Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+{checkboxes}
+</Box>
+);
 }
 
 export default Filter;

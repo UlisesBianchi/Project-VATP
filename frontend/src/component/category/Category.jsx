@@ -1,20 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import CardCategory from "./CardCategory";
 import { Box, Typography } from "@mui/material";
-import axios from "axios";
+import Filter from "./Filter";
+import { ContextGlobal } from "../utils/globalContext";
 
 
 const Category = () => {
-  const [category, setCategory] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const url = "http://18.191.210.53:8082/categorias";
-
-  useEffect(() => {
-    axios.get(url).then((res) => {
-      setCategory(res.data);
-      setLoading(false);
-    });
-  }, []);
+ 
+  
+  const {obj} = useContext(ContextGlobal)
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -22,8 +16,9 @@ const Category = () => {
         Categorias
       </Typography>
       
-       <Box sx={{ display: "flex", justifyContent: "space-evenly", margin: "2vh" }}>
-        {category.map((data) => (
+      
+      <Box sx={{ display: "flex", justifyContent: "space-evenly", margin: "2vh" }}>
+        {obj.category.map((data) => (
           <CardCategory data={data} key={data.id} />
         ))}
       </Box>
