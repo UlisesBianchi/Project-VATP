@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 
 @Entity
@@ -20,17 +21,7 @@ public class Producto {
     private double precio;
     @Column
     private String descripcion;
-    @Column
-    private String imagenUrl;
 
-
-    public String getImagenUrl() {
-        return imagenUrl;
-    }
-
-    public void setImagenUrl(String imagenUrl) {
-        this.imagenUrl = imagenUrl;
-    }
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
@@ -47,16 +38,37 @@ public class Producto {
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductImage> images = new ArrayList<>();
+
+    public List<ProductImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ProductImage> images) {
+        this.images = images;
+    }
+
+    public void addImage(ProductImage image) {
+        images.add(image);
+        image.setProducto(this);
+    }
+
+    public void removeImage(ProductImage image) {
+        images.remove(image);
+        image.setProducto(null);
+    }
+
     public Producto() {
     }
 
 
-    public Producto(Integer id, String nombre, double precio, String descripcion, String imagenUrl, Categoria categoria, Reserva reservas) {
+    public Producto(Integer id, String nombre, double precio, String descripcion, Categoria categoria, Reserva reservas) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
-        this.imagenUrl = imagenUrl;
         this.categoria = categoria;
         this.reservas = reservas;
     }
