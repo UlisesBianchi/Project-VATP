@@ -1,21 +1,24 @@
-import React from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import { Icon } from "@mui/material";
+import AirIcon from "@mui/icons-material/Air";
+import Wifi2BarIcon from '@mui/icons-material/Wifi2Bar';
+import PetsIcon from '@mui/icons-material/Pets';
 
 const FeatureList = () => {
   const features = [
     {
-      title: "Característica 1",
-      description: "Descripción de la característica 1.",
+      title: "Aire acondicionado",
+      icon: <AirIcon/>,
     },
     {
-      title: "Característica 2",
-      description: "Descripción de la característica 2.",
+      title: "Wifi",
+      icon: <Wifi2BarIcon/>,
     },
     {
-      title: "Característica 3",
-      description: "Descripción de la característica 3.",
+      title: "Pet friendy",
+      icon: <PetsIcon/>,
     },
     // ... más características
   ];
@@ -26,7 +29,9 @@ const FeatureList = () => {
         <Grid item key={index} xs={12} sm={6} md={4}>
           <Paper elevation={3} style={{ padding: "16px" }}>
             <Typography variant="h6">{feature.title}</Typography>
-            <Typography variant="body1">{feature.description}</Typography>
+            <Icon>
+              {feature.icon}
+            </Icon>
           </Paper>
         </Grid>
       ))}

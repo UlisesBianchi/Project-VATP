@@ -34,8 +34,6 @@
       product,
       category
     }
-  
-    console.log(obj.product);
 
   return (
     <ContextGlobal.Provider value={{ obj }}>
