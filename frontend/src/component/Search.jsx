@@ -48,7 +48,7 @@ const Search = () => {
           sx={{
             display: "flex",
             alignItems: "center",
-            width: { xl: "30vw" },
+            width: { xl: "30vw", height:"100%" },
            
           }}
         >
@@ -56,7 +56,7 @@ const Search = () => {
             <RestaurantIcon />
           </IconButton>
           <InputBase
-            sx={{ ml: 1, flex: 1 ,height:"6vh"}}
+            sx={{ ml: 1, flex: 1 }}
             placeholder="Elige tu categoria o experiencia"
             inputProps={{ "aria-label": "search google maps" }}
           />
@@ -68,7 +68,7 @@ const Search = () => {
           <DemoContainer components={["DatePicker"]} sx={{ paddingTop: "0" }}>
             <DatePicker
               label="Seleccione la fecha"
-              sx={{ width: { xl: "25vw" }, background: "white",height:"6vh",borderRadius:"4px" }}
+              sx={{ width: { xl: "25vw" }, background: "white",height:"100%",borderRadius:"4px" }}
             />
           </DemoContainer>
         </LocalizationProvider>

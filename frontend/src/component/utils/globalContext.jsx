@@ -1,6 +1,8 @@
   /* eslint-disable react/prop-types */
   import axios from 'axios';
   import  { createContext, useEffect, useState } from 'react'
+import Admin from '../../routes/Admin';
+
 
   export const ContextGlobal = createContext();
 
@@ -27,7 +29,7 @@
     .then((res)=>{
       setCategory(res.data)
     })
-  })
+  },[])
 
 
   const obj ={
@@ -37,7 +39,7 @@
 
 
   return (
-    <ContextGlobal.Provider value={{ obj }}>
+    <ContextGlobal.Provider value={{ obj, AdminComponent: <Admin /> }}>
       {children}
     </ContextGlobal.Provider>
   );

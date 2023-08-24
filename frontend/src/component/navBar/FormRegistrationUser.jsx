@@ -15,12 +15,14 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const FormRegistrationUser = () => {
-  const url = "http://localhost:8082/register/save";
+  const url = "http://18.191.210.53:8082/register/save";
 
   const [mensaje, setMensaje] = useState(false);
   const sendForm = async (data, { resetForm }) => {
+
+    const { confirmPassword, ...postData } = data;
     try {
-      await axios.post(url, data); 
+      await axios.post(url, postData); 
       setMensaje(true);
       localStorage.setItem("firstName", data.firstName);
       localStorage.setItem("lastName", data.lastName);
@@ -39,7 +41,7 @@ const FormRegistrationUser = () => {
         email: "",
         password: "",
         confirmPassword: "",
-        name:"name"
+        
       },
       onSubmit: sendForm,
       validationSchema: Yup.object({

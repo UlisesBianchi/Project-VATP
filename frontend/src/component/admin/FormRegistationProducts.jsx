@@ -1,82 +1,321 @@
-import { Box, Button, FormControl, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import  { useContext } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  FormControl,
+  Grid,
+  InputAdornment,
+  OutlinedInput,
+  TextField,
+  Typography,
+  Select,
+  MenuItem,
+} from "@mui/material";
+import axios from "axios";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { ContextGlobal } from "../utils/globalContext";
 
-const FormRegistationProducts = () => {
-  const [image, setImage] = useState(null);
+const FormRegistrationProducts = () => {
+  const url = "http://18.191.210.53:8082/productos";
+  const { AdminComponent, obj } = useContext(ContextGlobal);
 
-  const handleImageChange = (e) => {
-    const selectedImage = e.target.files[0];
-    if (selectedImage) {
-      setImage(selectedImage);
+  const sendForm = async (data) => {
+    try {
+      console.log("Data being sent:", data);
+      await axios.post(url, data);
+      alert("Formulario enviado");
+      console.log(data);
+    } catch (error) {
+      console.error("Error al enviar el formulario:", error);
     }
   };
+
+  const {
+    handleChange,
+    handleSubmit,
+    errors,
+    values,
+    touched,
+    handleBlur,
+  } = useFormik({
+    initialValues: {
+      descripcion: "",
+      nombre: "",
+      precio: "",
+      categoria: "",
+      imagenUrl: "",
+    },
+    onSubmit: sendForm,
+    validationSchema: Yup.object({
+      descripcion: Yup.string()
+        .required("Campo obligatorio")
+        .min(4, "Debe tener al menos 4 caracteres"),
+      nombre: Yup.string()
+        .required("Campo obligatorio")
+        .min(2, "Debe tener al menos 2 caracteres"),
+      precio: Yup.number()
+        .required("Campo obligatorio")
+        .positive("Debe ser un número positivo")
+        .integer("Debe ser un número entero"),
+      categoria: Yup.object().shape({
+        id: Yup.number().required("Campo obligatorio"),
+        nombre: Yup.string().required("Campo obligatorio"),
+      }),
+    }),
+  });
+
   return (
-    
+    <Box sx={{ display: "flex" }}>
+      {AdminComponent}
+      <Container sx={{ marginTop: "10vh", marginBottom: "10vh" }}>
+        <Typography
+          sx={{ marginBottom: "5vh" }}
+          variant="h4"
+          align="left"
+          gutterBottom
+          color="primary"
+        >
+          Agregar un producto
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            {/* Sección de Nombre y Descripción */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                boxSizing: "border-box",
+                border: "solid grey 1px",
+                borderRadius: "5px",
+                height: "58vh",
+                width: "80vw",
+                marginBottom: "2vh",
+              }}
+            >
+              <Typography
+                variant="h5"
+                color="primary"
+                sx={{ margin: "2vh 0 2vh 1vw" }}
+              >
+                Nombre y descripción
+              </Typography>
+              <Grid
+                container
+                spacing={2}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  flexWrap: "nowrap",
+                }}
+              >
+                <Grid item xs={12} sm={6}>
+                  <Typography
+                    variant="h7"
+                    color="primary"
+                    sx={{ marginLeft: "1vw" }}
+                  >
+                    Nombre
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    label=""
+                    name="nombre"
+                    value={values.nombre}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.nombre && Boolean(errors.nombre)}
+                    helperText={touched.nombre && errors.nombre}
+                    sx={{ margin: "1vw 0 0 1vw", width: "180%" }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Typography
+                    variant="h7"
+                    color="primary"
+                    sx={{ marginLeft: "1vw" }}
+                  >
+                    Descripción
+                  </Typography>
+                  <TextField
+                    label=""
+                    name="descripcion"
+                    value={values.descripcion}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.descripcion && Boolean(errors.descripcion)}
+                    helperText={touched.descripcion && errors.descripcion}
+                    rows={5}
+                    multiline
+                    sx={{ margin: "1vw 0 0 1vw", width: "180%" }}
+                  />
+                </Grid>
+              </Grid>
+            </Box>
 
-    <Box
-      component="form"
-      sx={{
-        "& .MuiTextField-root": { m: 1, width: "25ch" },
-        display:"flex",
-        flexDirection:"column",
-        alignItems:"center",
-        margin:"10vh",
-        
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <Typography>Datos necesarios </Typography>
-      <TextField
-          id="outlined-multiline-flexible"
-          label="Nombre"
-          multiline
-          maxRows={4}
-        />
-      <TextField
-        id="outlined-multiline-static"
-        label="Descripcion"
-        multiline
-        rows={4}
-      />
+            {/* Sección de Precios */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                boxSizing: "border-box",
+                border: "solid grey 1px",
+                borderRadius: "5px",
+                height: "25vh",
+                width: "80vw",
+                marginBottom: "2vh",
+              }}
+            >
+              <Grid
+                item
+                xs={12}
+                sx={{ display: "flex", flexDirection: "column" }}
+              >
+                <Typography
+                  variant="h5"
+                  color="primary"
+                  sx={{ margin: "2vh 0 2vh 1vw" }}
+                >
+                  Precios
+                </Typography>
+                <FormControl
+                  fullWidth
+                  sx={{ width: "50%", margin: "1vw 0 0 1vw" }}
+                >
+                  <OutlinedInput
+                    id="outlined-adornment-amount"
+                    startAdornment={
+                      <InputAdornment position="start">$</InputAdornment>
+                    }
+                    name="precio"
+                    value={values.precio}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.precio && Boolean(errors.precio)}
+                    helperText={touched.precio && errors.precio}
+                  />
+                </FormControl>
+              </Grid>
+            </Box>
 
-      <TextField
-        id="outlined-number"
-        label="Stock"
-        type="number"
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
+            {/* Sección de Categoría */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                boxSizing: "border-box",
+                border: "solid grey 1px",
+                borderRadius: "5px",
+                height: "30vh",
+                width: "80vw",
+                marginBottom: "2vh",
+              }}
+            >
+              <Typography
+                variant="h5"
+                color="primary"
+                sx={{ margin: "2vh 0 2vh 1vw" }}
+              >
+                Categoría
+              </Typography>
+              <Grid item xs={12}>
+                <Typography
+                  variant="h7"
+                  color="primary"
+                  sx={{ marginLeft: "1vw" }}
+                >
+                  Elige la categoría
+                </Typography>
+                <FormControl
+                  fullWidth
+                  sx={{ margin: "1vw 0 0 1vw", width: "90%" }}
+                >
+                  <Select
+                    name="categoria"
+                    value={values.categoria.id}
+                    onChange={(event) => {
+                      const selectedCategory = obj.category.find(
+                        (category) => category.id === event.target.value
+                      );
+                      handleChange({
+                        target: {
+                          name: "categoria",
+                          value: selectedCategory,
+                        },
+                      });
+                    }}
+                    onBlur={handleBlur}
+                    error={touched.categoria && Boolean(errors.categoria)}
+                  >
+                    <MenuItem value="" disabled>
+                      Selecciona una categoría
+                    </MenuItem>
+                    {obj.category.map((category) => (
+                      <MenuItem key={category.id} value={category.id}>
+                        {category.nombre}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {touched.categoria && errors.categoria && (
+                    <Typography color="error">{errors.categoria}</Typography>
+                  )}
+                </FormControl>
+              </Grid>
+            </Box>
 
-      <FormControl  sx={{ m: 1 , width: "25ch"}}>
-          <InputLabel htmlFor="outlined-adornment-amount">Precio</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-amount"
-            startAdornment={<InputAdornment position="start">$</InputAdornment>}
-            label="Amount"
-          />
-        </FormControl>
-      
-      <Box sx={{display:"flex", flexDirection:"column"}}>
-        <TextField label="Nombre de imagen" fullWidth />
-        <input
-          accept="image/*"
-          id="image-upload"
-          type="file"
-          style={{ display: "none" }}
-          onChange={handleImageChange}
-        />
-        <label htmlFor="image-upload">
-          <Button variant="contained" component="span" sx={{}}>
-            Cargar imagen
-          </Button>
-        </label>
-        {image && <img src={URL.createObjectURL(image)} alt="Imagen cargada" />}
-      </Box>
-      <Button sx={{margin:"5vh"}} variant="outlined" type="submit">Cargar Producto</Button>
+            {/* Sección de Imagen */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                boxSizing: "border-box",
+                border: "solid grey 1px",
+                borderRadius: "5px",
+                height: "30vh",
+                width: "80vw",
+                marginBottom: "2vh",
+              }}
+            >
+              <Typography
+                variant="h5"
+                color="primary"
+                sx={{ margin: "2vh 0 2vh 1vw" }}
+              >
+                Imagen principal
+              </Typography>
+              <TextField
+                fullWidth
+                label="URL de la imagen principal"
+                name="imagenUrl"
+                value={values.imagenUrl}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.imagenUrl && Boolean(errors.imagenUrl)}
+                helperText={touched.imagenUrl && errors.imagenUrl}
+                sx={{ margin: "1vw 0 0 1vw", width: "90%" }}
+              />
+            </Box>
+
+            {/* Botón de Enviar */}
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginRight: "2vw",
+              }}
+            >
+              <Button type="submit" variant="contained" color="primary">
+                Enviar
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </Container>
     </Box>
   );
 };
 
-export default FormRegistationProducts;
+export default FormRegistrationProducts;

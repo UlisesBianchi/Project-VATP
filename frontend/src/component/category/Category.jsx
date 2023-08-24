@@ -1,9 +1,8 @@
 import { useContext } from "react";
 import CardCategory from "./CardCategory";
 import { Box, Typography } from "@mui/material";
-import Filter from "./Filter";
-import { ContextGlobal } from "../utils/globalContext";
 
+import { ContextGlobal } from "../utils/globalContext";
 
 const Category = () => {
  

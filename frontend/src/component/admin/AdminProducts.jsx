@@ -1,106 +1,116 @@
-import { Box, Button, Typography } from '@mui/material';
-import { useEffect, useState } from 'react'
-
-import { Link } from 'react-router-dom';
-import CardProduct from '../product/CardProducts';
+import React, { useContext, useState } from "react";
+import { Box, Button, Typography } from "@mui/material";
+import { ContextGlobal } from "../utils/globalContext";
+import { DataGrid } from "@mui/x-data-grid";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const AdminProducts = () => {
-    let producto = [
+  const { obj } = useContext(ContextGlobal);
+  const [products, setProducts] = useState(obj.product);
 
-        {
-            id:"1",
-            name:"producto 1",
-            imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-            descripcion:""
-        },
-        {
-          id:"2",
-          name:"producto 2",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"3",
-          name:"producto 3",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"4",
-          name:"producto 4",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"5",
-          name:"producto 5",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"6",
-          name:"producto 6",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"7",
-          name:"producto 7",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"8",
-          name:"producto 8",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"9",
-          name:"producto 9",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-        {
-          id:"10",
-          name:"producto 10",
-          imgUrl:"https://i.imgur.com/mCha6F0.jpeg",
-          descripcion:""
-        },
-    ]
+  const handleDelete = async (productId) => {
+    const confirmed = window.confirm("¿Estás seguro de que deseas eliminar este producto?");
+    if (confirmed) {
+      try {
+        await axios.delete(`http://18.191.210.53:8082/productos/${productId}`);
+        // Eliminar el producto del estado local
+        const updatedProducts = products.filter((product) => product.id !== productId);
+        setProducts(updatedProducts);
+        console.log("producto eliminado");
+      } catch (error) {
+        console.error("Error al eliminar el producto:", error);
+      }
+    }
+  };
 
-    const [product, setProducts] = useState([]);
+  const columns = [
+    {
+      field: "id",
+      headerName: "ID",
+      width: 100,
+    },
+    {
+      field: "imagen",
+      headerName: "Imagen",
+      width: 250,
+      sortable: false,
+      filterable: false,
+      hide: true,
+      disableColumnMenu: true,
+      renderCell: (params) => (
+        <img
+          src={params.row.imagenUrl}
+          alt={`Imagen ${params.row.id}`}
+          style={{ width: "8vw", height: "10vh" }}
+        />
+      ),
+    },
+    {
+      field: "Producto",
+      headerName: "Producto",
+      width: 350,
+      align: "center",
+    },
+    { field: "Precio", headerName: "Precio", width: 200, align: "center" },
+    {
+      field: "Acciones",
+      headerName: "Acciones",
+      width: 200,
+      sortable: false,
+      filterable: false,
+      hide: true,
+      disableColumnMenu: true,
+      align: "center",
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleDelete(params.row.id)}
+        >
+          Eliminar
+        </Button>
+      ),
+    },
+  ];
 
-  useEffect(() => {
-    setProducts(producto);
-  }, []);
-
-  
-
+  const rows = products.map((product) => ({
+    id: product.id,
+    imagen: "",
+    imagenUrl: product.imagenUrl,
+    Producto: product.nombre,
+    Precio: product.precio,
+    Acciones: "",
+  }));
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <Box sx={{width:"12vw", marginTop:"5vh", display:"flex"}}>
-    <Link to={'product-form'}>    
-    <Button >Agregar Producto</Button>
-    </Link>
+    <Box>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Typography variant="h4" color="primary" sx={{ margin: "5vh" }}>
+          Productos
+        </Typography>
+        <Link to={"/form-product"}>
+          <Button variant="contained" sx={{ marginRight: "5vw", height: "5vh", background: "primary" }}>
+            Agregar productos
+          </Button>
+        </Link>
+      </Box>
+      <Box sx={{ height: "100%", width: "95%", margin: "2v" }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          getRowHeight={() => 80}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 20 },
+            },
+          }}
+          pageSizeOptions={[20, 10]}
+          checkboxSelection
+        />
+      </Box>
     </Box>
-    <Box sx={{ marginTop: "3vh", background: "#E9EEFC", paddingBottom: "10vh" }}>
-        <Typography color="secondary" variant="h5" sx={{ marginLeft: "2vw", paddingTop: "5vh" }}>Productos</Typography>
-        <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-around", alignItems: "center" }}>
-            <Box sx={{ display: 'grid', gridTemplateColumns: { xl: "repeat(2 ,1fr)", xs: "repeat(1 ,1fr)" }, gap: '3rem', marginTop: '2rem', columnGap: "3rem" }}>
-                {product.map((data) => (
-                    <Box key={data.id}>
-                        <CardProduct data={data} />
-                        <Button>Eliminar</Button>
-                        <Button>Editar</Button>
-                    </Box>
-                ))}
-            </Box>
-        </Box>
-    </Box>
-</Box>
-  )
-}
+  );
+};
 
-export default AdminProducts
+export default AdminProducts;
