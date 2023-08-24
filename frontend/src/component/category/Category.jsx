@@ -23,7 +23,7 @@ const Category = () => {
         sx={{
           display: "flex",
           justifyContent: "center",
-          fontSize: isSmallScreen3 ? "1.2rem" : "2rem",
+          fontSize: isSmallScreen3 ? "1.5rem" : "2rem",
           overflow: "hidden",
           paddingTop: "5vh",
         }}
@@ -35,11 +35,11 @@ const Category = () => {
         sx={{
           display: "flex",
           justifyContent: "space-evenly",
-          margin: "2vh",
+          margin: "2vh 0",
           gap: "2rem",
           flexWrap: "wrap",
           overflow: "hidden",
-          fontSize: isSmallScreen3 ? "1.2rem" : "2rem",
+          fontSize: isSmallScreen3 ? "1.5rem" : "2rem",
         }}
       >
         {obj.category.map((data) => (

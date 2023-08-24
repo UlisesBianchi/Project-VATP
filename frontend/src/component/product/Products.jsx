@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import CardProduct from "./CardProducts";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
@@ -6,10 +6,18 @@ import { ContextGlobal } from "../utils/globalContext";
 
 const Products = () => {
   const { obj } = useContext(ContextGlobal);
+  const isSmallScreen3 = useMediaQuery("(max-width: 320px)");
 
   return (
     <Box sx={{ marginTop: "3vh", background: "#E9EEFC" }}>
-      <Typography color="secondary" variant="h5" sx={{ marginLeft: "18vh" }}>
+      <Typography
+        color="secondary"
+        variant="h5"
+        sx={{
+          marginLeft: "18vh",
+          fontSize: isSmallScreen3 ? "1rem" : "1.5rem",
+        }}
+      >
         Productos recomendados
       </Typography>
       <Box

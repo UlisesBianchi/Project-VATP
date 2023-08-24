@@ -6,7 +6,7 @@ import Filter from "../category/Filter";
 
 const Recomendation = () => {
   const { obj } = useContext(ContextGlobal);
-  const isSmallScreen = useMediaQuery("(max-width: 850px)");
+  const isSmallScreen = useMediaQuery("(max-width: 1160px)");
   const isSmallScreen3 = useMediaQuery("(max-width: 320px)");
 
   const [showCount, setShowCount] = useState(10);
@@ -51,12 +51,12 @@ const Recomendation = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: isSmallScreen3 ? "1.2rem" : "2rem",
+          fontSize: isSmallScreen3 ? "1.1rem" : "1.8rem",
           flexWrap: "nowrap",
           overflow: "hidden",
           paddingTop: "5vh",
           "@media (max-width: 356px)": {
-            fontSize: "1.3rem",
+            fontSize: "1.1rem",
             fontWeight: "bold",
           },
         }}
@@ -83,9 +83,9 @@ const Recomendation = () => {
             gridTemplateColumns: isSmallScreen
               ? "repeat(1, 1fr)"
               : "repeat(2, 1fr)",
-            gap: { xl: "0 20rem", xs: "0 5rem" },
+            gap: { xl: "5rem 20rem", xs: "5rem 5rem" },
             minWidth: "10%",
-            maxWidth: "95%",
+            maxWidth: "100%",
             marginTop: "2rem",
           }}
         >
