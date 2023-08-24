@@ -58,14 +58,16 @@ const NavBar = () => {
             />
           </Link>
           <Box sx={{ display: { xs: "none", md: "flex", xl: "flex" } }}>
-            <Link to={"/form-registration"}>
+            <Link to={"/register"}>
             <Button variant="text" sx={{ margin: "3vh", fontSize:"0.75rem" }}>
               Crear cuenta
             </Button>
-            </Link>
+            </Link >
+            <Link to={"/login"}>
             <Button variant="text" sx={{ margin: "3vh", fontSize:"0.75rem" }}>
               Iniciar Sesión
             </Button>
+            </Link>
           </Box>
 
         <Box sx={{ display: {xl:"none", md:"none"}, alignItems: 'center', textAlign: 'center',  }}>

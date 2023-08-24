@@ -18,11 +18,16 @@ const FormRegistrationUser = () => {
   const url = "http://18.191.210.53:8082/register/save";
 
   const [mensaje, setMensaje] = useState(false);
-  const sendForm = async (data, { resetForm }) => {
-
-    const { confirmPassword, ...postData } = data;
+  
+    const sendForm = async (data, { resetForm }) => {
+      const formData = new URLSearchParams();
+      for (const [key, value] of Object.entries(data)) {
+        formData.append(key, value);
+      }
+    
     try {
-      await axios.post(url, postData); 
+      await axios.post(url, formData); 
+      
       setMensaje(true);
       localStorage.setItem("firstName", data.firstName);
       localStorage.setItem("lastName", data.lastName);
