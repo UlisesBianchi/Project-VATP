@@ -36,12 +36,11 @@ public class SpringSecurity {
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers(
                                         "/categorias/**",
+                                        "/imagenes/**",
                                         "/productos/**",
                                         "/admin/**",
                                         "/usuarios/**",
                                         "/reservas/**",
-                                        "/productImages/**",
-                                        "/productImages/*/associateWithProduct/*",
                                         "/register/**",    // Added /register/** here
                                         "/index",
                                         "/registrationok" // Added /registrationok here

@@ -1,12 +1,14 @@
 package com.example.VATP.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
+import java.util.Set;
 
 @Entity
 @Table(name = "productos")
@@ -31,37 +33,13 @@ public class Producto {
     @JoinColumn(name = "reservas_id")
     private Reserva reservas;
 
-    public Categoria getCategoria() {
-        return categoria;
-    }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
+    @Getter
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)       // tener en cuenta EAGER que trae a domicilio y con lazi no si lo booeo tambien borro domicilio
+    @JoinColumn(name = "id_imagenes",referencedColumnName = "id")
+    // @JsonIgnore
+    private Imagenes imagenes;
 
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductImage> images = new ArrayList<>();
-
-    public List<ProductImage> getImages() {
-        return images;
-    }
-
-    public void setImages(List<ProductImage> images) {
-        this.images = images;
-    }
-
-    public void addImage(ProductImage image) {
-        images.add(image);
-        image.setProducto(this);
-    }
-
-    public void removeImage(ProductImage image) {
-        images.remove(image);
-        image.setProducto(null);
-    }
-
-    public Producto() {
-    }
 
 
     public Producto(Integer id, String nombre, double precio, String descripcion, Categoria categoria, Reserva reservas) {
@@ -72,6 +50,18 @@ public class Producto {
         this.categoria = categoria;
         this.reservas = reservas;
     }
+
+    public Producto() {
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
 
     public Integer getId() {
         return id;
@@ -103,4 +93,9 @@ public class Producto {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }}
+    }
+
+    public void setImagenes(Imagenes imagenes) {
+        this.imagenes = imagenes;
+    }
+}
