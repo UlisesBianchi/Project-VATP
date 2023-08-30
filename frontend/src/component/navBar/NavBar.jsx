@@ -62,7 +62,7 @@ const NavBar = () => {
             <Button variant="text" sx={{ margin: "3vh", fontSize:"0.75rem" }}>
               Crear cuenta
             </Button>
-            </Link >
+            </Link>
             <Link to={"/login"}>
             <Button variant="text" sx={{ margin: "3vh", fontSize:"0.75rem" }}>
               Iniciar Sesión

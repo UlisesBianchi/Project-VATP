@@ -12,14 +12,12 @@ function Footer() {
         width: "100%",
         height: "20vh",
         backgroundColor: "white",
-        padding:"0",
-        marginBottom:"0", 
-        marginTop:"2vh",
-        position:"relative",
-        bottom:"0"
-        }}
+        padding:"0px",
+        
+        marginTop:"2vh"
+      }}
     >
-      <Box sx={{display:"flex",justifyContent:"space-evenly",height:"17vh"}}>  
+      <Box sx={{display:"flex",justifyContent:"space-evenly"}}>  
       <Box
         sx={{
           display: "flex",
@@ -67,7 +65,7 @@ function Footer() {
           </IconButton>
           </Box>
           </Box>
-          <Box sx={{display:"flex",color:"#E233332",justifyContent:"center",backgroundColor:"#E23333",width:"100%",height:"5vh",padding:"0",position:"absolute",bottom:"0"}}>
+          <Box sx={{display:"flex",color:"#E233332",justifyContent:"center",backgroundColor:"#E23333",width:"100%",height:"5vh",padding:"0"}}>
           <Typography variant="h6" sx={{color:"white",display:"flex",alignItems:"center"}} >©2023 Un viaje a tu paladar</Typography>
           </Box>
     </Box>

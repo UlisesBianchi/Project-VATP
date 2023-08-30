@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TextField, Button, Container, CssBaseline, Typography, Box } from '@mui/material';
+import { TextField, Button, Container, CssBaseline, Typography } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -39,10 +39,10 @@ function LoginForm() {
     }
 
     return (
-        <Container component="main" maxWidth="xs" sx={{height:"50vh",border:"1px solid grey",borderRadius:"15px"}}>
-            <CssBaseline  />
-            <Box sx={{display:"flex",flexDirection:"column",marginTop:"10vh"}} >
-                <Typography component="h1" variant="h5" sx={{color:"#E23333"}}>
+        <Container component="main" maxWidth="xs" sx={{marginTop: "2vh"}}>
+            <CssBaseline />
+            <div className="paper">
+                <Typography component="h1" variant="h5">
                     Iniciar sesión
                 </Typography>
                 <form className="form" onSubmit={login}>
@@ -78,7 +78,7 @@ function LoginForm() {
                         Iniciar sesión
                     </Button>
                 </form>
-            </Box>
+            </div>
         </Container>
     );
 }

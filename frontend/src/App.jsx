@@ -8,25 +8,24 @@ import RegistrationUser from "./routes/RegistrationUser";
 import Admin from "./routes/Admin";
 import LoginForm from "./component/navBar/LoginForm";
 
+
+
 function App() {
-  const isAuthenticated = localStorage.getItem("token") !== null;
+
+  const isAuthenticated = localStorage.getItem('token') !== null;
 
   return (
     <>
       <NavBar />
       <Routes>
-        <Route path="/" element={<Navigate to="/home" />} />
+        <Route path="/" element={<Navigate to="/home"/>} /> 
         <Route path="/home" element={<Home />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="product-form" element={<FormRegistationProducts />} />
-        <Route path="/product/:id" component={<ProductDetail />} />
-        <Route path="/register" element={<RegistrationUser />} />
-        <Route path="/form-product" element={<FormRegistationProducts />} />
-        {isAuthenticated ? (
-          <Route path="/login" element={<Navigate to="/home" />} />
-        ) : (
-          <Route path="/login" element={<LoginForm />} />
-        )}
+        <Route path="/admin" element={<Admin/>} />
+        <Route path="product-form" element={<FormRegistationProducts />}/>
+        <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/register" element={<RegistrationUser />}/>
+        <Route path="/form-product" element={<FormRegistationProducts />}/>
+        {isAuthenticated ? <Route path="/login" element={<Navigate to="/home" />} /> : <Route path="/login" element={<LoginForm />} />}
       </Routes>
 
       <Footer />
