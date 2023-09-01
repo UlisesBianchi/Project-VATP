@@ -2,7 +2,9 @@ package com.example.VATP.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "product_images")
 public class ProductImage {

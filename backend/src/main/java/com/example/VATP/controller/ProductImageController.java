@@ -50,6 +50,9 @@ public class ProductImageController {
     public void deleteProductImage(@PathVariable Integer id) {
         productImageService.eliminarImagen(id);
     }
+
+
+
     @PostMapping("/{imageId}/associateWithProduct/{productId}")
     public ProductImage associateImageWithProduct(
             @PathVariable Integer imageId,
@@ -57,4 +60,10 @@ public class ProductImageController {
     ) {
         return productImageService.associateImageWithProduct(imageId, productId);
     }
+
+
+
+
+
+
 }

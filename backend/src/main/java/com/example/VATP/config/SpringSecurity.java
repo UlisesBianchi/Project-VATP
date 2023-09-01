@@ -40,6 +40,8 @@ public class SpringSecurity {
                                         "/admin/**",
                                         "/usuarios/**",
                                         "/reservas/**",
+                                        "/caracteristicas/**",
+                                        "/productImages/*/asociacionCaracteristicaConProducto/*",
                                         "/productImages/**",
                                         "/productImages/*/associateWithProduct/*",
                                         "/register/**",    // Added /register/** here

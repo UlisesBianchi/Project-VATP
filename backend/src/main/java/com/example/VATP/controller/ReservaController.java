@@ -18,6 +18,14 @@ public class ReservaController {
     @Autowired
     private ReservaService reservaService;
 
+    // registrar una reserva
+
+    @PostMapping
+    public ResponseEntity<Reserva>  registrarNuevaRerserva(@RequestBody Reserva reserva){
+        Reserva savedReserva = reservaService.guardarReserva(reserva);
+        return ResponseEntity.ok(savedReserva) ;
+    }
+
     // buscar todos las reservas
 
     @GetMapping
@@ -33,12 +41,7 @@ public class ReservaController {
         return reservaBuscado.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-// registrar una reserva
 
-    @PostMapping
-    public ResponseEntity<Reserva>  registrarNuevaRerserva(@RequestBody Reserva reserva){
-        return ResponseEntity.ok(reservaService.guardarReserva(reserva)) ;
-    }
 
 // eliminar una reserva por id
 
@@ -49,7 +52,7 @@ public class ReservaController {
 
 // actualizar reserva
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<Reserva> actualizarReserva(@RequestBody Reserva reserva){
 
         Optional<Reserva> reservaBuscado=reservaService.buscarReserva(reserva.getId());
