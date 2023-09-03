@@ -15,20 +15,26 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+
 import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
 public class SpringSecurity {
+    @Autowired
+    private UserDetailsService userDetailsService;
 
+    public SpringSecurity() {
+    }
 
-        @Autowired
-        private UserDetailsService userDetailsService;
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
+    }
 
-        @Bean
-        public static PasswordEncoder passwordEncoder(){
-            return new BCryptPasswordEncoder();
-        }
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -40,18 +46,18 @@ public class SpringSecurity {
                                         "/admin/**",
                                         "/usuarios/**",
                                         "/reservas/**",
-                                        "/productImages/**",
-                                        "/productImages/*/associateWithProduct/*",
-                                        "/register/**",    // Added /register/** here
+                                        "/api/**",
+                                        "/productos/*//*",
+                                        "/detalles/**",
                                         "/index",
-                                        "/registrationok" // Added /registrationok here
+                                        "/registrationok"
                                 ).permitAll()
-                                .requestMatchers("/users").hasRole("ADMIN")
+                                .requestMatchers("/register/**").permitAll()
                 ).formLogin(
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/users")
+                                .defaultSuccessUrl("http://www.google.com")
                                 .permitAll()
                 ).logout(
                         logout -> logout
@@ -60,22 +66,20 @@ public class SpringSecurity {
                 );
         return http.build();
     }
-
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Collections.singletonList("*"));
         configuration.setAllowedMethods(Collections.singletonList("*"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
-        @Autowired
-        public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-            auth
-                    .userDetailsService(userDetailsService)
-                    .passwordEncoder(passwordEncoder());
-        }
+
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
     }
+}
