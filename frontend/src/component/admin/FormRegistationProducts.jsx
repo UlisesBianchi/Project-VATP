@@ -68,7 +68,8 @@ const FormRegistrationProducts = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      {AdminComponent}
+    {AdminComponent}
+      
       <Container sx={{ marginTop: "10vh", marginBottom: "10vh" }}>
         <Typography
           sx={{ marginBottom: "5vh" }}

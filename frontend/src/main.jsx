@@ -7,11 +7,12 @@ import "./styles.css";
 import { ContextProvider } from './component/utils/globalContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <ContextProvider>
-    <ThemeProvider theme={customTheme}>
-      <BrowserRouter>
+  <ThemeProvider theme={customTheme}>
+    <BrowserRouter>
+      <ContextProvider>
         <App />
-      </BrowserRouter>
-    </ThemeProvider>
-  </ContextProvider>
+      </ContextProvider>
+    </BrowserRouter>
+  </ThemeProvider>
 );
+

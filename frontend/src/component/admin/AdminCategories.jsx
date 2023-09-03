@@ -1,25 +1,33 @@
-import React, { useContext, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
-import { ContextGlobal } from "../utils/globalContext";
-import { DataGrid } from "@mui/x-data-grid";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { Box, Button, Typography } from '@mui/material';
+import React, { useContext, useMemo, useState } from 'react'
+import { ContextGlobal } from '../utils/globalContext';
+import axios from 'axios';
+import { DataGrid } from '@mui/x-data-grid';
+import { Link } from 'react-router-dom';
 
-const AdminProducts = () => {
+
+const AdminCategories = () => {
+
+ 
+
   const { obj , AdminComponent } = useContext(ContextGlobal);
-  const [products, setProducts] = useState(obj.product);
+  const [category, setCategory] = useState(obj.category);
 
-  const handleDelete = async (productId) => {
-    const confirmed = window.confirm("¿Estás seguro de que deseas eliminar este producto?");
+ 
+
+ 
+
+  const handleDelete = async (categoryId) => {
+    const confirmed = window.confirm("¿Estás seguro de que deseas eliminar esta categoria?");
     if (confirmed) {
       try {
-        await axios.delete(`http://18.191.210.53:8082/productos/${productId}`);
-        // Eliminar el producto del estado local
-        const updatedProducts = products.filter((product) => product.id !== productId);
-        setProducts(updatedProducts);
-        console.log("producto eliminado");
+        await axios.delete(`http://18.191.210.53:8082/categorias/${categoryId}`);
+        // Eliminar la categoria del estado local
+        const updatedCategory = category.filter((category) => category.id !== categoryId);
+        setCategory(updatedCategory);
+        console.log("Categoria eliminada");
       } catch (error) {
-        console.error("Error al eliminar el producto:", error);
+        console.error("Error al eliminar la categoria:", error);
       }
     }
   };
@@ -52,7 +60,6 @@ const AdminProducts = () => {
       width: 350,
       align: "center",
     },
-    { field: "Precio", headerName: "Precio", width: 200, align: "center" },
     {
       field: "Acciones",
       headerName: "Acciones",
@@ -71,29 +78,31 @@ const AdminProducts = () => {
           Eliminar
         </Button>
       ),
-    },
+    }
+
   ];
 
-  const rows = products.map((product) => ({
-    id: product.id,
+  const rows = category.map((category) => ({
+    id: category.id,
     imagen: "",
-    imagenUrl: product.imagenUrl,
-    Producto: product.nombre,
-    Precio: product.precio,
+    imagenUrl: category.imagenUrl,
+    Producto: category.nombre,
     Acciones: "",
   }));
 
   return (
-    <Box sx={{display:"flex"}}>
+  
+      
+      <Box sx={{display:"flex"}}>
       {AdminComponent}
-      <Box sx={{display:"flex", flexDirection:"column", marginLeft:"20vh"}}>
+      <Box sx={{display:"flex", flexDirection:"column",marginLeft:"20vh", width:"76%"}}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h4" color="primary" sx={{ margin: "5vh" }}>
-          Productos
+          Categorias
         </Typography>
-        <Link to={"/admin/form-product"}>
+        <Link to={"/admin/form-category"} >
           <Button variant="contained" sx={{ marginRight: "5vw", height: "5vh", background: "primary" }}>
-            Agregar productos
+            Agregar categoria
           </Button>
         </Link>
       </Box>
@@ -113,7 +122,9 @@ const AdminProducts = () => {
       </Box>
       </Box>
     </Box>
-  );
-};
 
-export default AdminProducts;
+   
+  )
+}
+
+export default AdminCategories

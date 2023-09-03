@@ -1,25 +1,27 @@
+import React, { useState, useContext } from "react";
 import {
   Box,
   AppBar,
   Toolbar,
   Button,
   IconButton,
-
   Menu,
   Tooltip,
   Avatar,
   MenuItem,
-ListItemIcon,
+  ListItemIcon,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { Logout } from "@mui/icons-material";
+import { AccountCircle, Logout } from "@mui/icons-material";
+import { ContextGlobal } from "../utils/globalContext";
 
 const NavBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const { obj } = useContext(ContextGlobal);
+
+  const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -27,19 +29,16 @@ const NavBar = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, display:"flex", justifyContent:"space-around"}}>
-
-
-
-
+    <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "space-around" }}>
       <AppBar position="static">
-        <Toolbar sx={{ height: "5rem", background: "white", display:"flex", justifyContent:"space-around"}}>
-
-       
-
-
-
-
+        <Toolbar
+          sx={{
+            height: "5rem",
+            background: "white",
+            display: "flex",
+            justifyContent: "space-around",
+          }}
+        >
           <IconButton color="primary" sx={{ display: { xl: "none" } }}>
             <MenuIcon />
           </IconButton>
@@ -58,84 +57,53 @@ const NavBar = () => {
             />
           </Link>
           <Box sx={{ display: { xs: "none", md: "flex", xl: "flex" } }}>
-            <Link to={"/register"}>
-            <Button variant="text" sx={{ margin: "3vh", fontSize:"0.75rem" }}>
-              Crear cuenta
-            </Button>
-            </Link>
-            <Link to={"/login"}>
-            <Button variant="text" sx={{ margin: "3vh", fontSize:"0.75rem" }}>
-              Iniciar Sesión
-            </Button>
-            </Link>
+            {obj.isLoggedIn ? (
+              // Mostrar el avatar y el menú si está logueado
+              <div>
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                >
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={open}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={handleClose}>My account</MenuItem>
+                </Menu>
+              </div>
+            ) : (
+              // Botón de inicio de sesión
+              <Link to={"/login"}>
+                <Button variant="text" sx={{ margin: "3vh", fontSize: "0.75rem" }}>
+                  Iniciar Sesión
+                </Button>
+              </Link>
+            )}
+            {!obj.isLoggedIn && ( // Ocultar el botón de "Crear cuenta" si está logueado
+              <Link to={"/register"}>
+                <Button variant="text" sx={{ margin: "3vh", fontSize: "0.75rem" }}>
+                  Crear cuenta
+                </Button>
+              </Link>
+            )}
           </Box>
-
-        <Box sx={{ display: {xl:"none", md:"none"}, alignItems: 'center', textAlign: 'center',  }}>
-        <Tooltip title="Account settings">
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            sx={{ ml: 2 }}
-            aria-controls={open ? 'account-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-          >
-            <Avatar sx={{ width: 32, height: 32 }}></Avatar>
-          </IconButton>
-        </Tooltip>
-        
-        </Box>
-        <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={open}
-        onClose={handleClose}
-        onClick={handleClose}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            overflow: 'visible',
-            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-            mt: 1.5,
-            '& .MuiAvatar-root': {
-              width: 32,
-              height: 32,
-              ml: -0.5,
-              mr: 1,
-            },
-            '&:before': {
-              content: '""',
-              display: 'block',
-              position: 'absolute',
-              top: 0,
-              right: 14,
-              width: 10,
-              height: 10,
-              bgcolor: 'background.paper',
-              transform: 'translateY(-50%) rotate(45deg)',
-              zIndex: 0,
-            },
-          },
-        }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      >
-
-        <MenuItem onClick={handleClose}>
-          <Avatar /> Crear cuenta
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar /> Iniciar Sesion
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          Logout
-        </MenuItem>
-
-
-      </Menu>
         </Toolbar>
       </AppBar>
     </Box>
