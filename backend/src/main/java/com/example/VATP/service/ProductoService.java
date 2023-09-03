@@ -28,10 +28,18 @@ public class ProductoService {
         return productoRepository.findById(id);
     }
 
+/*
+    public Producto guardarProducto (Producto producto){
+        return productoRepository.save(producto);
+    }
+*/
+
+
     public Producto guardarProducto(Producto p) {
+
         Categoria categoria = p.getCategoria();
 
-        if (categoria != null && categoria.getId() != null) {
+        if (categoria !=null && categoria.getId() != null) {
             Integer categoriaId = categoria.getId();
             Categoria existingCategoria = categoriaService.obtenerCatPorId(categoriaId)
                     .orElseThrow(() -> new IllegalArgumentException("Invalid categoria ID provided"));
@@ -41,6 +49,9 @@ public class ProductoService {
 
         return productoRepository.save(p);
     }
+
+
+
     public void eliminarProducto(Integer id) {
         productoRepository.deleteById(id);
     }

@@ -17,6 +17,8 @@ public class CategoriaService {
     public CategoriaService(CategoriaRepository categoriaRepository) {
         this.categoriaRepository = categoriaRepository;
     }
+
+
     public List<Categoria> obtenerTodas() {
         return categoriaRepository.findAll();
     }
@@ -32,6 +34,8 @@ public class CategoriaService {
     public void eliminarCategoria(Integer id) {
         categoriaRepository.deleteById(id);
     }
+
+
     public Categoria actualizarCategoria(Categoria c) {
         return categoriaRepository.save(c);
     }

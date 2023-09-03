@@ -1,19 +1,19 @@
 package com.example.VATP.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+   //    colocar jsonignore en donde vaya y entenderlo
+  // ver lo de filtro y lo de la reserva
+
 @Entity
 @Table(name = "productos")
 public class Producto {
     @Id
-    @SequenceGenerator(name = "producto_sequence",sequenceName = "producto_sequence",allocationSize =1 )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "producto_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column
     private String nombre;
@@ -22,80 +22,11 @@ public class Producto {
     @Column
     private String descripcion;
 
-
-    @ManyToOne
-    @JoinColumn(name = "categoria_id")
-    private Categoria categoria;
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-
-
-    @ManyToOne
-    @JoinColumn(name = "reservas_id")
-    private Reserva reservas;
-
-    public Reserva getReservas() {
-        return reservas;
-    }
-
-    public void setReservas(Reserva reservas) {
-        this.reservas = reservas;
-    }
-
-
-
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductImage> images = new ArrayList<>();
-    public List<ProductImage> getImages() {
-        return images;
-    }
-    public void setImages(List<ProductImage> images) {
-        this.images = images;
-    }
-    public void addImage(ProductImage image) {
-        images.add(image);
-        image.setProducto(this);
-    }
-    public void removeImage(ProductImage image) {
-        images.remove(image);
-        image.setProducto(null);
-    }
-
-
-
-
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CaracteristicasProducto> caracteristicasProductos = new ArrayList<>();
-    public void setCaracteristicasProductos(List<CaracteristicasProducto> caracteristicasProductos) {
-        this.caracteristicasProductos = caracteristicasProductos;
-    }
-
-    public List<CaracteristicasProducto> getCaracteristicasProductos() {
-        return caracteristicasProductos;
-    }
-
-    public void addCaracteristica(CaracteristicasProducto caracteristicaProductos) {
-        caracteristicasProductos.add(caracteristicaProductos);
-        caracteristicaProductos.setProducto(this);
-    }
-    public void removeCaracteristica(CaracteristicasProducto caracteristicaProductos) {
-        caracteristicasProductos.remove(caracteristicaProductos);
-        caracteristicaProductos.setProducto(null);
-    }
-
-
-
+    // constructores
     public Producto() {
     }
 
-
-    public Producto(Integer id, String nombre, double precio, String descripcion, Categoria categoria, Reserva reservas, List<ProductImage> images, List<CaracteristicasProducto> caracteristicasProductos) {
+    public Producto(Integer id, String nombre, double precio, String descripcion, Categoria categoria, List<Reserva> reservas, List<ProductImage> images, List<CaracteristicasProducto> caracteristicasProductos) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -136,4 +67,86 @@ public class Producto {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }}
+    }
+
+
+    // relacion con categoria
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+
+    private Categoria categoria;
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+
+
+    // relacion con reservas
+    @OneToMany(mappedBy = "productos")
+       // sirve pero no me tare la reserva en producto
+    private List<Reserva> reservas ;
+
+    public List<Reserva> getReservas() {
+        return reservas;
+    }
+    public void setReservas(List<Reserva> reservas) {
+        this.reservas = reservas;
+    }
+
+
+
+//relacion con imagenes
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductImage> images = new ArrayList<>();
+
+
+    public void addImage(ProductImage image) {
+        images.add(image);
+        image.setProducto(this);
+    }
+    public void removeImage(ProductImage image) {
+        images.remove(image);
+        image.setProducto(null);
+    }
+    public List<ProductImage> getImages() {
+        return images;
+    }
+    public void setImages(List<ProductImage> images) {
+        this.images = images;
+    }
+
+
+    // relacion con caracteristicas
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CaracteristicasProducto> caracteristicasProductos = new ArrayList<>();
+
+
+    public void addCaracteristica(CaracteristicasProducto caracteristicaProductos) {
+        caracteristicasProductos.add(caracteristicaProductos);
+        caracteristicaProductos.setProducto(this);
+    }
+    public void removeCaracteristica(CaracteristicasProducto caracteristicaProductos) {
+        caracteristicasProductos.remove(caracteristicaProductos);
+        caracteristicaProductos.setProducto(null);
+    }
+
+    public List<CaracteristicasProducto> getCaracteristicasProductos() {
+        return caracteristicasProductos;
+    }
+
+    public void setCaracteristicasProductos(List<CaracteristicasProducto> caracteristicasProductos) {
+        this.caracteristicasProductos = caracteristicasProductos;
+    }
+
+
+
+
+}

@@ -1,7 +1,9 @@
 package com.example.VATP.controller;
 
 
+import com.example.VATP.model.Producto;
 import com.example.VATP.model.Reserva;
+import com.example.VATP.service.ProductoService;
 import com.example.VATP.service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,10 @@ public class ReservaController {
     @Autowired
     private ReservaService reservaService;
 
+    @Autowired
+    private ProductoService productoService;
+
+
     // registrar una reserva
 
     @PostMapping
@@ -25,6 +31,24 @@ public class ReservaController {
         Reserva savedReserva = reservaService.guardarReserva(reserva);
         return ResponseEntity.ok(savedReserva) ;
     }
+
+
+/*
+    @PostMapping
+    public ResponseEntity<Reserva> registrarNuevaReserva(@RequestBody Reserva reserva) {
+        Optional<Producto> productoBuscado = productoService.obtenerPorId(reserva.getProductos().getId());
+
+        if (productoBuscado.isPresent()) {
+            Producto producto = productoBuscado.get();
+            reserva.setProductos(producto);
+            Reserva savedReserva = reservaService.guardarReserva(reserva);
+            return ResponseEntity.ok(savedReserva);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+*/
 
     // buscar todos las reservas
 

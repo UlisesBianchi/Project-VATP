@@ -1,6 +1,7 @@
 package com.example.VATP.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -11,26 +12,35 @@ import java.util.List;
 public class Reserva {
 
     @Id
-    @SequenceGenerator(name = "reserva_sequence",sequenceName = "reserva_sequence",allocationSize =1 )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "reserva_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column
     private LocalDate fecha;
 
 
 
-    @OneToMany(mappedBy = "reservas")
-    private List<Producto> productos;
+    @ManyToOne
+    @JoinColumn(name = "productos")
+  @JsonIgnore
+    private Producto productos;
 
 
-    public Reserva(Integer id, LocalDate fecha, List<Producto> productos) {
-        this.id = id;
-        this.fecha = fecha;
+    public Producto getProductos() {
+        return productos;
+    }
+
+    public void setProductos(Producto productos) {
         this.productos = productos;
     }
 
-    public Reserva() {
 
+    public Reserva(Integer id, LocalDate fecha) {
+        this.id = id;
+        this.fecha = fecha;
+
+    }
+
+    public Reserva() {
     }
 
     public Integer getId() {
@@ -41,13 +51,6 @@ public class Reserva {
         this.id = id;
     }
 
-    public List<Producto> getProductos() {
-        return productos;
-    }
-
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
-    }
 
     public LocalDate getFecha() {
         return fecha;
