@@ -22,6 +22,30 @@ public class Producto {
     @Column
     private String descripcion;
 
+        @ElementCollection(fetch = FetchType.EAGER)
+        @CollectionTable(
+                name = "producto_images",
+                joinColumns = @JoinColumn(name = "producto_id")
+        )
+        @Column(name = "image_url")
+        private List<String> images = new ArrayList<>();
+
+        public List<String> getImages() {
+            return images;
+        }
+
+        public void setImages(List<String> images) {
+            this.images = images;
+        }
+
+
+    public void addImage(String imageUrl) {
+        images.add(imageUrl);
+    }
+
+    public void removeImage(String imageUrl) {
+        images.remove(imageUrl);
+    }
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
@@ -39,38 +63,45 @@ public class Producto {
         this.categoria = categoria;
     }
 
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductImage> images = new ArrayList<>();
 
-    public List<ProductImage> getImages() {
-        return images;
+    @ManyToMany
+    @JoinTable(
+            name = "producto_detalle",
+            joinColumns = @JoinColumn(name = "producto_id"),
+            inverseJoinColumns = @JoinColumn(name = "detalle_id")
+    )
+    private List<Detalle> detalles = new ArrayList<>();
+
+    public List<Detalle> getDetalles() {
+        return detalles;
     }
 
-    public void setImages(List<ProductImage> images) {
-        this.images = images;
+    public void setDetalles(List<Detalle> detalles) {
+        this.detalles = detalles;
     }
 
-    public void addImage(ProductImage image) {
-        images.add(image);
-        image.setProducto(this);
+    public void addDetalle(Detalle detalle) {
+        detalles.add(detalle);
+        detalle.getProductos().add(this);
     }
 
-    public void removeImage(ProductImage image) {
-        images.remove(image);
-        image.setProducto(null);
+    public void removeDetalle(Detalle detalle) {
+        detalles.remove(detalle);
+        detalle.getProductos().remove(this);
     }
 
     public Producto() {
     }
 
-
-    public Producto(Integer id, String nombre, double precio, String descripcion, Categoria categoria, Reserva reservas) {
+    public Producto(Integer id, String nombre, double precio, String descripcion, List<String> images, Categoria categoria, Reserva reservas, List<Detalle> detalles) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
+        this.images = images;
         this.categoria = categoria;
         this.reservas = reservas;
+        this.detalles = detalles;
     }
 
     public Integer getId() {

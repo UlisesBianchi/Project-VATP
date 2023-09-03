@@ -1,9 +1,9 @@
 package com.example.VATP.repository;
 
-import com.example.VATP.model.ProductImage;
+import com.example.VATP.model.Detalle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductImageRepository extends JpaRepository<ProductImage, Integer> {
+public interface DetalleRepository extends JpaRepository<Detalle, Integer> {
 }

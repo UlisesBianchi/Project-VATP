@@ -1,5 +1,6 @@
 package com.example.VATP.controller;
 
+import com.example.VATP.dto.ProductoRequestDTO;
 import com.example.VATP.model.Producto;
 import com.example.VATP.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ public class ProductoController {
     private ProductoService productoService;
 
     @PostMapping
-    public ResponseEntity<Producto> guardarProducto(@RequestBody Producto producto) {
-        Producto savedProducto = productoService.guardarProducto(producto);
+    public ResponseEntity<Producto> guardarProducto(@RequestBody ProductoRequestDTO productoRequestDTO) {
+        Producto savedProducto = productoService.guardarProducto(productoRequestDTO);
         return ResponseEntity.ok(savedProducto);
     }
 
@@ -34,12 +35,22 @@ public class ProductoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Producto> actualizarProducto(@PathVariable Integer id, @RequestBody Producto producto) {
+    public ResponseEntity<Producto> actualizarProducto(@PathVariable Integer id, @RequestBody ProductoRequestDTO productoRequestDTO) {
         Optional<Producto> existingProducto = productoService.obtenerPorId(id);
         if (existingProducto.isPresent()) {
-            producto.setId(id);
-            Producto updatedProducto = productoService.actualizarProducto(producto);
+            Producto updatedProducto = productoService.actualizarProducto(id, productoRequestDTO);
             return ResponseEntity.ok(updatedProducto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}/images")
+    public ResponseEntity<List<String>> obtenerImagenesProducto(@PathVariable Integer id) {
+        Optional<Producto> producto = productoService.obtenerPorId(id);
+        if (producto.isPresent()) {
+            List<String> images = producto.get().getImages();
+            return ResponseEntity.ok(images);
         } else {
             return ResponseEntity.notFound().build();
         }

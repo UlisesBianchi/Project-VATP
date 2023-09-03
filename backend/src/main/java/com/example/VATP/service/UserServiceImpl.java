@@ -1,15 +1,21 @@
 package com.example.VATP.service;
 
+import com.example.VATP.dto.LoginDTO;
 import com.example.VATP.dto.UserDto;
 import com.example.VATP.model.Role;
 import com.example.VATP.model.User;
 import com.example.VATP.repository.RoleRepository;
 import com.example.VATP.repository.UserRepository;
+import com.example.VATP.utils.LoginMesage;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,7 +66,45 @@ public class UserServiceImpl implements UserService {
 
         emailService.sendRegistrationConfirmationEmail(user.getEmail(), user.getFirstName());
     }
+@Override
+    public LoginMesage loginUser(LoginDTO loginDTO) {
+        String msg = "";
+        User user1 = userRepository.findByEmail(loginDTO.getEmail());
+        if (user1 != null) {
+            String password = loginDTO.getPassword();
+            String encodedPassword = user1.getPassword();
+            boolean isPwdRight = passwordEncoder.matches(password, encodedPassword);
+            if (isPwdRight) {
+                Optional<User> user = userRepository.findOneByEmailAndPassword(loginDTO.getEmail(), encodedPassword);
+                if (user.isPresent()) {
+                    return new LoginMesage("Login Success", true);
+                } else {
+                    return new LoginMesage("Login Failed", false);
+                }
+            } else {
+                return new LoginMesage("Password Not Match", false);
+            }
+        } else {
+            return new LoginMesage("Email not exists", false);
+        }}
 
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+
+        if (user != null) {
+            return new org.springframework.security.core.userdetails.User(
+                    user.getEmail(),
+                    user.getPassword(),
+                    user.getRoles().stream()
+                            .map(role -> new SimpleGrantedAuthority(role.getName()))
+                            .collect(Collectors.toList())
+            );
+        } else {
+            throw new UsernameNotFoundException("Invalid email or password.");
+        }
+    }
 
 
     public void grantAdminPrivileges(String userEmail) {
