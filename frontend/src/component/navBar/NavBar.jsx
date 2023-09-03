@@ -10,6 +10,7 @@ import {
   Avatar,
   MenuItem,
   ListItemIcon,
+  Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
@@ -17,16 +18,24 @@ import { AccountCircle, Logout } from "@mui/icons-material";
 import { ContextGlobal } from "../utils/globalContext";
 
 const NavBar = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+ 
+  
   const { obj } = useContext(ContextGlobal);
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+
+
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
+
+  const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
   return (
     <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "space-around" }}>
@@ -59,35 +68,35 @@ const NavBar = () => {
           <Box sx={{ display: { xs: "none", md: "flex", xl: "flex" } }}>
             {obj.isLoggedIn ? (
               // Mostrar el avatar y el menú si está logueado
-              <div>
-                <IconButton
-                  size="large"
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleMenu}
-                >
-                  <AccountCircle />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={open}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
-                </Menu>
-              </div>
+             <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {settings.map((setting) => (
+                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">{setting}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
             ) : (
               // Botón de inicio de sesión
               <Link to={"/login"}>
