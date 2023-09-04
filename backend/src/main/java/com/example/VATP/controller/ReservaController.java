@@ -25,30 +25,58 @@ public class ReservaController {
 
 
     // registrar una reserva
-
+/*
     @PostMapping
     public ResponseEntity<Reserva>  registrarNuevaRerserva(@RequestBody Reserva reserva){
         Reserva savedReserva = reservaService.guardarReserva(reserva);
         return ResponseEntity.ok(savedReserva) ;
     }
 
-
+    @PostMapping
+    public ResponseEntity<Reserva> registrarNuevaReservaConIdProducto(@RequestBody Reserva reserva) {
+        Optional<Producto> productoBuscado = productoService.obtenerPorId(reserva.getProductos().getId());
+        if (productoBuscado.isPresent()) {
+            return ResponseEntity.ok(reservaService.guardarReserva(reserva));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }*/
 /*
     @PostMapping
-    public ResponseEntity<Reserva> registrarNuevaReserva(@RequestBody Reserva reserva) {
-        Optional<Producto> productoBuscado = productoService.obtenerPorId(reserva.getProductos().getId());
+    public ResponseEntity<Reserva> registrarNuevaReservaConIdProducto(@RequestBody Reserva reservaRequest) {
+        // Check if the provided product id exists
+        Optional<Producto> productoBuscado = productoService.obtenerPorId(reservaRequest.getProductos().getId());
+        if (productoBuscado.isPresent()) {
+            reservaRequest.setProductos(productoBuscado.get()); // Associate the found Producto with the Reserva
+            return ResponseEntity.ok(reservaService.guardarReserva(reservaRequest));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }*/
 
+ // crea una reserva y asigna un producto
+    @PostMapping
+    public ResponseEntity<Reserva> registrarNuevaReservaConIdProducto(@RequestBody Reserva reservaRequest) {
+        // Check if the provided product id exists
+        Optional<Producto> productoBuscado = productoService.obtenerPorId(reservaRequest.getProductos().getId());
         if (productoBuscado.isPresent()) {
             Producto producto = productoBuscado.get();
-            reserva.setProductos(producto);
-            Reserva savedReserva = reservaService.guardarReserva(reserva);
-            return ResponseEntity.ok(savedReserva);
+            reservaRequest.setProductos(producto); // Asociar manualmente el producto con la reserva
+            return ResponseEntity.ok(reservaService.guardarReserva(reservaRequest));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
-*/
+
+
+
+
+
+
+
+
+
 
     // buscar todos las reservas
 

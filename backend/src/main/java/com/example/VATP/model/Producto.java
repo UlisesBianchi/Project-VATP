@@ -1,6 +1,8 @@
 package com.example.VATP.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -98,7 +100,8 @@ public class Producto {
 
 
     @OneToMany(mappedBy = "productos")
-
+   // @JsonIgnore
+    @JsonManagedReference
     private List<Reserva> reservas ;
 
     public List<Reserva> getReservas() {
@@ -107,9 +110,6 @@ public class Producto {
     public void setReservas(List<Reserva> reservas) {
         this.reservas = reservas;
     }
-
-// METODO PARA CONTAR LAS RESERVAS
-
 
 
 
