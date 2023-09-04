@@ -1,12 +1,15 @@
 package com.example.VATP.controller;
 
 import com.example.VATP.model.Categoria;
+import com.example.VATP.model.Producto;
 import com.example.VATP.service.CategoriaService;
+import com.example.VATP.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -14,9 +17,12 @@ import java.util.Optional;
 public class CategoriaController {
   @Autowired
     private final CategoriaService categoriaService;
+    @Autowired
+    private final ProductoService productoService;
 
-    public CategoriaController(CategoriaService categoriaService) {
+    public CategoriaController(CategoriaService categoriaService, ProductoService productoService) {
         this.categoriaService = categoriaService;
+        this.productoService = productoService;
     }
 
     @PostMapping
@@ -49,9 +55,23 @@ public class CategoriaController {
         }
     }
 
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategoria(@PathVariable Integer id) {
+
+        List<Producto> productosConCategoria = productoService.obtenerTodos();
+
+        for (Producto producto : productosConCategoria) {
+            Categoria categoriaProducto = producto.getCategoria();
+            if (categoriaProducto != null && Objects.equals(categoriaProducto.getId(), id)) {
+                productoService.eliminarProducto(producto.getId());
+            }
+        }
+
         categoriaService.eliminarCategoria(id);
+
         return ResponseEntity.noContent().build();
     }
+
 }

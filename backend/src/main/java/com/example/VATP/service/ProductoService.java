@@ -56,6 +56,11 @@ public class ProductoService {
         productoRepository.deleteById(id);
     }
 
+    public void eliminarTodosProducto() {
+        productoRepository.deleteAll();}
+
+
+
     public Producto actualizarProducto(Producto p) {
         return productoRepository.save(p);
     }

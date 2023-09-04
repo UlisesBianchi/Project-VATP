@@ -21,7 +21,7 @@ public class Reserva {
 
     @ManyToOne
     @JoinColumn(name = "productos")
-  @JsonIgnore
+    @JsonIgnore
     private Producto productos;
 
 

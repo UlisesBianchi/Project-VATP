@@ -52,6 +52,9 @@ public class ProductoController {
         return ResponseEntity.ok(productos);
     }
 
+
+
+
     @GetMapping("/{id}")
     public ResponseEntity<Producto> obtenerPorId(@PathVariable Integer id) {
         Optional<Producto> producto = productoService.obtenerPorId(id);

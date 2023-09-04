@@ -1,12 +1,15 @@
 package com.example.VATP.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
-   //    colocar jsonignore en donde vaya y entenderlo
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+//    colocar jsonignore en donde vaya y entenderlo
   // ver lo de filtro y lo de la reserva
 
 @Entity
@@ -74,7 +77,7 @@ public class Producto {
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
-
+     // SIN JSONIGNORE
     private Categoria categoria;
 
     public Categoria getCategoria() {
@@ -85,11 +88,17 @@ public class Producto {
         this.categoria = categoria;
     }
 
-
+ public int  getCategoriaId(Categoria categoria){
+        return categoria.getId();
+ }
 
     // relacion con reservas
+
+
+
+
     @OneToMany(mappedBy = "productos")
-       // sirve pero no me tare la reserva en producto
+
     private List<Reserva> reservas ;
 
     public List<Reserva> getReservas() {
@@ -98,6 +107,9 @@ public class Producto {
     public void setReservas(List<Reserva> reservas) {
         this.reservas = reservas;
     }
+
+// METODO PARA CONTAR LAS RESERVAS
+
 
 
 
