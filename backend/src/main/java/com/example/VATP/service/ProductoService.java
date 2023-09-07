@@ -7,8 +7,11 @@ import com.example.VATP.model.ProductoDisponibilidad;
 import com.example.VATP.repository.ProductoDisponibilidadRepository;
 import com.example.VATP.repository.ProductoRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,13 +22,15 @@ import java.util.Optional;
 public class ProductoService {
     private final ProductoRepository productoRepository;
     private final CategoriaService categoriaService;
-
+    @PersistenceContext
+    private final EntityManager entityManager;
     private final ProductoDisponibilidadRepository productoDisponibilidadRepository;
 
     @Autowired
-    public ProductoService(ProductoRepository productoRepository, CategoriaService categoriaService, ProductoDisponibilidadRepository productoDisponibilidadRepository) {
+    public ProductoService(ProductoRepository productoRepository, CategoriaService categoriaService, EntityManager entityManager, ProductoDisponibilidadRepository productoDisponibilidadRepository) {
         this.productoRepository = productoRepository;
         this.categoriaService = categoriaService;
+        this.entityManager = entityManager;
         this.productoDisponibilidadRepository = productoDisponibilidadRepository;
     }
 
@@ -37,14 +42,45 @@ public class ProductoService {
         return productoRepository.findById(id);
     }
 
+
+    public List<Producto> findAvailableProductsByDay(LocalDate date) {
+        // Query products with available units for the specified date
+        // Assuming you have a 'product_availability' table with columns 'product_id', 'date', and 'available_units'
+
+        // Example using JPQL (Java Persistence Query Language)
+        String jpqlQuery = "SELECT p FROM Producto p " +
+                "WHERE EXISTS (" +
+                "   SELECT a FROM ProductoDisponibilidad a " +
+                "   WHERE a.producto = p AND a.date = :date AND a.availableUnits > 0" +
+                ")";
+
+        TypedQuery<Producto> query = entityManager.createQuery(jpqlQuery, Producto.class);
+        query.setParameter("date", date);
+
+        return query.getResultList();
+    }
+
+    public List<Producto> findProductsByKeywords(String keywords) {
+        // Query products where product name or description contains the specified keywords
+
+        // Example using JPQL (Java Persistence Query Language)
+        String jpqlQuery = "SELECT p FROM Producto p " +
+                "WHERE LOWER(p.nombre) LIKE LOWER(:keywords) OR LOWER(p.descripcion) LIKE LOWER(:keywords)";
+
+        TypedQuery<Producto> query = entityManager.createQuery(jpqlQuery, Producto.class);
+        query.setParameter("keywords", "%" + keywords + "%");
+
+        return query.getResultList();
+    }
+
+
     public Producto guardarProducto(ProductoRequestDTO productoRequestDTO) {
         Producto newProducto = new Producto();
         newProducto.setNombre(productoRequestDTO.getNombre());
         newProducto.setPrecio(productoRequestDTO.getPrecio());
         newProducto.setDescripcion(productoRequestDTO.getDescripcion());
 
-        // Set the initial stock to 5 for new products
-        newProducto.setStockDiario(5);
+
 
         // Fetch the Categoria object from the CategoriaService
         Categoria categoria = productoRequestDTO.getCategoria();
@@ -95,10 +131,7 @@ public class ProductoService {
         }
     }
 
-    public void replenishStock(Producto producto) {
-        producto.setStockDiario(5);
-        productoRepository.save(producto);
-    }
+
     public Optional<ProductoDisponibilidad> getProductAvailability(Producto producto, LocalDate date) {
         // Query the database to find availability for the product and date
 
@@ -120,4 +153,5 @@ public class ProductoService {
             }
         }
     }
+
 }

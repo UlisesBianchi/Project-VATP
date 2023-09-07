@@ -14,7 +14,7 @@ public class ProductoRequestDTO {
     private String descripcion;
     private List<String> images;
 
-    private int stockDiario;
+
     private Categoria categoria; // Change to Categoria object
 
     public Categoria getCategoria() {
@@ -32,13 +32,6 @@ public class ProductoRequestDTO {
         this.id = id;
     }
 
-    public int getStockDiario() {
-        return stockDiario;
-    }
-
-    public void setStockDiario(int stockDiario) {
-        this.stockDiario = stockDiario;
-    }
 
     public String getNombre() {
         return nombre;
