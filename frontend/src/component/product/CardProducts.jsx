@@ -1,103 +1,87 @@
-// import React from 'react';
-// import Card from '@mui/material/Card';
-// import CardContent from '@mui/material/CardContent';
-// import CardMedia from '@mui/material/CardMedia';
-// import Typography from '@mui/material/Typography';
-// import { Box, CardActionArea, CardActions } from '@mui/material';
-// import Button from '@mui/material/Button';
-// import { Link } from 'react-router-dom';
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { Box, CardActionArea } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
-// const CardProduct = ({ data }) => {
-//     return (
-//         <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}>
-//             <Card sx={{ width: 345, height: 250 }}>
-//                 <CardActionArea>
-//                     <CardMedia
-//                         component="img"
-//                         height="250"
-//                         width="200"
-//                         image={data.imagenUrl} // Fixed this line
-//                         alt={data.name} // Fixed this line
-//                     />
-//                     <CardContent>
-//                         {console.log(data.id)}
-//                     </CardContent>
-//                 </CardActionArea>
-//             </Card>
-//             <Card sx={{ width: 345, height: 250, display: "flex", flexDirection: "column" }}>
-//                 <CardContent>
-//                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-//                         Word of the Day
-//                     </Typography>
-//                     <Typography variant="h5" component="div">
-//                         {data.nombre}
-//                     </Typography>
-//                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
-//                         {data.descripcion}
-//                     </Typography>
-//                     <Typography variant="body2">
-//                         ${data.precio}
-//                     </Typography>
-//                 </CardContent>
-//                 <CardActions>
-//                     <Link to={`/product/${data.id}`}> {/* Fixed this line */}
-//                         <Button size="small">Learn More</Button>
-//                     </Link>
-//                 </CardActions>
-//             </Card>
-//         </Box>
-//     );
-// };
+import CardActions from "@mui/material/CardActions";
 
-// export default CardProduct;
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { Box, CardActionArea } from '@mui/material';
+import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { FavoriteBorder } from "@mui/icons-material";
+import { ContextGlobal } from "../utils/globalContext";
 
+const CardProducts = ({ product }) => {
+  // const productImg = imageMap[product.id]
+  const { obj } = useContext(ContextGlobal);
+  const [isFavorite, setIsFavorite] = useState(false);
 
-import CardActions from '@mui/material/CardActions';
+  const handleFavorite = () => {
+    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
-import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
+    const isFavorite = favorites.find((fav) => fav.id === product.id);
 
+    if (isFavorite) {
+      const updateFavorites = favorites.filter((fav) => fav.id !== product.id);
+      localStorage.setItem("favorites", JSON.stringify(updateFavorites));
+      alert("Producto eliminado de favoritos");
+    } else {
+      favorites.push(product);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+      alert("Producto agregado a favoritos");
+    }
 
-const CardProduct = ({ product, imageMap }) => {
-  const productImageUrl = imageMap[product.id]; 
-
+    setIsFavorite(!isFavorite);
+    console.log(product);
+  };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
+    <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}>
       <Card sx={{ width: 345, height: 250 }}>
         <CardActionArea>
           <CardMedia
             component="img"
             height="250"
             width="200"
-            image={productImageUrl || ''}
+            image={obj.imageMap[product.id] || ""}
             alt={product.nombre}
           />
-          <CardContent>
-            {/* Other card content */}
-          </CardContent>
+          <CardContent>{}</CardContent>
         </CardActionArea>
       </Card>
-      <Card sx={{ width: 345, height: 250, display: 'flex', flexDirection: 'column' }}>
+      <Card
+        sx={{
+          width: 345,
+          height: 250,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <CardContent>
           {/* Card content */}
           <Typography>{product.nombre}</Typography>
           <Typography>{product.precio}</Typography>
           <Typography>{product.descripcion}</Typography>
         </CardContent>
-        <Link to={`/product/${product.id}`}>
         <CardActions>
-          <Button size="small">Learn More</Button>
+          <IconButton onClick={handleFavorite}>
+            {isFavorite ? (
+              <FavoriteIcon color="error" />
+            ) : (
+              <FavoriteBorder color="error" />
+            )}
+          </IconButton>
+
+          <Link to={`/product/${product.id}`}>
+            <Button size="small">Learn More</Button>
+          </Link>
         </CardActions>
-        </Link>
       </Card>
     </Box>
   );
 };
 
-export default CardProduct;
+export default CardProducts;

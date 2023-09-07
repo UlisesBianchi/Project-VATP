@@ -7,9 +7,6 @@ import Filter from "../category/Filter";
 const Recomendation = () => {
   const { obj } = useContext(ContextGlobal);
 
-
-  
-
   const [showCount, setShowCount] = useState(10);
   const productsPerPage = 10;
   const [shuffledProducts, setShuffledProducts] = useState([]);

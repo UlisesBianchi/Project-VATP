@@ -18,24 +18,19 @@ import { AccountCircle, Logout } from "@mui/icons-material";
 import { ContextGlobal } from "../utils/globalContext";
 
 const NavBar = () => {
- 
-  
   const { obj } = useContext(ContextGlobal);
 
   const [anchorElUser, setAnchorElUser] = useState(null);
-
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
-
-
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
-  const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+  const settings = ["Perfil", "Favoritos", "Dashboard", "Cerrar Sesion"];
 
   return (
     <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "space-around" }}>
@@ -68,46 +63,61 @@ const NavBar = () => {
           <Box sx={{ display: { xs: "none", md: "flex", xl: "flex" } }}>
             {obj.isLoggedIn ? (
               // Mostrar el avatar y el menú si está logueado
-             <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src="/static/images/avatar/2.jpg"
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {settings.map((setting) => (
+                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      {setting === "Favoritos" ? (
+                        <Link to="/favorites">
+                          <Typography textAlign="center">Favoritos</Typography>
+                        </Link>
+                      ) : (
+                        <Typography textAlign="center">{setting}</Typography>
+                      )}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
             ) : (
               // Botón de inicio de sesión
               <Link to={"/login"}>
-                <Button variant="text" sx={{ margin: "3vh", fontSize: "0.75rem" }}>
+                <Button
+                  variant="text"
+                  sx={{ margin: "3vh", fontSize: "0.75rem" }}
+                >
                   Iniciar Sesión
                 </Button>
               </Link>
             )}
             {!obj.isLoggedIn && ( // Ocultar el botón de "Crear cuenta" si está logueado
               <Link to={"/register"}>
-                <Button variant="text" sx={{ margin: "3vh", fontSize: "0.75rem" }}>
+                <Button
+                  variant="text"
+                  sx={{ margin: "3vh", fontSize: "0.75rem" }}
+                >
                   Crear cuenta
                 </Button>
               </Link>

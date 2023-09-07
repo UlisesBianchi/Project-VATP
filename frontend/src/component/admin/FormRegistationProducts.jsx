@@ -1,4 +1,4 @@
-import  { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   Box,
   Button,
@@ -20,56 +20,69 @@ import { ContextGlobal } from "../utils/globalContext";
 const FormRegistrationProducts = () => {
   const url = "http://18.191.210.53:8082/productos";
   const { AdminComponent, obj } = useContext(ContextGlobal);
+ 
+
+  const [image1, setImage1] = useState("");
+  const [image2, setImage2] = useState("");
+  const [image3, setImage3] = useState("");
 
   const sendForm = async (data) => {
     try {
-      console.log("Data being sent:", data);
-      await axios.post(url, data);
+      // Recopilar las URLs de las imágenes
+      const imageUrls = [image1, image2, image3].filter(
+        (url) => url.trim() !== ""
+      );
+
+      const formData = {
+        ...data,
+        images: imageUrls,
+      };
+
+      console.log("Data being sent:", formData);
+
+      // Enviar los datos al servidor
+      await axios.post(url, formData);
       alert("Formulario enviado");
-      console.log(data);
+      console.log(formData);
     } catch (error) {
       console.error("Error al enviar el formulario:", error);
     }
   };
 
-  const {
-    handleChange,
-    handleSubmit,
-    errors,
-    values,
-    touched,
-    handleBlur,
-  } = useFormik({
-    initialValues: {
-      descripcion: "",
-      nombre: "",
-      precio: "",
-      categoria: "",
-      imagenUrl: "",
-    },
-    onSubmit: sendForm,
-    validationSchema: Yup.object({
-      descripcion: Yup.string()
-        .required("Campo obligatorio")
-        .min(4, "Debe tener al menos 4 caracteres"),
-      nombre: Yup.string()
-        .required("Campo obligatorio")
-        .min(2, "Debe tener al menos 2 caracteres"),
-      precio: Yup.number()
-        .required("Campo obligatorio")
-        .positive("Debe ser un número positivo")
-        .integer("Debe ser un número entero"),
-      categoria: Yup.object().shape({
-        id: Yup.number().required("Campo obligatorio"),
-        nombre: Yup.string().required("Campo obligatorio"),
+  const { handleChange, handleSubmit, errors, values, touched, handleBlur } =
+    useFormik({
+      initialValues: {
+        descripcion: "",
+        nombre: "",
+        precio: "",
+        categoria: "",
+        images: [],
+      },
+      onSubmit: sendForm,
+      validationSchema: Yup.object({
+        descripcion: Yup.string()
+          .required("Campo obligatorio")
+          .min(4, "Debe tener al menos 4 caracteres"),
+        nombre: Yup.string()
+          .required("Campo obligatorio")
+          .min(2, "Debe tener al menos 2 caracteres"),
+        precio: Yup.number()
+          .required("Campo obligatorio")
+          .positive("Debe ser un número positivo")
+          .integer("Debe ser un número entero"),
+        categoria: Yup.object().shape({
+          id: Yup.number().required("Campo obligatorio"),
+          nombre: Yup.string().required("Campo obligatorio"),
+        }),
+       
       }),
-    }),
-  });
+    });
 
+  
   return (
     <Box sx={{ display: "flex" }}>
-    {AdminComponent}
-      
+      {AdminComponent}
+
       <Container sx={{ marginTop: "10vh", marginBottom: "10vh" }}>
         <Typography
           sx={{ marginBottom: "5vh" }}
@@ -273,7 +286,7 @@ const FormRegistrationProducts = () => {
                 boxSizing: "border-box",
                 border: "solid grey 1px",
                 borderRadius: "5px",
-                height: "30vh",
+                height: "60vh",
                 width: "80vw",
                 marginBottom: "2vh",
               }}
@@ -289,15 +302,54 @@ const FormRegistrationProducts = () => {
                 fullWidth
                 label="URL de la imagen principal"
                 name="imagenUrl"
-                value={values.imagenUrl}
-                onChange={handleChange}
+                value={image1}
+                onChange={(e) => setImage1(e.target.value)} // Actualizar estado de imagen1
                 onBlur={handleBlur}
                 error={touched.imagenUrl && Boolean(errors.imagenUrl)}
                 helperText={touched.imagenUrl && errors.imagenUrl}
                 sx={{ margin: "1vw 0 0 1vw", width: "90%" }}
               />
-            </Box>
 
+              {/* Campo de Imagen 2 */}
+              <Typography
+                variant="h5"
+                color="primary"
+                sx={{ margin: "2vh 0 2vh 1vw" }}
+              >
+                Imagen 2
+              </Typography>
+              <TextField
+                fullWidth
+                label="URL de la imagen 2"
+                name="imagenUrl2"
+                value={image2}
+                onChange={(e) => setImage2(e.target.value)} // Actualizar estado de imagen2
+                onBlur={handleBlur}
+                error={touched.imagenUrl2 && Boolean(errors.imagenUrl2)}
+                helperText={touched.imagenUrl2 && errors.imagenUrl2}
+                sx={{ margin: "1vw 0 0 1vw", width: "90%" }}
+              />
+
+              {/* Campo de Imagen 3 */}
+              <Typography
+                variant="h5"
+                color="primary"
+                sx={{ margin: "2vh 0 2vh 1vw" }}
+              >
+                Imagen 3
+              </Typography>
+              <TextField
+                fullWidth
+                label="URL de la imagen 3"
+                name="imagenUrl3"
+                value={image3}
+                onChange={(e) => setImage3(e.target.value)} // Actualizar estado de imagen3
+                onBlur={handleBlur}
+                error={touched.imagenUrl3 && Boolean(errors.imagenUrl3)}
+                helperText={touched.imagenUrl3 && errors.imagenUrl3}
+                sx={{ margin: "1vw 0 0 1vw", width: "90%" }}
+              />
+            </Box>
             {/* Botón de Enviar */}
             <Grid
               item
@@ -309,7 +361,7 @@ const FormRegistrationProducts = () => {
               }}
             >
               <Button type="submit" variant="contained" color="primary">
-                Enviar
+                Guardar
               </Button>
             </Grid>
           </Grid>

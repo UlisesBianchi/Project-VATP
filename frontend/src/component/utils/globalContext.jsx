@@ -10,7 +10,6 @@ export const ContextProvider = ({ children }) => {
   const [category, setCategory] = useState([]);
   const [imageMap, setImageMap] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [userFullName, setUserFullName] = useState("");
   const navigate = useNavigate();
 
   const url = 'http://18.191.210.53:8082/productos';
@@ -34,12 +33,11 @@ export const ContextProvider = ({ children }) => {
 
       if (responseData.message === "Email not exists") {
         alert("Email not exists");
+        sessionStorage.removeItem("data")
       } else if (responseData.message === "Login Success") {
        
         setIsLoggedIn(true);
-        // const { firstName, lastName } = responseData.user;
-        // setUserFullName(`${firstName} ${lastName}`);
-        //comentado para ver con back
+        
         
         
       } else {
@@ -54,11 +52,13 @@ export const ContextProvider = ({ children }) => {
   };
   
 
+
   useEffect(() => {
     if (isLoggedIn) {
       navigate('/home');
     }
   }, [isLoggedIn, navigate]);
+
 
   useEffect(() => {
     axios.get(url)
@@ -75,6 +75,7 @@ export const ContextProvider = ({ children }) => {
         setImageMap(newImageMap);
       })},[]);
 
+     
       useEffect(()=>{
         
         axios.get(url2)

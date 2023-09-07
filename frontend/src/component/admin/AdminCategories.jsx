@@ -16,20 +16,18 @@ const AdminCategories = () => {
  
 
  
-
-  const handleDelete = async (categoryId) => {
-    const confirmed = window.confirm("¿Estás seguro de que deseas eliminar esta categoria?");
-    if (confirmed) {
-      try {
-        await axios.delete(`http://18.191.210.53:8082/categorias/${categoryId}`);
-        // Eliminar la categoria del estado local
-        const updatedCategory = category.filter((category) => category.id !== categoryId);
-        setCategory(updatedCategory);
-        console.log("Categoria eliminada");
-      } catch (error) {
-        console.error("Error al eliminar la categoria:", error);
-      }
+  const handleFavorite = () => {
+    const isProductFavorite = favorites.some((fav) => fav.id === product.id);
+    let updatedFavorites;
+  
+    if (isProductFavorite) {
+      updatedFavorites = favorites.filter((fav) => fav.id !== product.id);
+    } else {
+      updatedFavorites = [...favorites, product];
     }
+  
+    setFavorites(updatedFavorites); // Actualiza el estado de favoritos en el contexto global
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites)); // Actualiza el localStorage
   };
 
   const columns = [

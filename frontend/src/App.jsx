@@ -10,6 +10,7 @@ import LoginForm from "./component/navBar/LoginForm";
 import AdminProducts from "./component/admin/AdminProducts";
 import AdminCategories from "./component/admin/AdminCategories";
 import FormRegistationCategories from "./component/admin/FormRegistationCategories";
+import Favorites from "./component/User/favorites";
 
 
 
@@ -32,6 +33,7 @@ function App() {
         <Route path="/admin/admin-category" element={<AdminCategories/>}/>
         <Route path="/admin/form-category" element={<FormRegistationCategories />}/>
         <Route path="/login" element={<LoginForm/>}/>
+        <Route path="/favorites" element={<Favorites/>}/>
 
       
         {isAuthenticated ? <Route path="/login" element={<Navigate to="/home" />} /> : <Route path="/login" element={<LoginForm />} />}
