@@ -38,11 +38,13 @@ public class SpringSecurity {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        //noinspection removal
         http.csrf().disable()
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers(
                                         "/categorias/**",
                                         "/productos/**",
+                                        "/search/**",
                                         "/admin/**",
                                         "/usuarios/**",
                                         "/reservas/**",
