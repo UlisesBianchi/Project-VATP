@@ -6,10 +6,12 @@ import com.example.VATP.model.Reserva;
 import com.example.VATP.service.ProductoService;
 import com.example.VATP.service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -112,6 +114,21 @@ public class ReservaController {
             return ResponseEntity.ok(reservaService.actualizarReserva(reserva));
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
+
+    // busar en el calendario
+
+    @GetMapping("/por-fecha/{fecha}")
+    public ResponseEntity<List<Reserva>> listarProductosPorFecha (@PathVariable("fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fecha) {
+
+        if (fecha != null) {
+            List<Reserva> reservaFiltradas = reservaService.buscarProductosPorFecha(fecha);
+            return ResponseEntity.ok(reservaFiltradas);
+        } else {
+            return ResponseEntity.ok(reservaService.listarReserva());
         }
     }
 
