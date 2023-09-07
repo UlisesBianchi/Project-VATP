@@ -1,11 +1,13 @@
 package com.example.VATP.service;
 
 
+import com.example.VATP.model.Producto;
 import com.example.VATP.model.Reserva;
 import com.example.VATP.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +18,12 @@ public class ReservaServiceImpl implements ReservaService{
     @Autowired
     private ReservaRepository reservaRepository;
 
+
+    @Override
+    public List<Reserva> obtenerReservasEnFecha(Producto producto, LocalDate fechaReserva) {
+        // Return the list of reservations for the given Producto and fechaReserva
+        return reservaRepository.findByProductosAndFechaReserva(producto, fechaReserva);
+    }
 
     @Override
     public List<Reserva> listarReserva() {return reservaRepository.findAll();}
@@ -38,4 +46,4 @@ public class ReservaServiceImpl implements ReservaService{
     @Override
     public void eliminarReserva(Integer id) {
     }
-    }
+}

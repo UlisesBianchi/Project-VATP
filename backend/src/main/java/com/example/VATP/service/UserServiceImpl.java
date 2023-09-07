@@ -66,9 +66,8 @@ public class UserServiceImpl implements UserService {
 
         emailService.sendRegistrationConfirmationEmail(user.getEmail(), user.getFirstName());
     }
-@Override
+    @Override
     public LoginMesage loginUser(LoginDTO loginDTO) {
-        String msg = "";
         User user1 = userRepository.findByEmail(loginDTO.getEmail());
         if (user1 != null) {
             String password = loginDTO.getPassword();
@@ -77,16 +76,18 @@ public class UserServiceImpl implements UserService {
             if (isPwdRight) {
                 Optional<User> user = userRepository.findOneByEmailAndPassword(loginDTO.getEmail(), encodedPassword);
                 if (user.isPresent()) {
-                    return new LoginMesage("Login Success", true);
+                    // Include user information in the response
+                    return new LoginMesage("Login Success", true, user.get());
                 } else {
-                    return new LoginMesage("Login Failed", false);
+                    return new LoginMesage("Login Failed", false, null);
                 }
             } else {
-                return new LoginMesage("Password Not Match", false);
+                return new LoginMesage("Password Not Match", false, null);
             }
         } else {
-            return new LoginMesage("Email not exists", false);
-        }}
+            return new LoginMesage("Email not exists", false, null);
+        }
+    }
 
 
     @Override

@@ -1,12 +1,44 @@
 package com.example.VATP.dto;
 
+import com.example.VATP.model.Categoria;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public class ProductoRequestDTO {
+
+    private Integer id; // This field represents the product ID
+
     private String nombre;
     private double precio;
     private String descripcion;
     private List<String> images;
+
+    private int stockDiario;
+    private Categoria categoria; // Change to Categoria object
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public int getStockDiario() {
+        return stockDiario;
+    }
+
+    public void setStockDiario(int stockDiario) {
+        this.stockDiario = stockDiario;
+    }
 
     public String getNombre() {
         return nombre;
