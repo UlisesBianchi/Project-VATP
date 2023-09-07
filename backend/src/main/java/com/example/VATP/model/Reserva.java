@@ -1,37 +1,48 @@
 package com.example.VATP.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "reservas")
 public class Reserva {
-
     @Id
-    @SequenceGenerator(name = "reserva_sequence",sequenceName = "reserva_sequence",allocationSize =1 )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "reserva_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column
-    private LocalDate fecha;
+    private LocalDate fechaReserva;
 
 
+    // RELACION CON PRODUCTO
+    @ManyToOne
+    @JoinColumn(name = "productos")
+    // ver
+    @JsonBackReference
+    private Producto productos;
 
-    @OneToMany(mappedBy = "reservas")
-    private List<Producto> productos;
 
+    public Producto getProductos() {
+        return productos;
+    }
 
-    public Reserva(Integer id, LocalDate fecha, List<Producto> productos) {
-        this.id = id;
-        this.fecha = fecha;
+    public void setProductos(Producto productos) {
         this.productos = productos;
     }
 
-    public Reserva() {
+    // CONSTRUCTORES
 
+    public Reserva() {
     }
+    public Reserva(Integer id, LocalDate fechaReserva, Producto productos) {
+        this.id = id;
+        this.fechaReserva = fechaReserva;
+        this.productos = productos;
+    }
+
+
 
     public Integer getId() {
         return id;
@@ -41,21 +52,11 @@ public class Reserva {
         this.id = id;
     }
 
-    public List<Producto> getProductos() {
-        return productos;
+    public LocalDate getFechaReserva() {
+        return fechaReserva;
     }
 
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
+    public void setFechaReserva(LocalDate fechaReserva) {
+        this.fechaReserva = fechaReserva;
     }
-
-    public LocalDate getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-
 }

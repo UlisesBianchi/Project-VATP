@@ -46,6 +46,7 @@ public class SpringSecurity {
                                         "/admin/**",
                                         "/usuarios/**",
                                         "/reservas/**",
+                                        "/caracteristicas/**",
                                         "/api/**",
                                         "/productos/*//*",
                                         "/detalles/**",
