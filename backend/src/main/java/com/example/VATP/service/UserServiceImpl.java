@@ -74,10 +74,9 @@ public class UserServiceImpl implements UserService {
             String encodedPassword = user1.getPassword();
             boolean isPwdRight = passwordEncoder.matches(password, encodedPassword);
             if (isPwdRight) {
-                Optional<User> user = userRepository.findOneByEmailAndPassword(loginDTO.getEmail(), encodedPassword);
-                if (user.isPresent()) {
+                if (loginDTO.getEmail().equals(user1.getEmail())) {
                     // Include user information in the response
-                    return new LoginMesage("Login Success", true, user.get());
+                    return new LoginMesage("Login Success", true, user1);
                 } else {
                     return new LoginMesage("Login Failed", false, null);
                 }
