@@ -41,9 +41,22 @@ const NavBar = () => {
             background: "white",
             display: "flex",
             justifyContent: "space-around",
+            overflowX: "hidden",
           }}
         >
-          <IconButton color="primary" sx={{ display: { xl: "none" } }}>
+          <IconButton
+            color="primary"
+            sx={{
+              display: "none",
+              "@media (max-width: 899px)": {
+                display: "block",
+                margin: "0px 0px",
+              },
+              "@media (max-width: 249px)": {
+                margin: "0px auto",
+              },
+            }}
+          >
             <MenuIcon />
           </IconButton>
           <Link to={"/"}>
@@ -55,6 +68,10 @@ const NavBar = () => {
                 maxHeight: { xs: "4rem", md: "10rem" },
                 maxWidth: { xs: "10rem", md: "15rem" },
                 marginRight: "2vw",
+                display: "none",
+                "@media (min-width: 250px)": {
+                  display: "block",
+                },
               }}
               alt="The house from the offer."
               src="images\Logo.png"

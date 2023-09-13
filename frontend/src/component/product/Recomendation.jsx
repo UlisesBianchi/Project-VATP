@@ -1,11 +1,13 @@
 import { useContext, useState, useEffect } from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, useMediaQuery } from "@mui/material";
 import CardProduct from "./CardProducts";
 import { ContextGlobal } from "../utils/globalContext";
 import Filter from "../category/Filter";
 
 const Recomendation = () => {
   const { obj } = useContext(ContextGlobal);
+  const isSmallScreen = useMediaQuery("(max-width: 1160px)");
+  const isSmallScreen3 = useMediaQuery("(max-width: 320px)");
 
   const [showCount, setShowCount] = useState(10);
   const productsPerPage = 10;
@@ -28,8 +30,7 @@ const Recomendation = () => {
         selectedCategoryIds.length === 0 ||
         (data.categoria && selectedCategoryIds.includes(data.categoria.id)) // no rompe por mas que sea null
     );
-    
-      
+
     setFilteredProducts(filtered);
     setShowCount(productsPerPage);
   }, [shuffledProducts, selectedCategoryIds]);
@@ -52,22 +53,42 @@ const Recomendation = () => {
 
   return (
     <Box
-      sx={{ marginTop: "3vh", background: "#EDD8D8", paddingBottom: "10vh" }}
+      sx={{
+        marginTop: "3vh",
+        background: "#EDD8D8",
+        paddingBottom: "10vh",
+        justifyContent: "center",
+        alignContent: "center",
+      }}
     >
       <Typography
         color="primary"
         variant="h5"
-        sx={{ marginLeft: "2vw", paddingTop: "5vh" }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: isSmallScreen3 ? "1.1rem" : "1.8rem",
+          flexWrap: "nowrap",
+          overflow: "hidden",
+          paddingTop: "5vh",
+          "@media (max-width: 356px)": {
+            fontSize: "1.1rem",
+            fontWeight: "bold",
+          },
+        }}
       >
         Productos recomendados
       </Typography>
+
       <Box
         sx={{
           display: "flex",
-          flexDirection: "row",
           flexWrap: "wrap",
-          justifyContent: "space-around",
+          flexDirection: "column",
           alignItems: "center",
+          justifyContent: "space-between",
+          overflowX: "hidden",
         }}
       >
         <Filter
@@ -78,10 +99,13 @@ const Recomendation = () => {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: { xl: "repeat(2 ,1fr)", xs: "repeat(1 ,1fr)" },
-            gap: "3rem",
+            gridTemplateColumns: isSmallScreen
+              ? "repeat(1, 1fr)"
+              : "repeat(2, 1fr)",
+            gap: { xl: "5rem 20rem", xs: "5rem 5rem" },
+            minWidth: "10%",
+            maxWidth: "100%",
             marginTop: "2rem",
-            columnGap: "3rem",
           }}
         >
           {displayedProducts.map((product) => (

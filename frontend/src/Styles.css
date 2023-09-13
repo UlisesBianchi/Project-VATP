@@ -6,3 +6,20 @@ ul li a{
     gap: 20px;
     color: #E23333;
 }
+
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+  }
+
+  #cardProduct {
+    filter: brightness(0.8);
+    transition: transform 0.7s, filter 0.7s;
+  }
+  
+  #cardProduct:hover {
+    transform: scale(1.1); 
+    filter: brightness(0.7); 
+  }

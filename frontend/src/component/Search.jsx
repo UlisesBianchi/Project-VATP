@@ -19,17 +19,25 @@ const Search = () => {
         alignItems: "center",
         height: "50vh",
         gap: "1vw",
-        backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url('https://media.discordapp.net/attachments/1136794062238777474/1141905173371965532/5-consejos-para-comer-bien-cuando-viajes-1.jpg?width=1415&height=490')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        
+        backgroundImage:
+          "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url('https://media.discordapp.net/attachments/1136794062238777474/1141905173371965532/5-consejos-para-comer-bien-cuando-viajes-1.jpg?width=1415&height=490')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        overflowX: "hidden",
       }}
     >
-    
       <Typography
         variant="h5"
-        sx={{ color: "#ffff", display:{xs:"none", md:"flex"} , textAlign: "start", maxWidth:"28vw", flexWrap:"wrap", fontSize:"2rem", fontWeight:"700", }}
+        sx={{
+          color: "#ffff",
+          display: { xs: "none", md: "flex" },
+          textAlign: "start",
+          maxWidth: "28vw",
+          flexWrap: "wrap",
+          fontSize: "2rem",
+          fontWeight: "700",
+        }}
       >
         Busca la experiencia que mas se adapte a tu paladar!
       </Typography>
@@ -37,7 +45,7 @@ const Search = () => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          gap: "1vw",
+          gap: { xs: "1.2rem", xl: "1vw", md: "1vw" },
           flexDirection: { xs: "column", xl: "row", md: "row" },
           alignItems: { xs: "center" },
           padding: "0",
@@ -48,8 +56,7 @@ const Search = () => {
           sx={{
             display: "flex",
             alignItems: "center",
-            width: { xl: "30vw", height:"100%" },
-           
+            width: { xl: "30vw", height: "91%" },
           }}
         >
           <IconButton sx={{ p: "10px" }} aria-label="menu">
@@ -61,14 +68,20 @@ const Search = () => {
             inputProps={{ "aria-label": "search google maps" }}
           />
 
-          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+          <Divider sx={{ height: 55, m: 0.5 }} orientation="vertical" />
         </Paper>
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={["DatePicker"]} sx={{ paddingTop: "0" }}>
+          <DemoContainer
+            components={["DatePicker"]}
+            sx={{ paddingTop: "0", height: "91%" }}
+          >
             <DatePicker
               label="Seleccione la fecha"
-              sx={{ width: { xl: "25vw" }, background: "white",height:"100%",borderRadius:"4px" }}
+              sx={{
+                width: { xl: "25vw" },
+                background: "white",
+              }}
             />
           </DemoContainer>
         </LocalizationProvider>
@@ -79,16 +92,17 @@ const Search = () => {
           sx={{
             width: "10vw",
             background: "white",
-            "&:hover": { background: "white", padding: "0" },
+            "&:hover": {
+              backgroundColor: "#f0f0f0",
+              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+              cursor: "pointer",
+            },
           }}
         >
           Buscar
-          
         </Button>
       </Box>
     </Box>
-
-    
   );
 };
 
