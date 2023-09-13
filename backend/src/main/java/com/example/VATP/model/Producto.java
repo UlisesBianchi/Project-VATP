@@ -24,6 +24,7 @@ public class Producto {
     private String descripcion;
 
 
+
     // constructores
     public Producto() {
     }
@@ -137,7 +138,10 @@ public class Producto {
     public void removeImage(String imageUrl) {
         images.remove(imageUrl);
     }
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+
     private List<CaracteristicasProducto> caracteristicasProductos = new ArrayList<>();
 
 

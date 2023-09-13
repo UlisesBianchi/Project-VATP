@@ -1,5 +1,6 @@
 package com.example.VATP.dto;
 
+import com.example.VATP.model.CaracteristicasProducto;
 import com.example.VATP.model.Categoria;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ public class ProductoRequestDTO {
 
 
     private Categoria categoria; // Change to Categoria object
+    private List<CaracteristicasProducto> caracteristicasProductos;
 
     public Categoria getCategoria() {
         return categoria;
@@ -32,6 +34,13 @@ public class ProductoRequestDTO {
         this.id = id;
     }
 
+    public List<CaracteristicasProducto> getCaracteristicasProductos() {
+        return caracteristicasProductos;
+    }
+
+    public void setCaracteristicasProductos(List<CaracteristicasProducto> caracteristicasProductos) {
+        this.caracteristicasProductos = caracteristicasProductos;
+    }
 
     public String getNombre() {
         return nombre;

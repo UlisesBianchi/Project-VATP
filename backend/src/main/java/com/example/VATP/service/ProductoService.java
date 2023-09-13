@@ -1,6 +1,7 @@
 package com.example.VATP.service;
 
 import com.example.VATP.dto.ProductoRequestDTO;
+import com.example.VATP.model.CaracteristicasProducto;
 import com.example.VATP.model.Categoria;
 import com.example.VATP.model.Producto;
 import com.example.VATP.model.ProductoDisponibilidad;
@@ -96,6 +97,13 @@ public class ProductoService {
         if (images != null && !images.isEmpty()) {
             for (String imageUrl : images) {
                 newProducto.addImage(imageUrl);
+            }
+        }
+
+        List<CaracteristicasProducto> characteristics = productoRequestDTO.getCaracteristicasProductos();
+        if (characteristics != null && !characteristics.isEmpty()) {
+            for (CaracteristicasProducto caracteristicasProducto : characteristics) {
+                newProducto.addCaracteristica(caracteristicasProducto);
             }
         }
 

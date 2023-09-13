@@ -1,6 +1,7 @@
 package com.example.VATP.controller;
 
 import com.example.VATP.dto.ProductoRequestDTO;
+import com.example.VATP.model.CaracteristicasProducto;
 import com.example.VATP.model.Producto;
 import com.example.VATP.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class ProductoController {
         Producto savedProducto = productoService.guardarProducto(productoRequestDTO);
         return ResponseEntity.ok(savedProducto);
     }
+
 
     @GetMapping
     public ResponseEntity<List<Producto>> obtenerTodos() {

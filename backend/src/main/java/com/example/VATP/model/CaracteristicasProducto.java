@@ -1,6 +1,7 @@
 package com.example.VATP.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -21,9 +22,12 @@ public class CaracteristicasProducto {
 
     // relacion
 
+
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "producto_id")
-    @JsonIgnore
+   // @JsonIgnore
+
     private Producto producto;
 
 
