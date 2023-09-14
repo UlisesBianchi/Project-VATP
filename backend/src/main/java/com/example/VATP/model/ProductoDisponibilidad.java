@@ -1,5 +1,6 @@
 package com.example.VATP.model;
 
+import com.example.VATP.dto.ProductoRequestDTO;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

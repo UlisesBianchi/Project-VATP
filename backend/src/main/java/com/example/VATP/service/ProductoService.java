@@ -23,6 +23,8 @@ import java.util.Optional;
 public class ProductoService {
     private final ProductoRepository productoRepository;
     private final CategoriaService categoriaService;
+
+
     @PersistenceContext
     private final EntityManager entityManager;
     private final ProductoDisponibilidadRepository productoDisponibilidadRepository;
@@ -107,8 +109,24 @@ public class ProductoService {
             }
         }
 
+        Producto productoGuardado = productoRepository.save(newProducto);
+        LocalDate startDate = LocalDate.now();
+        int stockInicial = 5;
+        int daysToCreateAvailability = 365;
+
+        while (daysToCreateAvailability > 0) {
+            ProductoDisponibilidad disponibilidad = new ProductoDisponibilidad();
+            disponibilidad.setProducto(newProducto);
+            disponibilidad.setDate(startDate);
+            disponibilidad.setAvailableUnits(stockInicial);
+            productoDisponibilidadRepository.save(disponibilidad);
+            startDate = startDate.plusDays(1);
+            daysToCreateAvailability--;
+    }
+        return productoGuardado;
+
+
         // Save the product with images and category to the repository
-        return productoRepository.save(newProducto);
     }
 
 

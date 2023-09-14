@@ -2,13 +2,17 @@ package com.example.VATP.controller;
 
 import com.example.VATP.dto.ProductoRequestDTO;
 import com.example.VATP.model.CaracteristicasProducto;
+import com.example.VATP.model.Categoria;
 import com.example.VATP.model.Producto;
+import com.example.VATP.model.ProductoDisponibilidad;
+import com.example.VATP.service.DisponibilidadService;
 import com.example.VATP.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -16,6 +20,8 @@ import java.util.Optional;
 public class ProductoController {
     @Autowired
     private ProductoService productoService;
+    @Autowired
+    private DisponibilidadService disponibilidadService;
 
     @PostMapping
     public ResponseEntity<Producto> guardarProducto(@RequestBody ProductoRequestDTO productoRequestDTO) {
@@ -60,7 +66,19 @@ public class ProductoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarProducto(@PathVariable Integer id) {
+
+        List<ProductoDisponibilidad> productosConDisponibilidad = disponibilidadService.obtenerTodas();
+
+        for (ProductoDisponibilidad productoDisponibles : productosConDisponibilidad) {
+            Producto productoRelacionado = productoDisponibles.getProducto();
+
+            if (productoRelacionado != null && Objects.equals(productoRelacionado.getId(), id)) {
+                disponibilidadService.eliminarDisponibles(productoDisponibles.getId());
+            }
+        }
+
         productoService.eliminarProducto(id);
+
         return ResponseEntity.noContent().build();
     }
 }
