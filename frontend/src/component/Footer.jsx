@@ -34,8 +34,8 @@ function Footer() {
             maxHeight: { xs: "4rem", md: "6rem" },
             maxWidth: { xs: "10rem", md: "22rem" },
           }}
-          alt="The house from the offer."
-          src="images\Logo.png"
+          alt="Logo"
+          src="https://g6-frontend-fotos.s3.amazonaws.com/Logo.png"
         />
     
         </Box>

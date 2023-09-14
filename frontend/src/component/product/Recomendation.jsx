@@ -64,7 +64,7 @@ const Recomendation = () => {
       <Box
         sx={{
           display: "flex",
-          flexDirection: "row",
+          flexDirection: "column",
           flexWrap: "wrap",
           justifyContent: "space-around",
           alignItems: "center",

@@ -9,18 +9,23 @@ import {
   Tooltip,
   Avatar,
   MenuItem,
-  ListItemIcon,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
-import { AccountCircle, Logout } from "@mui/icons-material";
+import { Link, useNavigate } from "react-router-dom";
 import { ContextGlobal } from "../utils/globalContext";
 
 const NavBar = () => {
   const { obj } = useContext(ContextGlobal);
+  const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -29,6 +34,29 @@ const NavBar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleOpenLogoutDialog = () => {
+    setLogoutDialogOpen(true);
+  };
+
+  const handleCloseLogoutDialog = () => {
+    setLogoutDialogOpen(false);
+  };
+
+  const handleLogout = () => {
+    // Realiza aquí la lógica de cierre de sesión, por ejemplo, limpiar la información de sesión.
+    // Luego, redirige al usuario a la página de inicio de sesión.
+    sessionStorage.removeItem("isLoggedIn");
+    navigate("/login");
+    setAnchorElUser(null);
+    handleCloseLogoutDialog();
+  };
+
+  // Obtener las iniciales del nombre y apellido del usuario
+  const userInitials =
+    obj.isLoggedIn && obj.user
+      ? `${obj.user.firstName.charAt(0)}${obj.user.lastName.charAt(0)}`
+      : "";
 
   const settings = ["Perfil", "Favoritos", "Dashboard", "Cerrar Sesion"];
 
@@ -56,8 +84,8 @@ const NavBar = () => {
                 maxWidth: { xs: "10rem", md: "15rem" },
                 marginRight: "2vw",
               }}
-              alt="The house from the offer."
-              src="images\Logo.png"
+              alt="Logo"
+              src="https://g6-frontend-fotos.s3.amazonaws.com/Logo.png"
             />
           </Link>
           <Box sx={{ display: { xs: "none", md: "flex", xl: "flex" } }}>
@@ -66,10 +94,10 @@ const NavBar = () => {
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
-                    />
+                    {/* Mostrar las iniciales del usuario en el avatar */}
+                    <Avatar alt="User" sx={{ bgcolor: "primary.main" }}>
+                      {userInitials}
+                    </Avatar>
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -89,7 +117,7 @@ const NavBar = () => {
                   onClose={handleCloseUserMenu}
                 >
                   {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <MenuItem key={setting} onClick={setting === "Cerrar Sesion" ? handleOpenLogoutDialog : handleCloseUserMenu}>
                       {setting === "Favoritos" ? (
                         <Link to="/favorites">
                           <Typography textAlign="center">Favoritos</Typography>
@@ -112,7 +140,7 @@ const NavBar = () => {
                 </Button>
               </Link>
             )}
-            {!obj.isLoggedIn && ( // Ocultar el botón de "Crear cuenta" si está logueado
+            {!obj.isLoggedIn && (
               <Link to={"/register"}>
                 <Button
                   variant="text"
@@ -125,6 +153,23 @@ const NavBar = () => {
           </Box>
         </Toolbar>
       </AppBar>
+
+      <Dialog open={logoutDialogOpen} onClose={handleCloseLogoutDialog}>
+        <DialogTitle>Cerrar Sesión</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            ¿Estás seguro de que deseas cerrar sesión?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseLogoutDialog} color="primary">
+            Cancelar
+          </Button>
+          <Button onClick={handleLogout} color="primary">
+            Cerrar Sesión
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

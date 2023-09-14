@@ -76,7 +76,7 @@ const CardProducts = ({ product }) => {
           </IconButton>
 
           <Link to={`/product/${product.id}`}>
-            <Button size="small">Learn More</Button>
+            <Button size="small">Ver mas</Button>
           </Link>
         </CardActions>
       </Card>

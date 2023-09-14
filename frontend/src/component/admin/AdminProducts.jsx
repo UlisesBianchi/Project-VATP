@@ -86,7 +86,7 @@ const AdminProducts = () => {
   return (
     <Box sx={{display:"flex"}}>
       {AdminComponent}
-      <Box sx={{display:"flex", flexDirection:"column", marginLeft:"20vh"}}>
+      <Box sx={{display:"flex", flexDirection:"column", marginLeft:"10vh"}}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h4" color="primary" sx={{ margin: "5vh" }}>
           Productos
