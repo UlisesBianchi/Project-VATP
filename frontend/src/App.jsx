@@ -24,16 +24,14 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/register" element={<RegistrationUser />} />
-        <Route path="/admin/admin-product" element={<AdminProducts />} />
-        <Route
-          path="/admin/form-product"
-          element={<FormRegistationProducts />}
-        />
-        <Route path="/admin/admin-category" element={<AdminCategories />} />
-        <Route
-          path="/admin/form-category"
-          element={<FormRegistationCategories />}
-        />
+
+        <Route path="/admin" element={<Admin />}>
+          {/* Rutas secundarias para el Administrador */}
+          <Route path="admin-product" element={<AdminProducts />} />
+          <Route path="form-product" element={<FormRegistationProducts />} />
+          <Route path="admin-category" element={<AdminCategories />} />
+          <Route path="form-category" element={<FormRegistationCategories />} />
+        </Route>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/favorites" element={<Favorites />} />
 

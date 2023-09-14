@@ -1,41 +1,37 @@
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import { Icon } from "@mui/material";
-import AirIcon from "@mui/icons-material/Air";
-import Wifi2BarIcon from '@mui/icons-material/Wifi2Bar';
-import PetsIcon from '@mui/icons-material/Pets';
+import { List, ListItem, ListItemText, Icon } from '@mui/material';
+import { Air as AirIcon, Wifi2Bar as Wifi2BarIcon, Pets as PetsIcon } from '@mui/icons-material';
+import AccessibleIcon from '@mui/icons-material/Accessible';
 
 const FeatureList = () => {
   const features = [
     {
       title: "Aire acondicionado",
-      icon: <AirIcon/>,
+      icon: <AirIcon />,
     },
     {
       title: "Wifi",
-      icon: <Wifi2BarIcon/>,
+      icon: <Wifi2BarIcon />,
     },
     {
-      title: "Pet friendy",
-      icon: <PetsIcon/>,
+      title: "Pet friendly",
+      icon: <PetsIcon />,
     },
+    {
+      title: 'Accesesibilidad',
+      icon: <AccessibleIcon />
+    }
     // ... más características
   ];
 
   return (
-    <Grid container spacing={2}>
+    <List style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
       {features.map((feature, index) => (
-        <Grid item key={index} xs={12} sm={6} md={4}>
-          <Paper elevation={3} style={{ padding: "16px" }}>
-            <Typography variant="h6">{feature.title}</Typography>
-            <Icon>
-              {feature.icon}
-            </Icon>
-          </Paper>
-        </Grid>
+        <ListItem key={index} style={{ marginRight: '8px' }}>
+          <Icon style={{ marginRight: '4px' }}>{feature.icon}</Icon>
+          <ListItemText primary={feature.title} />
+        </ListItem>
       ))}
-    </Grid>
+    </List>
   );
 };
 

@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import ImageGallery from "./ImageGallery";
+import FeatureList from "./FeatureList";
+import Policity from "./Policity";
+
 import {
   Box,
-  Card,
-  CardContent,
-  CardMedia,
-  CardActionArea,
   Typography,
   Toolbar,
   IconButton,
@@ -14,64 +16,32 @@ import {
   Paper,
   Grid,
   Icon,
-  Button,
 } from "@mui/material";
 
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-
-import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-import ImageGallery from "./ImageGallery";
-import FeatureList from "./FeatureList";
-
 const ProductDetail = () => {
+  // const { obj } = useContext(ContextGlobal);
   const { id } = useParams();
   const [detail, setDetail] = useState("");
+  const [imagesArray, setImagesArray] = useState([]);
+  const [caracteristica, setCaracteristicas] = useState([]);
   const url = `http://18.191.210.53:8082/productos/${id}`;
+  const navigate = useNavigate();
+  const handleGoBack = () => {
+    navigate(-1); // Navega hacia atrás en la pila de rutas
+  };
+
+  console.log(detail);
 
   useEffect(() => {
     axios.get(url).then((res) => {
       const detailData = res.data;
       setDetail(detailData);
-
-      if (Array.isArray(detailData)) {
-        const images = detailData.map((item) => item.image);
-        console.log(images);
-      } else {
-        console.error("detailData no es un array:", detailData);
-      }
+      setImagesArray(detailData.images);
+      setCaracteristicas(detailData.detalles);
     });
-  }, [id]);
+  }, []);
 
-  console.log(detail);
-
-  const navigate = useNavigate();
-
-  const handleGoBack = () => {
-    navigate(-1); // Navega hacia atrás en la pila de rutas
-  };
-
-  const images = [
-    {
-      url: "https://www.infobae.com/new-resizer/CYS7pt2Pm365KmNrgjN7dCEbSzI=/992x661/filters:format(webp):quality(85)/s3.amazonaws.com/arc-wordpress-client-uploads/infobae-wp/wp-content/uploads/2019/08/13201409/gastronomia-del-mundo-3.jpg",
-      alt: "Imagen 1",
-    },
-    {
-      url: "https://www.mdzol.com/u/fotografias/m/2021/9/13/f608x342-1108566_1138289_126.jpg",
-      alt: "Imagen 2",
-    },
-    {
-      url: "https://www.nomadasexperience.com/wp-content/uploads/2023/03/Los-25-Mejores-restaurantes-de-comidas-rapidas-en-Estados-Unidos.jpg",
-      alt: "Imagen 3",
-    },
-    {
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF_VYD1ExzdAxkJvt7n_IgVe-rJfMrvwGTvw&usqp=CAU",
-      alt: "Imagen 4",
-    },
-    {
-      url: "https://www.recetasnestle.com.ar/sites/default/files/styles/crop_article_banner_desktop_nes/public/2022-06/ingredientes-comida-de-mar-parrilla.jpg?itok=DBjT8e7S",
-      alt: "Imagen 5",
-    },
-  ];
+  // console.log(imagesArray);
 
   return (
     <>
@@ -117,8 +87,7 @@ const ProductDetail = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
                 <img
-                  src={images[0].url}
-                  alt={images[0].alt}
+                  src={imagesArray[0]}
                   style={{
                     maxWidth: "100%",
                     height: "auto",
@@ -150,7 +119,7 @@ const ProductDetail = () => {
       <Toolbar
         sx={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "start",
           padding: "25",
           backgroundColor: "primary.main", // Set the background color to primary color
           color: "primary.contrastText", // Set the text color for contrast
@@ -160,8 +129,8 @@ const ProductDetail = () => {
           Imagenes
         </Typography>
       </Toolbar>
-      <ImageGallery images={images} />
-      <Toolbar sx={{ display: "flex", justifyContent: "end" }}>
+      <ImageGallery images={imagesArray} />
+      {/* <Toolbar sx={{ display: "flex", justifyContent: "end" }}>
         <Button
           variant="contained"
           color="primary"
@@ -172,10 +141,14 @@ const ProductDetail = () => {
             borderRadius: "10px", // Estilo de esquinas redondeadas
           }}
         >
+<<<<<<< HEAD
           <Link
             sx={{
               textDecoration: "none",
             }}
+=======
+          <Link to ={'/gallery'}
+>>>>>>> frontEnd-Mauricio
           >
             <Typography
               sx={{
@@ -186,15 +159,24 @@ const ProductDetail = () => {
             </Typography>
           </Link>
         </Button>
-      </Toolbar>
-      <Toolbar>
-        <Typography variant="h4" color="primary">
+      </Toolbar> */}
+      <Toolbar
+        sx={{
+          display: "flex",
+          justifyContent: "start",
+          padding: "25",
+          backgroundColor: "primary.main", // Set the background color to primary color
+          color: "primary.contrastText", // Set the text color for contrast
+        }}
+      >
+        <Typography variant="h4" color="white">
           Caracteristicas
         </Typography>
       </Toolbar>
       <Box>
-        <FeatureList />
+        <FeatureList caracteristica={caracteristica} />
       </Box>
+      <Policity />
     </>
   );
 };

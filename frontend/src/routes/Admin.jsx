@@ -18,7 +18,7 @@ function Admin() {
         <ListItemButton onClick={() => handleMenuClick('inicio')}>
           <ListItemText primary="Inicio" />
         </ListItemButton>
-        </Link>
+      </Link>
         <ListItemButton onClick={handleCollapseClick}>
           <ListItemText primary="Productos" />
           {open ? <ExpandLess /> : <ExpandMore />}
@@ -38,6 +38,7 @@ function Admin() {
             {/* Agrega más elementos para otras opciones */}
           </List>
         </Collapse>
+        
         {/* Agrega más elementos de menú aquí */}
       </List>
 

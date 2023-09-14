@@ -13,22 +13,22 @@ const AdminCategories = () => {
   const { obj , AdminComponent } = useContext(ContextGlobal);
   const [category, setCategory] = useState(obj.category);
 
- 
+  const handleDelete = async (categorytId) => {
+    const confirmed = window.confirm("¿Estás seguro de que deseas eliminar esta categoria?");
+    if (confirmed) {
+      try {
+        await axios.delete(`http://18.191.210.53:8082/categorias/${categorytId}`);
+        // Eliminar el producto del estado local
+        const updatedProducts = category.filter((product) => product.id !== categorytId);
+        setCategory(updatedProducts);
+        console.log("categoria eliminada");
+      } catch (error) {
+        console.error("Error al eliminar la categoria:", error);
+      }
+    }
+  };
 
  
-  const handleFavorite = () => {
-    const isProductFavorite = favorites.some((fav) => fav.id === product.id);
-    let updatedFavorites;
-  
-    if (isProductFavorite) {
-      updatedFavorites = favorites.filter((fav) => fav.id !== product.id);
-    } else {
-      updatedFavorites = [...favorites, product];
-    }
-  
-    setFavorites(updatedFavorites); // Actualiza el estado de favoritos en el contexto global
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites)); // Actualiza el localStorage
-  };
 
   const columns = [
     {
@@ -93,7 +93,7 @@ const AdminCategories = () => {
       
       <Box sx={{display:"flex"}}>
       {AdminComponent}
-      <Box sx={{display:"flex", flexDirection:"column",marginLeft:"20vh", width:"76%"}}>
+      <Box sx={{display:"flex", flexDirection:"column",marginLeft:"10vh"}}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h4" color="primary" sx={{ margin: "5vh" }}>
           Categorias
