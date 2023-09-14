@@ -6,18 +6,18 @@ import { CardActionArea } from '@mui/material';
 
 const CardCategory = ({ data }) => {
   return (
-    <Card sx={{ width: 345 }}>
+    <Card sx={{ width: 250 }}>
       <CardActionArea>
         <CardMedia
           component="img"
-          height="250"
-          width="200"
-          image={`${data.imgUrl}`}
+          height="200"
+          width="100"
+          image={`${data.imagenUrl}`}
           alt={`${data.name}`}
         />
         <CardContent>
           <Typography color='primary' gutterBottom variant="h5" component="div">
-            {`${data.name}`}
+            {`${data.nombre}`}
           </Typography>          
         </CardContent>
       </CardActionArea>
