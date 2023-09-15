@@ -1,7 +1,6 @@
 package com.example.VATP.service;
 
 
-import com.example.VATP.dto.ReservaRequestDTO;
 import com.example.VATP.model.Producto;
 import com.example.VATP.model.Reserva;
 
@@ -16,6 +15,7 @@ public interface ReservaService {
     Optional<Reserva> buscarReserva(Integer id);
 
     List<Reserva> obtenerReservasEnFecha(Producto producto, LocalDate fechaReserva);
+    List<Reserva> buscarProductosPorFecha( LocalDate fecha);
 
     Reserva guardarReserva(Reserva reserva);
 

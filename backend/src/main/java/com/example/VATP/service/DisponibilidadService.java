@@ -2,11 +2,13 @@ package com.example.VATP.service;
 
 import com.example.VATP.model.Categoria;
 import com.example.VATP.model.ProductoDisponibilidad;
+import com.example.VATP.model.Reserva;
 import com.example.VATP.repository.CategoriaRepository;
 import com.example.VATP.repository.ProductoDisponibilidadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +23,10 @@ public class DisponibilidadService {
     public List<ProductoDisponibilidad> obtenerTodas() {
         return productoDisponibilidadRepository.findAll();
     }
+    public List<ProductoDisponibilidad> buscarProductosDisponiblesPorFecha(LocalDate fechaReserva) {
+        return productoDisponibilidadRepository.findAllByDate(fechaReserva);
+    }
+
 
     public Optional<ProductoDisponibilidad> obtenerDisPorId(Integer id) {
         return productoDisponibilidadRepository.findById(id);

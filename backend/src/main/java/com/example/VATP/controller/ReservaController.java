@@ -1,14 +1,20 @@
 package com.example.VATP.controller;
 
 
-import com.example.VATP.dto.ReservaRequestDTO;
+import com.example.VATP.dto.ReservaDTO;
+import com.example.VATP.model.Producto;
 import com.example.VATP.model.Reserva;
+import com.example.VATP.service.ProductoService;
 import com.example.VATP.service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,9 +24,11 @@ public class ReservaController {
 
     @Autowired
     private final ReservaService reservaService;
-
-    public ReservaController(ReservaService reservaService) {
+    @Autowired
+    private final ProductoService productoService;
+    public ReservaController(ReservaService reservaService, ProductoService productoService) {
         this.reservaService = reservaService;
+        this.productoService = productoService;
     }
 
 
@@ -31,8 +39,27 @@ public class ReservaController {
         return ResponseEntity.ok(guardarReserva);
     }
 
+    @GetMapping("/por-fecha/{fecha}")
+    public ResponseEntity<List<ReservaDTO>> listarProductosPorFecha(@PathVariable("fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fecha) {
+        if (fecha != null) {
+            List<Reserva> reservas = reservaService.buscarProductosPorFecha(fecha);
 
+            List<ReservaDTO> resultados = new ArrayList<>();
 
+            for (Reserva reserva : reservas) {
+                LocalDate fechaReserva = reserva.getFechaReserva();
+                Producto producto = reserva.getProductos();
+                ReservaDTO dto = new ReservaDTO();
+                dto.setFechaReserva(fechaReserva);
+                dto.setProducto(producto);
+                resultados.add(dto);
+            }
+
+            return ResponseEntity.ok(resultados);
+        } else {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+    }
 
 
     // buscar todos las reservas

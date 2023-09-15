@@ -1,13 +1,11 @@
 package com.example.VATP.service;
 
 
-import com.example.VATP.dto.ReservaRequestDTO;
 import com.example.VATP.model.Producto;
 import com.example.VATP.model.ProductoDisponibilidad;
 import com.example.VATP.model.Reserva;
 import com.example.VATP.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,7 +26,10 @@ public class ReservaServiceImpl implements ReservaService{
         // Return the list of reservations for the given Producto and fechaReserva
         return reservaRepository.findByProductosAndFechaReserva(producto, fechaReserva);
     }
-
+    @Override
+    public List<Reserva> buscarProductosPorFecha( LocalDate fechaReserva) {
+        return reservaRepository.findByFechaReserva(fechaReserva);
+    }
     @Override
     public List<Reserva> listarReserva() {return reservaRepository.findAll();}
 
