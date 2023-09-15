@@ -15,4 +15,5 @@ public interface ProductoDisponibilidadRepository extends JpaRepository<Producto
     Optional<ProductoDisponibilidad> findByProductoAndDate(Producto producto, LocalDate date);
 
     List<ProductoDisponibilidad> findAllByDate(LocalDate date);
+
 }
