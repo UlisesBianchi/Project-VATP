@@ -52,6 +52,7 @@ const CardProducts = ({ product }) => {
   };
 
   return (
+    <Link to={`/product/${product.id}`}>
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       <Toaster richColors visibleToasts={1} />
       <Card
@@ -116,7 +117,7 @@ const CardProducts = ({ product }) => {
             sx={{ display: "flex", alignItems: "center", mb: 1.5 }}
             color="text.secondary"
           >
-            <LocationOnIcon /> Cordoba, Argentina.
+            
             <Box
               sx={{
                 ml: "auto",
@@ -125,11 +126,7 @@ const CardProducts = ({ product }) => {
                 alignItems: "center",
               }}
             >
-              <StarPurple500OutlinedIcon />
-              <StarPurple500OutlinedIcon />
-              <StarPurple500OutlinedIcon />
-              <StarHalfRoundedIcon />
-              <StarBorderRoundedIcon />
+             
             </Box>
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -168,6 +165,7 @@ const CardProducts = ({ product }) => {
         </CardActions>
       </Card>
     </Box>
+    </Link>
   );
 };
 

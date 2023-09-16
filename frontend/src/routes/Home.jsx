@@ -10,7 +10,6 @@ const Home = () => {
   return (
     <>
       <Search />
-      
       <Category />
       <Recomendation />
       

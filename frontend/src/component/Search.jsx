@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
 import axios from "axios";
 import {
   Box,
@@ -20,7 +17,16 @@ import {
   ClickAwayListener,
   Paper as DropdownPaper,
   MenuList,
+  Button,
+  IconButton,
 } from "@mui/material";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Link, useNavigate } from "react-router-dom";
+
+import RestaurantIcon from '@mui/icons-material/Abc';
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,34 +34,36 @@ const Search = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const suggestions = []; // Replace with actual suggestions
+  const suggestions = []; // Reemplaza con tus sugerencias reales
+  const navigate = useNavigate();
+
+  const fetchData = async () => {
+    setIsSearching(true);
+
+    try {
+      const response = await axios.post(
+        "http://18.191.210.53:8082/search/keywords",
+        { keywords: searchTerm }
+        
+      );
+     
+      if (response.status === 200) {
+        setSearchResults(response.data);
+        setAnchorEl(document.getElementById("search-input"));
+      }
+    } catch (error) {
+      console.error("Error al buscar productos:", error);
+    }
+
+    setIsSearching(false);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsSearching(true);
-
-      try {
-        const response = await axios.post(
-          "http://18.191.210.53:8082/search/keywords",
-          { keywords: searchTerm }
-        );
-
-        if (response.status === 200) {
-          setSearchResults(response.data);
-          setAnchorEl(document.getElementById("search-input"));
-        }
-      } catch (error) {
-        console.error("Error al buscar productos:", error);
-      }
-
-      setIsSearching(false);
-    };
-
     if (searchTerm) {
       fetchData();
     } else {
       setSearchResults([]);
-      setAnchorEl(null); // Close the dropdown if no search term
+      setAnchorEl(null); // Cierra el menú desplegable si no hay término de búsqueda
     }
   }, [searchTerm]);
 
@@ -68,6 +76,14 @@ const Search = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleSearchClick = async () => {
+    // Realiza la búsqueda al hacer clic en el botón "Buscar"
+    await fetchData();
+
+    // Navega a la página "Results" con los resultados de búsqueda
+    navigate("/results", { state: { searchResults } });
   };
 
   return (
@@ -155,21 +171,35 @@ const Search = () => {
               )}
             />
           </Paper>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer
+              sx={{
+                background: "white",
+                color: "primary",
+                padding: 0,
+                borderRadius: "4px",
+              }}
+              components={["DatePicker"]}
+            >
+              <DatePicker label="Basic date picker" />
+            </DemoContainer>
+          </LocalizationProvider>
           <Button
             variant="outlined"
-            type="submit"
+            type="button"
             sx={{
               width: "10vw",
               background: "white",
               "&:hover": { background: "white", padding: "0" },
             }}
             disabled={isSearching}
+            onClick={handleSearchClick} // Agrega el manejador de clic para buscar
           >
             Buscar
           </Button>
         </Box>
       </Box>
-      {/* Dropdown for search results */}
+      {/* Dropdown para mostrar resultados */}
       <ClickAwayListener onClickAway={handleClose}>
         <Popper
           sx={{ width: "24%" }}
@@ -185,12 +215,18 @@ const Search = () => {
               >
                 <MenuList>
                   {searchResults.map((result) => (
-                    <ListItem key={result.id} button onClick={handleClose}>
-                      <ListItemAvatar>
-                        <Avatar alt={result.nombre} src={result.imagen} />
-                      </ListItemAvatar>
-                      <ListItemText primary={result.nombre} />
-                    </ListItem>
+                    <Link
+                      key={result.id}
+                      to={`/product/${result.id}`}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <ListItem button onClick={handleClose}>
+                        <ListItemAvatar>
+                          <Avatar alt={result.nombre} src={result.imagen} />
+                        </ListItemAvatar>
+                        <ListItemText primary={result.nombre} />
+                      </ListItem>
+                    </Link>
                   ))}
                 </MenuList>
               </DropdownPaper>

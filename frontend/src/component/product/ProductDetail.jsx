@@ -141,14 +141,10 @@ const ProductDetail = () => {
             borderRadius: "10px", // Estilo de esquinas redondeadas
           }}
         >
-<<<<<<< HEAD
           <Link
             sx={{
               textDecoration: "none",
             }}
-=======
-          <Link to ={'/gallery'}
->>>>>>> frontEnd-Mauricio
           >
             <Typography
               sx={{

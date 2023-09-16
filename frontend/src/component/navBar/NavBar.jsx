@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   Box,
   AppBar,
@@ -18,10 +18,8 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useNavigate } from "react-router-dom";
-import { ContextGlobal } from "../utils/globalContext";
 
 const NavBar = () => {
-  const { obj } = useContext(ContextGlobal);
   const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -43,22 +41,29 @@ const NavBar = () => {
     setLogoutDialogOpen(false);
   };
 
-  const handleLogout = () => {
-    // Realiza aquí la lógica de cierre de sesión, por ejemplo, limpiar la información de sesión.
-    // Luego, redirige al usuario a la página de inicio de sesión.
-    sessionStorage.removeItem("isLoggedIn");
-    navigate("/login");
-    setAnchorElUser(null);
-    handleCloseLogoutDialog();
-  };
-
   // Obtener las iniciales del nombre y apellido del usuario
+  const userFromLocalStorage = localStorage.getItem("user");
   const userInitials =
-    obj.isLoggedIn && obj.user
-      ? `${obj.user.firstName.charAt(0)}${obj.user.lastName.charAt(0)}`
+    userFromLocalStorage &&
+    JSON.parse(userFromLocalStorage).firstName &&
+    JSON.parse(userFromLocalStorage).lastName
+      ? `${JSON.parse(userFromLocalStorage).firstName.charAt(0)}${JSON.parse(
+          userFromLocalStorage
+        ).lastName.charAt(0)}`
       : "";
 
   const settings = ["Perfil", "Favoritos", "Dashboard", "Cerrar Sesion"];
+
+  // Función para realizar el logout
+  const handleLogout = () => {
+    // Realiza aquí la lógica de cierre de sesión, por ejemplo, limpiar la información de sesión.
+    // Luego, redirige al usuario a la página de inicio de sesión.
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("user");
+    navigate("/home");
+    setAnchorElUser(null);
+    handleCloseLogoutDialog();
+  };
 
   return (
     <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "space-around" }}>
@@ -68,24 +73,10 @@ const NavBar = () => {
             height: "5rem",
             background: "white",
             display: "flex",
-            height: "100%",
             justifyContent: "space-around",
-            overflowX: "hidden",
           }}
         >
-          <IconButton
-            color="primary"
-            sx={{
-              display: "none",
-              "@media (max-width: 899px)": {
-                display: "block",
-                margin: "0px 0px",
-              },
-              "@media (max-width: 249px)": {
-                margin: "0px auto",
-              },
-            }}
-          >
+          <IconButton color="primary" sx={{ display: { xl: "none" } }}>
             <MenuIcon />
           </IconButton>
           <Link to={"/"}>
@@ -97,17 +88,13 @@ const NavBar = () => {
                 maxHeight: { xs: "4rem", md: "10rem" },
                 maxWidth: { xs: "10rem", md: "15rem" },
                 marginRight: "2vw",
-                display: "none",
-                "@media (min-width: 250px)": {
-                  display: "block",
-                },
               }}
               alt="Logo"
               src="https://g6-frontend-fotos.s3.amazonaws.com/Logo.png"
             />
           </Link>
           <Box sx={{ display: { xs: "none", md: "flex", xl: "flex" } }}>
-            {obj.isLoggedIn ? (
+            {localStorage.getItem("isLoggedIn") === "true" ? (
               // Mostrar el avatar y el menú si está logueado
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
@@ -147,6 +134,10 @@ const NavBar = () => {
                         <Link to="/favorites">
                           <Typography textAlign="center">Favoritos</Typography>
                         </Link>
+                      ) : setting === "Perfil" ? (
+                        <Link to="/profile">
+                          <Typography textAlign="center">Perfil</Typography>
+                        </Link>
                       ) : (
                         <Typography textAlign="center">{setting}</Typography>
                       )}
@@ -155,25 +146,25 @@ const NavBar = () => {
                 </Menu>
               </Box>
             ) : (
-              // Botón de inicio de sesión
-              <Link to={"/login"}>
-                <Button
-                  variant="text"
-                  sx={{ margin: "3vh", fontSize: "0.75rem" }}
-                >
-                  Iniciar Sesión
-                </Button>
-              </Link>
-            )}
-            {!obj.isLoggedIn && (
-              <Link to={"/register"}>
-                <Button
-                  variant="text"
-                  sx={{ margin: "3vh", fontSize: "0.75rem" }}
-                >
-                  Crear cuenta
-                </Button>
-              </Link>
+              // Botón de inicio de sesión y registro cuando no está logueado
+              <>
+                <Link to={"/login"}>
+                  <Button
+                    variant="text"
+                    sx={{ margin: "3vh", fontSize: "0.75rem" }}
+                  >
+                    Iniciar Sesión
+                  </Button>
+                </Link>
+                <Link to={"/register"}>
+                  <Button
+                    variant="text"
+                    sx={{ margin: "3vh", fontSize: "0.75rem" }}
+                  >
+                    Crear cuenta
+                  </Button>
+                </Link>
+              </>
             )}
           </Box>
         </Toolbar>
