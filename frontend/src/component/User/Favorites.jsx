@@ -8,7 +8,7 @@ const Favorites = () => {
   const [favorites, setFavorites] = useState([])
 
   useEffect(()=>{
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const favorites = JSON.parse(sessionStorage.getItem('favorites')) || [];
     setFavorites(favorites)
 
   },[] )

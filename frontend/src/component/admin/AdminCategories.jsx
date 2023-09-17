@@ -19,8 +19,8 @@ const AdminCategories = () => {
       try {
         await axios.delete(`http://18.191.210.53:8082/categorias/${categorytId}`);
         // Eliminar el producto del estado local
-        const updatedProducts = category.filter((product) => product.id !== categorytId);
-        setCategory(updatedProducts);
+        const updatedCategories = category.filter((category) => category.id !== categorytId);
+        setCategory(updatedCategories);
         console.log("categoria eliminada");
       } catch (error) {
         console.error("Error al eliminar la categoria:", error);

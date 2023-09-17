@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
 import axios from "axios";
 import {
   Box,
-  InputBase,
-  List,
-  ListItem,
-  ListItemText,
   Paper,
   Typography,
-  ListItemAvatar,
-  Avatar,
+  IconButton,
   TextField,
   Autocomplete,
   Popper,
@@ -20,42 +12,56 @@ import {
   ClickAwayListener,
   Paper as DropdownPaper,
   MenuList,
+  Button,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
 } from "@mui/material";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Link, useNavigate } from "react-router-dom";
+import RestaurantIcon from "@mui/icons-material/Abc";
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState({}); 
 
-  const suggestions = []; // Replace with actual suggestions
+  const suggestions = []; // Reemplaza con tus sugerencias reales
+  const navigate = useNavigate();
+
+  const fetchData = async () => {
+    setIsSearching(true);
+
+    try {
+      const response = await axios.post(
+        "http://18.191.210.53:8082/search/keywords",
+        { keywords: searchTerm }
+      );
+
+      if (response.status === 200) {
+        setSearchResults(response.data);
+        setAnchorEl(document.getElementById("search-input"));
+      }
+    } catch (error) {
+      console.error("Error al buscar productos:", error);
+    }
+
+    setIsSearching(false);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsSearching(true);
-
-      try {
-        const response = await axios.post(
-          "http://18.191.210.53:8082/search/keywords",
-          { keywords: searchTerm }
-        );
-
-        if (response.status === 200) {
-          setSearchResults(response.data);
-          setAnchorEl(document.getElementById("search-input"));
-        }
-      } catch (error) {
-        console.error("Error al buscar productos:", error);
-      }
-
-      setIsSearching(false);
-    };
-
     if (searchTerm) {
       fetchData();
     } else {
       setSearchResults([]);
-      setAnchorEl(null); // Close the dropdown if no search term
+      setAnchorEl(null);
     }
   }, [searchTerm]);
 
@@ -64,11 +70,60 @@ const Search = () => {
     setSearchTerm(newSearchTerm);
   };
 
-  const open = Boolean(anchorEl);
+  useEffect(() => {
+    setSearchTerm(""); // Restablece el campo de búsqueda a vacío
+  }, []);
 
-  const handleClose = () => {
+  const handleSelectSuggestion = (selectedSuggestion) => {
+    // Actualiza el estado de selectedProduct con la sugerencia seleccionada
+    setSelectedProduct(selectedSuggestion);
+
+    // Actualiza el estado searchTerm con el nombre de la sugerencia seleccionada
+    setSearchTerm(selectedSuggestion.nombre);
+
+    // Cierra el menú desplegable de sugerencias
     setAnchorEl(null);
   };
+
+  const open = Boolean(anchorEl);
+
+  const handleClose = (result) => {
+    if (result) {
+      // Si se selecciona una sugerencia, actualiza el valor del campo de entrada
+      handleSelectSuggestion(result);
+    } else {
+      setAnchorEl(null);
+    }
+  };
+
+  const handleSearchClick = () => {
+    if (searchTerm) {
+      // Realiza la búsqueda de palabras clave
+      fetchData();
+
+      navigate("/results", { state: { searchResults } });
+    } else if (selectedDate) {
+      // Realiza la búsqueda por fecha
+      const formattedDate = selectedDate.toISOString().split("T")[0];
+      const url = `http://18.191.210.53:8082/disponibilidad/por-fechaStock/${formattedDate}`;
+      axios
+        .get(url)
+        .then((response) => {
+          setSearchResults(response.data);
+          // Redirige a la URL correspondiente a la fecha seleccionada
+          window.location.href = url;
+        })
+        .catch((error) => {
+          console.error("Error al buscar productos:", error);
+        });
+    }
+  };
+
+  useEffect(() => {
+    if (selectedProduct) {
+      setSearchTerm(selectedProduct.nombre);
+    }
+  }, [selectedProduct]);
 
   return (
     <Box
@@ -99,7 +154,7 @@ const Search = () => {
           fontWeight: "700",
         }}
       >
-        Busca la experiencia que mas se adapte a tu paladar!
+        Busca la experiencia que más se adapte a tu paladar!
       </Typography>
       <Box
         sx={{
@@ -137,8 +192,13 @@ const Search = () => {
               id="search-input"
               freeSolo
               options={suggestions}
+              value={selectedProduct || searchTerm} // Usa selectedProduct si está definido, de lo contrario, usa searchTerm
               onInputChange={(event, newSearchTerm) => {
                 handleInputChange({ target: { value: newSearchTerm } });
+              }}
+getOptionLabel={(option) => (option && option.nombre ? option.nombre : "")}
+              onChange={(event, newValue) => {
+                handleClose(newValue);
               }}
               renderInput={(params) => (
                 <TextField
@@ -148,28 +208,46 @@ const Search = () => {
                     ...params.inputProps,
                     "aria-label": "search google maps",
                   }}
-                  value={searchTerm}
+                  value={searchTerm} // Usa searchTerm en lugar de selectedProduct.nombre
                   onChange={handleInputChange}
-                  fullWidth // Make the search bar wider
+                  fullWidth
                 />
               )}
             />
           </Paper>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer
+              sx={{
+                background: "white",
+                color: "primary",
+                padding: 0,
+                borderRadius: "4px",
+              }}
+              components={["DatePicker"]}
+            >
+              <DatePicker
+                label="Selecciona una fecha"
+                value={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+              />
+            </DemoContainer>
+          </LocalizationProvider>
           <Button
             variant="outlined"
-            type="submit"
+            type="button"
             sx={{
               width: "10vw",
               background: "white",
               "&:hover": { background: "white", padding: "0" },
             }}
             disabled={isSearching}
+            onClick={handleSearchClick}
           >
             Buscar
           </Button>
         </Box>
       </Box>
-      {/* Dropdown for search results */}
+      {/* Dropdown para mostrar resultados */}
       <ClickAwayListener onClickAway={handleClose}>
         <Popper
           sx={{ width: "24%" }}
@@ -185,12 +263,18 @@ const Search = () => {
               >
                 <MenuList>
                   {searchResults.map((result) => (
-                    <ListItem key={result.id} button onClick={handleClose}>
-                      <ListItemAvatar>
-                        <Avatar alt={result.nombre} src={result.imagen} />
-                      </ListItemAvatar>
-                      <ListItemText primary={result.nombre} />
-                    </ListItem>
+                    <Box
+                      key={result.id}
+                      onClick={() => handleSelectSuggestion(result)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <ListItem button>
+                        <ListItemAvatar>
+                          <Avatar alt={result.nombre} src={result.imagen} />
+                        </ListItemAvatar>
+                        <ListItemText primary={result.nombre} />
+                      </ListItem>
+                    </Box>
                   ))}
                 </MenuList>
               </DropdownPaper>

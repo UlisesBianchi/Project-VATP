@@ -8,8 +8,14 @@ export const ContextProvider = ({ children }) => {
   const [product, setProduct] = useState([]);
   const [category, setCategory] = useState([]);
   const [imageMap, setImageMap] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null); // Agregar una variable de usuario
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem('isLoggedIn') === 'true'
+  );
+  const [user, setUser] = useState(
+    localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user'))
+      : null
+  );
   const navigate = useNavigate();
 
   const url = 'http://18.191.210.53:8082/productos';
@@ -18,7 +24,7 @@ export const ContextProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await axios.post(
-        "http://18.191.210.53:8082/api/login",
+        'http://18.191.210.53:8082/api/login',
         {
           email: email,
           password: password,
@@ -31,54 +37,52 @@ export const ContextProvider = ({ children }) => {
       const responseData = response.data;
       console.log(responseData);
 
-      if (responseData.message === "Email not exists") {
-        alert("El correo electrónico no existe");
-        sessionStorage.removeItem("data");
-      } else if (responseData.message === "Login Success") {
+      if (responseData.message === 'Email not exists') {
+        alert('El correo electrónico no existe');
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('user');
+      } else if (responseData.message === 'Login Success') {
         setIsLoggedIn(true);
         navigate('/home');
-        sessionStorage.setItem("isLoggedIn", "true"); // Guarda isLoggedIn en sessionStorage
-        setUser(responseData.user); // Guarda la información del usuario
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('user', JSON.stringify(responseData.user));
+        setUser(responseData.user);
       } else {
-        alert("El correo electrónico y la contraseña no coinciden");
+        alert('El correo electrónico y la contraseña no coinciden');
       }
     } catch (error) {
       console.error(error);
-      console.log("Respuesta de error:", error.response);
-      alert("Se produjo un error al iniciar sesión");
+      console.log('Respuesta de error:', error.response);
+      alert('Se produjo un error al iniciar sesión');
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
+    navigate('/home');
+    setUser(null);
+  };
+
   useEffect(() => {
-    const isLoggedInSessionStorage = sessionStorage.getItem("isLoggedIn");
-    if (isLoggedInSessionStorage === "true") {
-      setIsLoggedIn(true);
-    }
-  }, []);
+    axios.get(url).then((res) => {
+      setProduct(res.data);
 
-
-
-  useEffect(() => {
-    axios.get(url)
-      .then((res) => {
-        setProduct(res.data);
-
-        // Create a mapping of product IDs to the first image URL
-        const newImageMap = {};
-        res.data.forEach(product => {
-          if (product.images.length > 0) {
-            newImageMap[product.id] = product.images[0];
-          }
-        });
-        setImageMap(newImageMap);
+      const newImageMap = {};
+      res.data.forEach((product) => {
+        if (product.images.length > 0) {
+          newImageMap[product.id] = product.images[0];
+        }
       });
+      setImageMap(newImageMap);
+    });
   }, []);
 
   useEffect(() => {
-    axios.get(url2)
-      .then((categoryRes) => {
-        setCategory(categoryRes.data);
-      });
+    axios.get(url2).then((categoryRes) => {
+      setCategory(categoryRes.data);
+    });
   }, []);
 
   const obj = {
@@ -87,12 +91,13 @@ export const ContextProvider = ({ children }) => {
     imageMap,
     isLoggedIn,
     login,
-    user, // Agregar la información del usuario al contexto
+    user,
+    handleLogout,
   };
 
   return (
     <ContextGlobal.Provider value={{ obj }}>
       {children}
     </ContextGlobal.Provider>
-  );
+);
 };

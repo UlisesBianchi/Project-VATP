@@ -41,7 +41,7 @@ const ProductDetail = () => {
     });
   }, []);
 
-  // console.log(imagesArray);
+  
 
   return (
     <>
@@ -130,36 +130,7 @@ const ProductDetail = () => {
         </Typography>
       </Toolbar>
       <ImageGallery images={imagesArray} />
-      {/* <Toolbar sx={{ display: "flex", justifyContent: "end" }}>
-        <Button
-          variant="contained"
-          color="primary"
-          size="medium"
-          sx={{
-            width: "10rem", // Ajusta el ancho según tus necesidades
-            minWidth: "auto", // Para que sea cuadrado
-            borderRadius: "10px", // Estilo de esquinas redondeadas
-          }}
-        >
-<<<<<<< HEAD
-          <Link
-            sx={{
-              textDecoration: "none",
-            }}
-=======
-          <Link to ={'/gallery'}
->>>>>>> frontEnd-Mauricio
-          >
-            <Typography
-              sx={{
-                color: "white",
-              }}
-            >
-              Ver más
-            </Typography>
-          </Link>
-        </Button>
-      </Toolbar> */}
+    
       <Toolbar
         sx={{
           display: "flex",

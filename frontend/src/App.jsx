@@ -11,6 +11,8 @@ import AdminProducts from "./component/admin/AdminProducts";
 import AdminCategories from "./component/admin/AdminCategories";
 import FormRegistationCategories from "./component/admin/FormRegistationCategories";
 import Favorites from "./component/User/Favorites";
+import ResultSearch from "./routes/ResultSearch";
+import Profiles from "./component/User/Profiles";
 
 function App() {
   const isAuthenticated = localStorage.getItem("token") !== null;
@@ -32,8 +34,10 @@ function App() {
           <Route path="admin-category" element={<AdminCategories />} />
           <Route path="form-category" element={<FormRegistationCategories />} />
         </Route>
+        <Route path="/results" element={<ResultSearch />}/>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/favorites" element={<Favorites />} />
+        <Route path="/profiles" element={<Profiles />} />
 
         {isAuthenticated ? (
           <Route path="/login" element={<Navigate to="/home" />} />
