@@ -157,7 +157,6 @@ public class ProductoService {
         }
     }
 
-
     public Optional<ProductoDisponibilidad> getProductAvailability(Producto producto, LocalDate date) {
         // Query the database to find availability for the product and date
 
@@ -179,5 +178,10 @@ public class ProductoService {
             }
         }
     }
+
+    public List<Producto> obtenerProductosPorCategoria(Integer categoriaId) {
+        return productoRepository.findByCategoriaId(categoriaId);
+    }
+
 
 }

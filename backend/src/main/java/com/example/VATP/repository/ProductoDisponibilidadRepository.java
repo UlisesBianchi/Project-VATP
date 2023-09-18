@@ -16,4 +16,6 @@ public interface ProductoDisponibilidadRepository extends JpaRepository<Producto
 
     List<ProductoDisponibilidad> findAllByDate(LocalDate date);
 
+    List<ProductoDisponibilidad> findByProductoId(Integer id);
+
 }

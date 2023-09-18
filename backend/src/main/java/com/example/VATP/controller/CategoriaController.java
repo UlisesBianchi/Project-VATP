@@ -55,7 +55,7 @@ public class CategoriaController {
         }
     }
 
-
+/*
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategoria(@PathVariable Integer id) {
@@ -67,6 +67,19 @@ public class CategoriaController {
             if (categoriaProducto != null && Objects.equals(categoriaProducto.getId(), id)) {
                 productoService.eliminarProducto(producto.getId());
             }
+        }
+
+        categoriaService.eliminarCategoria(id);
+
+        return ResponseEntity.noContent().build();
+    }*/
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCategoria(@PathVariable Integer id) {
+        List<Producto> productosConCategoria = productoService.obtenerProductosPorCategoria(id);
+
+        for (Producto producto : productosConCategoria) {
+            productoService.eliminarProducto(producto.getId());
         }
 
         categoriaService.eliminarCategoria(id);

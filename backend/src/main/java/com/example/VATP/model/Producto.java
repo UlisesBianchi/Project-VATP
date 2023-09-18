@@ -97,12 +97,23 @@ public class Producto {
         return categoria.getId();
     }
 
+
+    // relacion con disponibilidad
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductoDisponibilidad> disponibilidades;
+
+
+
+
+
+
+
+
     // relacion con reservas
 
 
-
-
-    @OneToMany(mappedBy = "productos")
+    @OneToMany(mappedBy = "productos", cascade = CascadeType.ALL, orphanRemoval = true)
     // @JsonIgnore
     @JsonManagedReference
     private List<Reserva> reservas ;

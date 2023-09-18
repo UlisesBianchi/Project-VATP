@@ -36,4 +36,8 @@ public class DisponibilidadService {
         productoDisponibilidadRepository.deleteById(id);
     }
 
+    public List<ProductoDisponibilidad> obtenerDisponibilidadesPorProducto(Integer id) {
+        return productoDisponibilidadRepository.findByProductoId(id);
+    }
+
 }

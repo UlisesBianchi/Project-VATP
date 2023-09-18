@@ -13,7 +13,8 @@ import java.util.Optional;
 @Repository
 public interface ReservaRepository extends JpaRepository<Reserva, Integer> {
     List<Reserva> findByProductosAndFechaReserva(Producto productos, LocalDate fechaReserva);
-
     List<Reserva> findByFechaReserva(LocalDate fechaReserva);
+
+    List<Reserva> findByProductosId(Integer id);
 
 }
