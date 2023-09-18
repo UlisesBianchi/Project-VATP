@@ -32,6 +32,7 @@ const Search = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState({});
+
   const suggestions = []; // Reemplaza con tus sugerencias reales
   const navigate = useNavigate();
 
@@ -89,24 +90,23 @@ const Search = () => {
     }
   };
 
-  const handleSearchClick = () => {
-    if (searchTerm) {
+  
+const handleSearchClick = () => {
+    if(selectedDate && selectedProduct.id) {
+      const formattedDate = selectedDate.toISOString().split("T")[0];
+      navigate(`/results/date=${formattedDate}?productoId=${selectedProduct.id}`);
+    } else if (searchTerm) {
       fetchData();
       navigate(`/results/productoId=${selectedProduct.id}`);
     } else if (selectedDate) {
       const formattedDate = selectedDate.toISOString().split("T")[0];
-      const url = `http://18.191.210.53:8082/disponibilidad/por-fechaStock/${formattedDate}`;
-      axios
-        .get(url)
-        .then((response) => {
-          setSearchResults(response.data);
-          window.location.href = url;
-        })
-        .catch((error) => {
-          console.error("Error al buscar productos:", error);
-        });
+      navigate(`/results/${formattedDate}`);
+    } else {
+      alert("error al ingresar datos");
     }
   };
+
+
 
   useEffect(() => {
     if (selectedProduct) {

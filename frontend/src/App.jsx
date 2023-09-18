@@ -34,7 +34,7 @@ function App() {
           <Route path="admin-category" element={<AdminCategories />} />
           <Route path="form-category" element={<FormRegistationCategories />} />
         </Route>
-        <Route path="/results" element={<ResultSearch />}/>
+        <Route path="/results/date=:fecha?productoId=:productoId" element={<ResultSearch />}/>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/profiles" element={<Profiles />} />
