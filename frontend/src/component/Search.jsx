@@ -31,8 +31,7 @@ const Search = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedProduct, setSelectedProduct] = useState({}); 
-
+  const [selectedProduct, setSelectedProduct] = useState({});
   const suggestions = []; // Reemplaza con tus sugerencias reales
   const navigate = useNavigate();
 
@@ -41,7 +40,7 @@ const Search = () => {
 
     try {
       const response = await axios.post(
-        "http://18.191.210.53:8082/search/keywords",
+        "http://localhost:8082/search/keywords",
         { keywords: searchTerm }
       );
 
@@ -71,17 +70,12 @@ const Search = () => {
   };
 
   useEffect(() => {
-    setSearchTerm(""); // Restablece el campo de búsqueda a vacío
+    setSearchTerm("");
   }, []);
 
   const handleSelectSuggestion = (selectedSuggestion) => {
-    // Actualiza el estado de selectedProduct con la sugerencia seleccionada
     setSelectedProduct(selectedSuggestion);
-
-    // Actualiza el estado searchTerm con el nombre de la sugerencia seleccionada
     setSearchTerm(selectedSuggestion.nombre);
-
-    // Cierra el menú desplegable de sugerencias
     setAnchorEl(null);
   };
 
@@ -89,7 +83,6 @@ const Search = () => {
 
   const handleClose = (result) => {
     if (result) {
-      // Si se selecciona una sugerencia, actualiza el valor del campo de entrada
       handleSelectSuggestion(result);
     } else {
       setAnchorEl(null);
@@ -98,19 +91,15 @@ const Search = () => {
 
   const handleSearchClick = () => {
     if (searchTerm) {
-      // Realiza la búsqueda de palabras clave
       fetchData();
-
-      navigate("/results", { state: { searchResults } });
+      navigate(`/results/productoId=${selectedProduct.id}`);
     } else if (selectedDate) {
-      // Realiza la búsqueda por fecha
       const formattedDate = selectedDate.toISOString().split("T")[0];
       const url = `http://18.191.210.53:8082/disponibilidad/por-fechaStock/${formattedDate}`;
       axios
         .get(url)
         .then((response) => {
           setSearchResults(response.data);
-          // Redirige a la URL correspondiente a la fecha seleccionada
           window.location.href = url;
         })
         .catch((error) => {
@@ -192,11 +181,13 @@ const Search = () => {
               id="search-input"
               freeSolo
               options={suggestions}
-              value={selectedProduct || searchTerm} // Usa selectedProduct si está definido, de lo contrario, usa searchTerm
+              value={selectedProduct || searchTerm}
               onInputChange={(event, newSearchTerm) => {
                 handleInputChange({ target: { value: newSearchTerm } });
               }}
-getOptionLabel={(option) => (option && option.nombre ? option.nombre : "")}
+              getOptionLabel={(option) =>
+                option && option.nombre ? option.nombre : ""
+              }
               onChange={(event, newValue) => {
                 handleClose(newValue);
               }}
@@ -208,7 +199,7 @@ getOptionLabel={(option) => (option && option.nombre ? option.nombre : "")}
                     ...params.inputProps,
                     "aria-label": "search google maps",
                   }}
-                  value={searchTerm} // Usa searchTerm en lugar de selectedProduct.nombre
+                  value={searchTerm}
                   onChange={handleInputChange}
                   fullWidth
                 />

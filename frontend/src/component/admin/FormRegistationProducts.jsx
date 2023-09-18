@@ -18,7 +18,7 @@ import * as Yup from "yup";
 import { ContextGlobal } from "../utils/globalContext";
 
 const FormRegistrationProducts = () => {
-  const url = "http://18.191.210.53:8082/productos";
+  const url = "http://localhost:8082/productos";
   const { AdminComponent, obj } = useContext(ContextGlobal);
  
 

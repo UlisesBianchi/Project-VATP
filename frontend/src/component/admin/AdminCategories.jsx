@@ -17,7 +17,7 @@ const AdminCategories = () => {
     const confirmed = window.confirm("¿Estás seguro de que deseas eliminar esta categoria?");
     if (confirmed) {
       try {
-        await axios.delete(`http://18.191.210.53:8082/categorias/${categorytId}`);
+        await axios.delete(`http://localhost:8082/categorias/${categorytId}`);
         // Eliminar el producto del estado local
         const updatedCategories = category.filter((category) => category.id !== categorytId);
         setCategory(updatedCategories);
