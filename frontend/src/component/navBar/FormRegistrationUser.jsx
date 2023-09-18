@@ -15,7 +15,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const FormRegistrationUser = () => {
-  const url = "http://18.191.210.53:8082/register/save";
+  const url = "http://localhost:8082/register/save";
 
   const [mensaje, setMensaje] = useState(false);
   

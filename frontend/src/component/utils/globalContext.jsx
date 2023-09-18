@@ -18,13 +18,13 @@ export const ContextProvider = ({ children }) => {
   );
   const navigate = useNavigate();
 
-  const url = 'http://18.191.210.53:8082/productos';
-  const url2 = 'http://18.191.210.53:8082/categorias';
+  const url = 'http://localhost:8082/productos';
+  const url2 = 'http://localhost:8082/categorias';
 
   const login = async (email, password) => {
     try {
       const response = await axios.post(
-        'http://18.191.210.53:8082/api/login',
+        'http://localhost:8082/api/login',
         {
           email: email,
           password: password,
