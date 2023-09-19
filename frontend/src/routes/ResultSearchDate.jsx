@@ -4,7 +4,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { Box } from "@mui/material";
 import axios from "axios";
 
-const ResultSearch = () => {
+const ResultSearchDate = () => {
   
   const { fecha } = useParams();
   const [search, setSearch] = useState([]);
@@ -40,4 +40,4 @@ const ResultSearch = () => {
   );
 };
 
-export default ResultSearch;
+export default ResultSearchDate;
