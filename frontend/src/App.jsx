@@ -1,21 +1,24 @@
-import NavBar from "./component/navBar/NavBar";
-import Home from "./routes/Home";
-import Footer from "./component/Footer";
-import { Navigate, Route, Routes } from "react-router-dom";
-import FormRegistationProducts from "./component/admin/FormRegistationProducts";
-import ProductDetail from "./component/product/ProductDetail";
-import RegistrationUser from "./routes/RegistrationUser";
-import Admin from "./routes/Admin";
-import LoginForm from "./component/navBar/LoginForm";
-import AdminProducts from "./component/admin/AdminProducts";
-import AdminCategories from "./component/admin/AdminCategories";
-import FormRegistationCategories from "./component/admin/FormRegistationCategories";
-import Favorites from "./component/User/Favorites";
-import ResultSearch from "./routes/ResultSearch";
-import Profiles from "./component/User/Profiles";
+import React from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import NavBar from './component/navBar/NavBar';
+import Home from './routes/Home';
+import Footer from './component/Footer';
+import FormRegistationProducts from './component/admin/FormRegistationProducts';
+import ProductDetail from './component/product/ProductDetail';
+import RegistrationUser from './routes/RegistrationUser';
+import Admin from './routes/Admin';
+import LoginForm from './component/navBar/LoginForm';
+import AdminProducts from './component/admin/AdminProducts';
+import AdminCategories from './component/admin/AdminCategories';
+import FormRegistationCategories from './component/admin/FormRegistationCategories';
+import Favorites from './component/User/Favorites';
+import ResultSearchDate from './routes/ResultSearchDate';
+import Profiles from './component/User/Profiles';
+import ResultSearchProduct from './routes/ResultSearchProduct';
+import ResultSearchProductDate from './routes/ResultSearchProductDate';
 
 function App() {
-  const isAuthenticated = localStorage.getItem("token") !== null;
+  const isAuthenticated = localStorage.getItem('token') !== null;
 
   return (
     <>
@@ -34,7 +37,12 @@ function App() {
           <Route path="admin-category" element={<AdminCategories />} />
           <Route path="form-category" element={<FormRegistationCategories />} />
         </Route>
-        <Route path="/results/date=:fecha?productoId=:productoId" element={<ResultSearch />}/>
+        <Route path="/results/date/:fecha" element={<ResultSearchDate />} />
+        <Route path="/results/:productoId" element={<ResultSearchProduct />} />
+        <Route
+          path="/results/date-product/:fecha/:productoId"
+          element={<ResultSearchProductDate />}
+        />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/profiles" element={<Profiles />} />

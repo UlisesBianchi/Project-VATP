@@ -1,25 +1,27 @@
-import { Box, Button, Typography } from '@mui/material';
-import React, { useContext, useMemo, useState } from 'react'
-import { ContextGlobal } from '../utils/globalContext';
-import axios from 'axios';
-import { DataGrid } from '@mui/x-data-grid';
-import { Link } from 'react-router-dom';
-
+import { Box, Button, Typography } from "@mui/material";
+import React, { useContext, useMemo, useState } from "react";
+import { ContextGlobal } from "../utils/globalContext";
+import axios from "axios";
+import { DataGrid } from "@mui/x-data-grid";
+import { Link } from "react-router-dom";
 
 const AdminCategories = () => {
-
- 
-
-  const { obj , AdminComponent } = useContext(ContextGlobal);
+  const { obj, AdminComponent } = useContext(ContextGlobal);
   const [category, setCategory] = useState(obj.category);
 
   const handleDelete = async (categorytId) => {
-    const confirmed = window.confirm("¿Estás seguro de que deseas eliminar esta categoria?");
+    const confirmed = window.confirm(
+      "¿Estás seguro de que deseas eliminar esta categoria?"
+    );
     if (confirmed) {
       try {
-        await axios.delete(`http://localhost:8082/categorias/${categorytId}`);
+        await axios.delete(
+          `http://18.191.210.53:8082/categorias/${categorytId}`
+        );
         // Eliminar el producto del estado local
-        const updatedCategories = category.filter((category) => category.id !== categorytId);
+        const updatedCategories = category.filter(
+          (category) => category.id !== categorytId
+        );
         setCategory(updatedCategories);
         console.log("categoria eliminada");
       } catch (error) {
@@ -27,8 +29,6 @@ const AdminCategories = () => {
       }
     }
   };
-
- 
 
   const columns = [
     {
@@ -76,8 +76,7 @@ const AdminCategories = () => {
           Eliminar
         </Button>
       ),
-    }
-
+    },
   ];
 
   const rows = category.map((category) => ({
@@ -89,40 +88,47 @@ const AdminCategories = () => {
   }));
 
   return (
-  
-      
-      <Box sx={{display:"flex"}}>
+    <Box sx={{ display: "flex" }}>
       {AdminComponent}
-      <Box sx={{display:"flex", flexDirection:"column",marginLeft:"10vh"}}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Typography variant="h4" color="primary" sx={{ margin: "5vh" }}>
-          Categorias
-        </Typography>
-        <Link to={"/admin/form-category"} >
-          <Button variant="contained" sx={{ marginRight: "5vw", height: "5vh", background: "primary" }}>
-            Agregar categoria
-          </Button>
-        </Link>
-      </Box>
-      <Box sx={{ height: "100%", width: "100%", margin: "2v" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          getRowHeight={() => 80}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 20 },
-            },
+      <Box
+        sx={{ display: "flex", flexDirection: "column", marginLeft: "10vh" }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
-          pageSizeOptions={[20, 10]}
-          checkboxSelection
-        />
-      </Box>
+        >
+          <Typography variant="h4" color="primary" sx={{ margin: "5vh" }}>
+            Categorias
+          </Typography>
+          <Link to={"/admin/form-category"}>
+            <Button
+              variant="contained"
+              sx={{ marginRight: "5vw", height: "5vh", background: "primary" }}
+            >
+              Agregar categoria
+            </Button>
+          </Link>
+        </Box>
+        <Box sx={{ height: "100%", width: "100%", margin: "2v" }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            getRowHeight={() => 80}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 20 },
+              },
+            }}
+            pageSizeOptions={[20, 10]}
+            checkboxSelection
+          />
+        </Box>
       </Box>
     </Box>
+  );
+};
 
-   
-  )
-}
-
-export default AdminCategories
+export default AdminCategories;

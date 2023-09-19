@@ -24,7 +24,7 @@ const ProductDetail = () => {
   const [detail, setDetail] = useState("");
   const [imagesArray, setImagesArray] = useState([]);
   const [caracteristica, setCaracteristicas] = useState([]);
-  const url = `http://localhost:8082/productos/${id}`;
+  const url = `http://18.191.210.53:8082/productos/${id}`;
   const navigate = useNavigate();
   const handleGoBack = () => {
     navigate(-1); // Navega hacia atrás en la pila de rutas
@@ -40,8 +40,6 @@ const ProductDetail = () => {
       setCaracteristicas(detailData.detalles);
     });
   }, []);
-
-  
 
   return (
     <>
@@ -130,7 +128,7 @@ const ProductDetail = () => {
         </Typography>
       </Toolbar>
       <ImageGallery images={imagesArray} />
-    
+
       <Toolbar
         sx={{
           display: "flex",

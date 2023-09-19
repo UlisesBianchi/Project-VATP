@@ -41,7 +41,7 @@ const Search = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8082/search/keywords",
+        "http://18.191.210.53:8082/search/keywords",
         { keywords: searchTerm }
       );
 
@@ -90,23 +90,23 @@ const Search = () => {
     }
   };
 
-  
-const handleSearchClick = () => {
-    if(selectedDate && selectedProduct.id) {
+  const handleSearchClick = () => {
+    if (selectedDate && selectedProduct.id) {
       const formattedDate = selectedDate.toISOString().split("T")[0];
-      navigate(`/results/date=${formattedDate}?productoId=${selectedProduct.id}`);
+      navigate(
+        `/results/date-product/${formattedDate}/${selectedProduct.id}`
+      );
     } else if (searchTerm) {
       fetchData();
-      navigate(`/results/productoId=${selectedProduct.id}`);
+      navigate(`/results/${selectedProduct.id}`);
+      console.log(selectedProduct.id);
     } else if (selectedDate) {
       const formattedDate = selectedDate.toISOString().split("T")[0];
-      navigate(`/results/${formattedDate}`);
+      navigate(`/results/date/${formattedDate}`);
     } else {
       alert("error al ingresar datos");
     }
   };
-
-
 
   useEffect(() => {
     if (selectedProduct) {

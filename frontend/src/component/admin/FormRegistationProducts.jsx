@@ -18,9 +18,8 @@ import * as Yup from "yup";
 import { ContextGlobal } from "../utils/globalContext";
 
 const FormRegistrationProducts = () => {
-  const url = "http://localhost:8082/productos";
+  const url = "http://18.191.210.53:8082/productos";
   const { AdminComponent, obj } = useContext(ContextGlobal);
- 
 
   const [image1, setImage1] = useState("");
   const [image2, setImage2] = useState("");
@@ -53,6 +52,7 @@ const FormRegistrationProducts = () => {
     useFormik({
       initialValues: {
         descripcion: "",
+        descripcionCorta:"",
         nombre: "",
         precio: "",
         categoria: "",
@@ -61,6 +61,9 @@ const FormRegistrationProducts = () => {
       onSubmit: sendForm,
       validationSchema: Yup.object({
         descripcion: Yup.string()
+          .required("Campo obligatorio")
+          .min(4, "Debe tener al menos 4 caracteres"),
+          descripcionCorta: Yup.string()
           .required("Campo obligatorio")
           .min(4, "Debe tener al menos 4 caracteres"),
         nombre: Yup.string()
@@ -74,11 +77,9 @@ const FormRegistrationProducts = () => {
           id: Yup.number().required("Campo obligatorio"),
           nombre: Yup.string().required("Campo obligatorio"),
         }),
-       
       }),
     });
 
-  
   return (
     <Box sx={{ display: "flex" }}>
       {AdminComponent}
@@ -103,7 +104,7 @@ const FormRegistrationProducts = () => {
                 boxSizing: "border-box",
                 border: "solid grey 1px",
                 borderRadius: "5px",
-                height: "58vh",
+                height: "80vh",
                 width: "80vw",
                 marginBottom: "2vh",
               }}
@@ -164,6 +165,29 @@ const FormRegistrationProducts = () => {
                     multiline
                     sx={{ margin: "1vw 0 0 1vw", width: "180%" }}
                   />
+                  
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Typography
+                    variant="h7"
+                    color="primary"
+                    sx={{ marginLeft: "1vw" }}
+                  >
+                    Descripción Corta
+                  </Typography>
+                  <TextField
+                    label=""
+                    name="descripcionCorta"
+                    value={values.descripcionCorta}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.descripcion && Boolean(errors.descripcion)}
+                    helperText={touched.descripcion && errors.descripcion}
+                    rows={5}
+                    multiline
+                    sx={{ margin: "1vw 0 0 1vw", width: "180%" }}
+                  />
+                  
                 </Grid>
               </Grid>
             </Box>
