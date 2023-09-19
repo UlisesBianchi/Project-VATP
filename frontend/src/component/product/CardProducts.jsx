@@ -25,17 +25,17 @@ const CardProducts = ({ product }) => {
   let showMessage = false;
   const isSmallScreen = useMediaQuery("(max-width: 545px)");
   const handleFavorite = () => {
-    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
 
     const isFavorite = favorites.find((fav) => fav.id === product.id);
 
     if (isFavorite) {
       const updateFavorites = favorites.filter((fav) => fav.id !== product.id);
-      localStorage.setItem("favorites", JSON.stringify(updateFavorites));
+      sessionStorage.setItem("favorites", JSON.stringify(updateFavorites));
       showMessage = true;
     } else {
       favorites.push(product);
-      localStorage.setItem("favorites", JSON.stringify(favorites));
+      sessionStorage.setItem("favorites", JSON.stringify(favorites));
       showMessage = true;
     }
     if (showMessage) {

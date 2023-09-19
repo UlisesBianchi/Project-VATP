@@ -8,9 +8,21 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const Calendario = () => {
+  const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const handleReserveClick = () => {
+    if (isLoggedIn) {
+      navigate('/reserve');
+    } else {
+      alert("Debe iniciar sesión para poder hacer una reserva");
+      navigate('/login');
+    }
+  };
+
+
   return (
     <>
       <Box
@@ -23,25 +35,6 @@ const Calendario = () => {
           padding: "0",
         }}
       >
-        {/* <Paper
-          component="form"
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            width: { xl: "10vw", height: "100%" },
-          }}
-        >
-          <IconButton sx={{ p: "10px" }} aria-label="menu">
-            <RestaurantIcon />
-          </IconButton>
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Elige tu categoria o experiencia"
-            inputProps={{ "aria-label": "search google maps" }}
-          />
-
-          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-        </Paper> */}
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DatePicker"]} sx={{ paddingTop: "0" }}>
@@ -56,7 +49,7 @@ const Calendario = () => {
             />
           </DemoContainer>
         </LocalizationProvider>
-
+        
         <Button
           variant="outlined"
           type="submit"
@@ -65,12 +58,11 @@ const Calendario = () => {
             background: "white",
             "&:hover": { background: "white", padding: "0" },
           }}
+          onClick={handleReserveClick}
         >
-          <Link to={'/reserve'}
-          style={{ color: '#E23333',fontFamily: "'Roboto', sans-serif", textDecoration: 'none'}}>
           Reservar
-          </Link>
         </Button>
+        
       </Box>
     </>
   );
