@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import ImageGallery from "./ImageGallery";
 import FeatureList from "./FeatureList";
-import Policity from "./Policity";
+import Politicas from "./Politicas";
+import Description from "./Description";
+import Search from "../Search";
+import Calendario from "./Calendario";
 
 import {
   Box,
@@ -14,9 +16,8 @@ import {
   IconButton,
   Container,
   Paper,
-  Grid,
-  Icon,
 } from "@mui/material";
+import ShareButton from "./SharedButton";
 
 const ProductDetail = () => {
   // const { obj } = useContext(ContextGlobal);
@@ -27,10 +28,8 @@ const ProductDetail = () => {
   const url = `http://18.191.210.53:8082/productos/${id}`;
   const navigate = useNavigate();
   const handleGoBack = () => {
-    navigate(-1); // Navega hacia atrás en la pila de rutas
+    navigate(-1); // Navega hacia atrÃ¡s en la pila de rutas
   };
-
-  console.log(detail);
 
   useEffect(() => {
     axios.get(url).then((res) => {
@@ -48,16 +47,34 @@ const ProductDetail = () => {
           display: "flex",
           justifyContent: "space-between",
           padding: "25",
-          backgroundColor: "primary.main", // Set the background color to primary color
-          color: "primary.contrastText", // Set the text color for contrast
+          marginTop: "0.5rem",
+          // backgroundColor: "primary.main", // Set the background color to primary color
+          // color: "primary.contrastText", // Set the text color for contrast
         }}
       >
-        <Typography variant="h4" color="white">
+        <Typography variant="h4" color="primary" marginLeft={"10rem"}>
           {detail.nombre}
         </Typography>
         <IconButton onClick={handleGoBack}>
-          <ArrowBackRoundedIcon style={{ color: "white" }} />
+          <ArrowBackRoundedIcon
+            style={{
+              color: "#E23333",
+              fontSize: "2.5rem",
+              paddingRight: "10rem",
+            }}
+          />
         </IconButton>
+      </Toolbar>
+      <Toolbar
+        sx={{
+          display: "flex",
+          justifyContent: "end",
+          marginRight: "10rem",
+          // backgroundColor: "primary.main", // Set the background color to primary color
+          // color: "primary.contrastText", // Set the text color for contrast
+        }}
+      >
+        <ShareButton />
       </Toolbar>
 
       <Container maxWidth="md" style={{ width: "100vw" }}>
@@ -82,70 +99,37 @@ const ProductDetail = () => {
               width: "100vw",
             }}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <img
-                  src={imagesArray[0]}
-                  style={{
-                    maxWidth: "100%",
-                    height: "auto",
-                    marginBottom: "2rem",
-                    borderRadius: "10px",
-                  }}
-                />
-                <Grid>
-                  <Typography variant="h4">Descripción</Typography>
-                  <Typography variant="body1">{detail.descripcion}</Typography>
-                </Grid>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography variant="h4">{detail.nombre}</Typography>
-                <Typography variant="h5">$ {detail.precio}</Typography>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <Icon>
-                    <LocationOnIcon />
-                  </Icon>
-                  <Typography variant="h5" style={{ marginLeft: "0.5rem" }}>
-                    Ubicación
-                  </Typography>
-                </div>
-              </Grid>
-            </Grid>
+            {/* <Typography variant="h4">{detail.nombre}</Typography>
+            <Typography variant="body1">{detail.descripcion}</Typography>
+            <Typography variant="body1">{detail.precio}</Typography> */}
+            <ImageGallery images={imagesArray} />
           </Paper>
         </Box>
       </Container>
-      <Toolbar
+      <Container
         sx={{
           display: "flex",
-          justifyContent: "start",
-          padding: "25",
-          backgroundColor: "primary.main", // Set the background color to primary color
-          color: "primary.contrastText", // Set the text color for contrast
+          justifyContent: "space-around",
+          flexDirection: { xs: "column", l: "row", xl: "row" },
+          margin: { xs: "10rem" },
         }}
       >
-        <Typography variant="h4" color="white">
-          Imagenes
-        </Typography>
-      </Toolbar>
-      <ImageGallery images={imagesArray} />
-
-      <Toolbar
-        sx={{
-          display: "flex",
-          justifyContent: "start",
-          padding: "25",
-          backgroundColor: "primary.main", // Set the background color to primary color
-          color: "primary.contrastText", // Set the text color for contrast
-        }}
-      >
-        <Typography variant="h4" color="white">
-          Caracteristicas
-        </Typography>
-      </Toolbar>
-      <Box>
-        <FeatureList caracteristica={caracteristica} />
-      </Box>
-      <Policity />
+        <Box sx={{ width: "75vw" }}>
+          <Description descripcion={detail.descripcion} />
+          <FeatureList caracteristica={caracteristica} />
+          <Politicas />
+        </Box>
+        <Box
+          sx={{
+            justifyContent: "space-around",
+            width: "20vw",
+            marginLeft: "2rem",
+          }}
+        >
+          {/* <Search /> */}
+          <Calendario />
+        </Box>
+      </Container>
     </>
   );
 };
