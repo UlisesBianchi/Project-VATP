@@ -24,5 +24,7 @@ public interface ReservaService {
     void  eliminarReserva(Integer id);
 
 
+    List<Reserva> obtenerReservasPorProducto(Integer id);
+
 
 }

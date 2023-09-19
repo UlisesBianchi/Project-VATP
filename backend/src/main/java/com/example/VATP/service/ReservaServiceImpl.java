@@ -21,6 +21,12 @@ public class ReservaServiceImpl implements ReservaService{
     @Autowired
     private ProductoService productoService;
 
+
+    @Override
+    public List<Reserva> obtenerReservasPorProducto(Integer id) {
+        return reservaRepository.findByProductosId(id);
+    }
+
     @Override
     public List<Reserva> obtenerReservasEnFecha(Producto producto, LocalDate fechaReserva) {
         // Return the list of reservations for the given Producto and fechaReserva
@@ -74,5 +80,8 @@ public class ReservaServiceImpl implements ReservaService{
 
     @Override
     public void eliminarReserva(Integer id) {
+        reservaRepository.deleteById(id);
     }
+
+
 }
