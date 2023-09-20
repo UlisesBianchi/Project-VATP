@@ -14,12 +14,8 @@ public class Reserva {
     private Integer id;
     @Column
     private LocalDate fechaReserva;
-
-
-    // RELACION CON PRODUCTO
     @ManyToOne
     @JoinColumn(name = "productos")
-    // ver
     @JsonBackReference
     private Producto productos;
 
@@ -36,13 +32,11 @@ public class Reserva {
 
     public Reserva() {
     }
-    public Reserva(Integer id, LocalDate fechaReserva, Producto productos) {
+    public Reserva(Integer id,LocalDate fechaReserva, Producto productos) {
         this.id = id;
         this.fechaReserva = fechaReserva;
         this.productos = productos;
     }
-
-
 
     public Integer getId() {
         return id;

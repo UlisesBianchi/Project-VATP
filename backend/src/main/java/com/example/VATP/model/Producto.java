@@ -23,16 +23,21 @@ public class Producto {
     @Column
     private String descripcion;
 
+    @Column
+    private String descripcionCorta;
+
+
 
     // constructores
     public Producto() {
     }
 
-    public Producto(Integer id, String nombre, double precio, String descripcion, Categoria categoria, List<Reserva> reservas, List<String> images, List<CaracteristicasProducto> caracteristicasProductos) {
+    public Producto(Integer id, String nombre, double precio, String descripcion, String descripcionCorta, Categoria categoria, List<Reserva> reservas, List<String> images, List<CaracteristicasProducto> caracteristicasProductos) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
+        this.descripcionCorta = descripcionCorta;
         this.categoria = categoria;
         this.reservas = reservas;
         this.images = images;
@@ -56,9 +61,13 @@ public class Producto {
     }
 
 
+    public String getDescripcionCorta() {
+        return descripcionCorta;
+    }
 
-
-
+    public void setDescripcionCorta(String descripcionCorta) {
+        this.descripcionCorta = descripcionCorta;
+    }
 
     public double getPrecio() {
         return precio;
@@ -96,12 +105,23 @@ public class Producto {
         return categoria.getId();
     }
 
+
+    // relacion con disponibilidad
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductoDisponibilidad> disponibilidades;
+
+
+
+
+
+
+
+
     // relacion con reservas
 
 
-
-
-    @OneToMany(mappedBy = "productos")
+    @OneToMany(mappedBy = "productos", cascade = CascadeType.ALL, orphanRemoval = true)
     // @JsonIgnore
     @JsonManagedReference
     private List<Reserva> reservas ;
@@ -137,7 +157,10 @@ public class Producto {
     public void removeImage(String imageUrl) {
         images.remove(imageUrl);
     }
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+
     private List<CaracteristicasProducto> caracteristicasProductos = new ArrayList<>();
 
 

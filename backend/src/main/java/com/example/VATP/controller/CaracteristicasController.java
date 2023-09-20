@@ -64,6 +64,4 @@ public class CaracteristicasController {
         return caracteristicasProductoService.asociacionCaracteristicaConProducto(caracteristicaId, productId);
     }
 
-
-
 }

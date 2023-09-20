@@ -13,12 +13,18 @@ public interface ReservaService {
 
     List<Reserva> listarReserva();
     Optional<Reserva> buscarReserva(Integer id);
-    Reserva guardarReserva(Reserva reserva);
+
     List<Reserva> obtenerReservasEnFecha(Producto producto, LocalDate fechaReserva);
+    List<Reserva> buscarProductosPorFecha( LocalDate fecha);
+
+    Reserva guardarReserva(Reserva reserva);
+
     Reserva actualizarReserva(Reserva reserva);
 
     void  eliminarReserva(Integer id);
 
+
+    List<Reserva> obtenerReservasPorProducto(Integer id);
 
 
 }
