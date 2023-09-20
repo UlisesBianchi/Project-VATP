@@ -8,7 +8,7 @@ public class DisponibilidadDTO {
 
 
     private LocalDate fechaDisponible;
-    private Integer stock;
+    private Integer availableUnits;
     private Producto producto;
 
     public LocalDate getFechaDisponible() {
@@ -19,12 +19,12 @@ public class DisponibilidadDTO {
         this.fechaDisponible = fechaDisponible;
     }
 
-    public Integer getStock() {
-        return stock;
+    public Integer getAvailableUnits() {
+        return availableUnits;
     }
 
-    public void setStock(Integer stock) {
-        this.stock = stock;
+    public void setAvailableUnits(Integer stock) {
+        this.availableUnits = stock;
     }
 
     public Producto getProducto() {

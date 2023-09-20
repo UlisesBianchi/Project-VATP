@@ -18,4 +18,5 @@ public interface ProductoDisponibilidadRepository extends JpaRepository<Producto
 
     List<ProductoDisponibilidad> findByProductoId(Integer id);
 
+    List<ProductoDisponibilidad> findAvailableDatesWithStockByProducto(Producto producto);
 }

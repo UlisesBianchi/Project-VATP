@@ -19,14 +19,14 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/disponibilidad")
-public class DisponibilidadCOntroller {
+public class DisponibilidadController {
 
     @Autowired
     private final DisponibilidadService disponibilidadService;
     @Autowired
     private final ProductoService productoService;
 
-    public DisponibilidadCOntroller(DisponibilidadService disponibilidadService, ProductoService productoService) {
+    public DisponibilidadController(DisponibilidadService disponibilidadService, ProductoService productoService) {
         this.disponibilidadService = disponibilidadService;
         this.productoService = productoService;
     }
@@ -42,13 +42,13 @@ public class DisponibilidadCOntroller {
             for (ProductoDisponibilidad productoDisponibilidad : disponibilidad) {
                 LocalDate fechaDisponible = productoDisponibilidad.getDate();
                 Producto producto = productoDisponibilidad.getProducto();
-                Integer stock = productoDisponibilidad.getAvailableUnits();
+                Integer availableUnits = productoDisponibilidad.getAvailableUnits();
 
-                if (stock > 0) {
+                if (availableUnits > 0) {
                     DisponibilidadDTO dto = new DisponibilidadDTO();
                     dto.setFechaDisponible(fechaDisponible);
                     dto.setProducto(producto);
-                    dto.setStock(stock);
+                    dto.setAvailableUnits(availableUnits);
                     resultados.add(dto);
                 }
             }
@@ -69,12 +69,12 @@ public class DisponibilidadCOntroller {
             for (ProductoDisponibilidad productoDisponibilidad : disponibilidad) {
                 LocalDate fechaDisponible = productoDisponibilidad.getDate();
                 Producto producto = productoDisponibilidad.getProducto();
-                Integer stock = productoDisponibilidad.getAvailableUnits();
+                Integer availableUnits = productoDisponibilidad.getAvailableUnits();
 
                 DisponibilidadDTO dto = new DisponibilidadDTO();
                 dto.setFechaDisponible(fechaDisponible);
                 dto.setProducto(producto);
-                dto.setStock(stock);
+                dto.setAvailableUnits(availableUnits);
                 resultados.add(dto);
             }
 
@@ -87,8 +87,8 @@ public class DisponibilidadCOntroller {
     @GetMapping
     public ResponseEntity<List<ProductoDisponibilidad>> obternerFecha(){
         //todos la disponibilidad del producto seleccionado en tal fecha
-        List<ProductoDisponibilidad> productoDisponibilidads = disponibilidadService.obtenerTodas();
-        return ResponseEntity.ok(productoDisponibilidads);    }
+        List<ProductoDisponibilidad> productoDisponibilidad = disponibilidadService.obtenerTodas();
+        return ResponseEntity.ok(productoDisponibilidad);    }
 
 
     @GetMapping("/por-fechaProducto/{fecha}")
@@ -106,7 +106,7 @@ public class DisponibilidadCOntroller {
                             DisponibilidadDTO dto = new DisponibilidadDTO();
                             dto.setFechaDisponible(disponibilidad1.getDate());
                             dto.setProducto(producto.get());
-                            dto.setStock(disponibilidad1.getAvailableUnits());
+                            dto.setAvailableUnits(disponibilidad1.getAvailableUnits());
                             return dto;
                         })
                         .collect(Collectors.toList());
@@ -120,6 +120,24 @@ public class DisponibilidadCOntroller {
         return ResponseEntity.ok(new ArrayList<>());
     }
 
+    @GetMapping("/por-producto/{productoId}")
+    public ResponseEntity<List<DisponibilidadDTO>> listarDisponibilidadPorProducto(@PathVariable("productoId") Integer productoId) {
+        // Retrieve the product by its ID
+        Optional<Producto> producto = productoService.obtenerPorId(productoId);
+
+        if (producto.isPresent()) {
+            // Use DisponibilidadService to fetch available dates with stock for the product
+            List<DisponibilidadDTO> disponibilidadDTOs = disponibilidadService.obtenerFechasConStockParaProducto(producto.get());
+
+            if (!disponibilidadDTOs.isEmpty()) {
+                return ResponseEntity.ok(disponibilidadDTOs);
+            }
+        }
+
+        return ResponseEntity.ok(Collections.emptyList());
+    }
+    }
 
 
-}
+
+

@@ -14,7 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:5173/")
                 .allowedOrigins("http://g6-frontend.s3-website-us-east-1.amazonaws.com")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
                 .exposedHeaders("X-Total-Count");
     }
 }

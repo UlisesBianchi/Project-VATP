@@ -44,11 +44,47 @@ public class ProductoController {
         return producto.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Producto> actualizarProducto(@PathVariable Integer id, @RequestBody ProductoRequestDTO productoRequestDTO) {
         Optional<Producto> existingProducto = productoService.obtenerPorId(id);
+
         if (existingProducto.isPresent()) {
-            Producto updatedProducto = productoService.actualizarProducto(id, productoRequestDTO);
+            Producto productoToUpdate = existingProducto.get();
+
+            // Apply partial updates from the DTO to the existing product
+            if (productoRequestDTO.getNombre() != null) {
+                productoToUpdate.setNombre(productoRequestDTO.getNombre());
+            }
+
+            // Directly update the precio field, as it cannot be null
+            productoToUpdate.setPrecio(productoRequestDTO.getPrecio());
+
+            if (productoRequestDTO.getDescripcion() != null) {
+                productoToUpdate.setDescripcion(productoRequestDTO.getDescripcion());
+            }
+
+            if (productoRequestDTO.getImages() != null) {
+                productoToUpdate.setImages(productoRequestDTO.getImages());
+            }
+
+            if (productoRequestDTO.getDescripcionCorta() != null) {
+                productoToUpdate.setDescripcionCorta(productoRequestDTO.getDescripcionCorta());
+            }
+
+            // Update the valoracion field without any checks
+            productoToUpdate.setValoracion(productoRequestDTO.getValoracion());
+
+            if (productoRequestDTO.getCategoria() != null) {
+                productoToUpdate.setCategoria(productoRequestDTO.getCategoria());
+            }
+
+            if (productoRequestDTO.getCaracteristicasProductos() != null) {
+                productoToUpdate.setCaracteristicasProductos(productoRequestDTO.getCaracteristicasProductos());
+            }
+
+            // Now, update the product in your service
+            Producto updatedProducto = productoService.actualizarProducto(id, productoToUpdate);
+
             return ResponseEntity.ok(updatedProducto);
         } else {
             return ResponseEntity.notFound().build();
@@ -65,24 +101,7 @@ public class ProductoController {
             return ResponseEntity.notFound().build();
         }
     }
-/*
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarProducto(@PathVariable Integer id) {
 
-        List<ProductoDisponibilidad> productosConDisponibilidad = disponibilidadService.obtenerTodas();
-
-        for (ProductoDisponibilidad productoDisponibles : productosConDisponibilidad) {
-            Producto productoRelacionado = productoDisponibles.getProducto();
-
-            if (productoRelacionado != null && Objects.equals(productoRelacionado.getId(), id)) {
-                disponibilidadService.eliminarDisponibles(productoDisponibles.getId());
-            }
-        }
-
-        productoService.eliminarProducto(id);
-
-        return ResponseEntity.noContent().build();
-    } */
 
 
     @DeleteMapping("/{id}")
