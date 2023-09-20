@@ -1,6 +1,5 @@
 package com.example.VATP.controller;
 
-
 import com.example.VATP.dto.LoginDTO;
 import com.example.VATP.dto.UserDto;
 import com.example.VATP.model.User;
@@ -25,36 +24,34 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @GetMapping({"index"})
+    @GetMapping({ "index" })
     public String home() {
         return "index";
     }
 
-    @GetMapping({"/api/login"})
+    @GetMapping({ "/api/login" })
     public String loginForm() {
         return "login";
     }
 
-
     @PostMapping("/api/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDTO)
-    {
+    public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDTO) {
         LoginMesage loginResponse = userService.loginUser(loginDTO);
         return ResponseEntity.ok(loginResponse);
     }
 
-    @GetMapping({"register"})
+    @GetMapping({ "register" })
     public String showRegistrationForm(Model model) {
         UserDto user = new UserDto();
         model.addAttribute("user", user);
         return "register";
     }
 
-    @PostMapping({"/register/save"})
+    @PostMapping({ "/register/save" })
     public String registration(@ModelAttribute("user") @Valid UserDto user, BindingResult result, Model model) {
         User existing = this.userService.findUserByEmail(user.getEmail());
         if (existing != null) {
-            result.rejectValue("email", (String)null, "There is already an account registered with that email");
+            result.rejectValue("email", (String) null, "There is already an account registered with that email");
         }
 
         if (result.hasErrors()) {
@@ -66,16 +63,15 @@ public class AuthController {
         }
     }
 
-    @GetMapping({"/registrationok"})
+    @GetMapping({ "/registrationok" })
     public String registrationSuccess() {
         return "registrationok";
     }
 
-    @GetMapping({"/users"})
+    @GetMapping({ "/users" })
     public String listRegisteredUsers(Model model) {
         List<UserDto> users = this.userService.findAllUsers();
         model.addAttribute("users", users);
         return "users";
     }
 }
-

@@ -1,5 +1,6 @@
 package com.example.VATP.model;
 
+import com.example.VATP.dto.ProductoRequestDTO;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -32,6 +33,15 @@ public class ProductoDisponibilidad {
 
     public Producto getProducto() {
         return producto;
+    }
+    public ProductoDisponibilidad() {
+
+    }
+    public ProductoDisponibilidad(Integer id, Producto producto, LocalDate date, Integer availableUnits) {
+        this.id = id;
+        this.producto = producto;
+        this.date = date;
+        this.availableUnits = availableUnits;
     }
 
     public void setProducto(Producto producto) {

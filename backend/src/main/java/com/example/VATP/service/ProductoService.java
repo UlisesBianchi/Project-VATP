@@ -1,6 +1,7 @@
 package com.example.VATP.service;
 
 import com.example.VATP.dto.ProductoRequestDTO;
+import com.example.VATP.model.CaracteristicasProducto;
 import com.example.VATP.model.Categoria;
 import com.example.VATP.model.Producto;
 import com.example.VATP.model.ProductoDisponibilidad;
@@ -22,6 +23,8 @@ import java.util.Optional;
 public class ProductoService {
     private final ProductoRepository productoRepository;
     private final CategoriaService categoriaService;
+
+
     @PersistenceContext
     private final EntityManager entityManager;
     private final ProductoDisponibilidadRepository productoDisponibilidadRepository;
@@ -99,8 +102,31 @@ public class ProductoService {
             }
         }
 
+        List<CaracteristicasProducto> characteristics = productoRequestDTO.getCaracteristicasProductos();
+        if (characteristics != null && !characteristics.isEmpty()) {
+            for (CaracteristicasProducto caracteristicasProducto : characteristics) {
+                newProducto.addCaracteristica(caracteristicasProducto);
+            }
+        }
+
+        Producto productoGuardado = productoRepository.save(newProducto);
+        LocalDate startDate = LocalDate.now();
+        int stockInicial = 5;
+        int daysToCreateAvailability = 365;
+
+        while (daysToCreateAvailability > 0) {
+            ProductoDisponibilidad disponibilidad = new ProductoDisponibilidad();
+            disponibilidad.setProducto(newProducto);
+            disponibilidad.setDate(startDate);
+            disponibilidad.setAvailableUnits(stockInicial);
+            productoDisponibilidadRepository.save(disponibilidad);
+            startDate = startDate.plusDays(1);
+            daysToCreateAvailability--;
+    }
+        return productoGuardado;
+
+
         // Save the product with images and category to the repository
-        return productoRepository.save(newProducto);
     }
 
 
@@ -131,7 +157,6 @@ public class ProductoService {
         }
     }
 
-
     public Optional<ProductoDisponibilidad> getProductAvailability(Producto producto, LocalDate date) {
         // Query the database to find availability for the product and date
 
@@ -153,5 +178,10 @@ public class ProductoService {
             }
         }
     }
+
+    public List<Producto> obtenerProductosPorCategoria(Integer categoriaId) {
+        return productoRepository.findByCategoriaId(categoriaId);
+    }
+
 
 }
