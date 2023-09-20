@@ -3,7 +3,6 @@ package com.example.VATP.dto;
 import com.example.VATP.model.CaracteristicasProducto;
 import com.example.VATP.model.Categoria;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class ProductoRequestDTO {
@@ -15,9 +14,29 @@ public class ProductoRequestDTO {
     private String descripcion;
     private List<String> images;
 
+    private String descripcionCorta;
 
+
+    private Integer valoracion;
     private Categoria categoria; // Change to Categoria object
     private List<CaracteristicasProducto> caracteristicasProductos;
+
+
+    public String getDescripcionCorta() {
+        return descripcionCorta;
+    }
+
+    public void setDescripcionCorta(String descripcionCorta) {
+        this.descripcionCorta = descripcionCorta;
+    }
+
+    public Integer getValoracion() {
+        return valoracion;
+    }
+
+    public void setValoracion(int valoracion) {
+        this.valoracion = valoracion;
+    }
 
     public Categoria getCategoria() {
         return categoria;

@@ -7,12 +7,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto
-{
+public class UserDto {
     private Integer id;
     @NotEmpty
     private String firstName;
@@ -23,7 +24,5 @@ public class UserDto
     private String email;
     @NotEmpty(message = "Password should not be empty")
     private String password;
-
-
-
+    private Integer roleId;
 }

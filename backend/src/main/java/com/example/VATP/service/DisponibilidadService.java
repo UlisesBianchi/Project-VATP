@@ -1,5 +1,6 @@
 package com.example.VATP.service;
 
+import com.example.VATP.dto.DisponibilidadDTO;
 import com.example.VATP.model.Producto;
 import com.example.VATP.model.ProductoDisponibilidad;
 import com.example.VATP.repository.ProductoDisponibilidadRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DisponibilidadService {
@@ -40,4 +42,34 @@ public class DisponibilidadService {
         return productoDisponibilidadRepository.findByProductoId(id);
     }
 
+    public List<LocalDate> obtenerFechasDisponiblesParaProducto(Producto producto) {
+        // Use the repository method to find available dates for the given product
+        List<ProductoDisponibilidad> disponibilidades = productoDisponibilidadRepository.findByProductoId(producto.getId());
+
+        // Extract the dates from the disponibilidades and return as a list of LocalDate
+        return disponibilidades.stream()
+                .map(ProductoDisponibilidad::getDate)
+                .collect(Collectors.toList());
+    }
+
+    public List<DisponibilidadDTO> obtenerFechasConStockParaProducto(Producto producto) {
+        // Use the repository method to find available dates with stock for the given product
+        List<ProductoDisponibilidad> disponibilidades = productoDisponibilidadRepository.findAvailableDatesWithStockByProducto(producto);
+
+        // Filter out dates with stock = 0
+        disponibilidades = disponibilidades.stream()
+                .filter(disponibilidad -> disponibilidad.getAvailableUnits() > 0)
+                .collect(Collectors.toList());
+
+        // Map the available dates with stock to DisponibilidadDTO objects
+        return disponibilidades.stream()
+                .map(disponibilidad -> {
+                    DisponibilidadDTO dto = new DisponibilidadDTO();
+                    dto.setFechaDisponible(disponibilidad.getDate());
+                    dto.setProducto(producto);
+                    dto.setAvailableUnits(disponibilidad.getAvailableUnits());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
 }

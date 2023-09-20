@@ -43,4 +43,26 @@ public class User {
     @JsonIgnore
     private List<Role> roles = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "usuario_favoritos",
+            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "PRODUCTO_ID", referencedColumnName = "ID")}
+    )
+    private List<Producto> favoritos = new ArrayList<>();
+
+    // Getters y setters para "favoritos"
+
+    public List<Producto> getFavoritos() {
+        return favoritos;
+    }
+
+    public void setFavoritos(List<Producto> favoritos) {
+        this.favoritos = favoritos;
+    }
+
+
+
 }
+
+

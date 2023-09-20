@@ -134,24 +134,34 @@ public class ProductoService {
         productoRepository.deleteById(id);
     }
 
-    public Producto actualizarProducto(Integer id, ProductoRequestDTO productoRequestDTO) {
+    public Producto actualizarProducto(Integer id, Producto producto) {
         Optional<Producto> existingProducto = obtenerPorId(id);
+
         if (existingProducto.isPresent()) {
-            Producto producto = existingProducto.get();
-            producto.setNombre(productoRequestDTO.getNombre());
-            producto.setPrecio(productoRequestDTO.getPrecio());
-            producto.setDescripcion(productoRequestDTO.getDescripcion());
+            Producto existing = existingProducto.get();
+
+            // Update the existing product with the values from the provided product
+            existing.setNombre(producto.getNombre());
+            existing.setPrecio(producto.getPrecio());
+            existing.setDescripcion(producto.getDescripcion());
             // Update other fields as needed
 
-            // If images are provided, add them to the product
-            List<String> images = productoRequestDTO.getImages();
-            if (images != null && !images.isEmpty()) {
-                for (String imageUrl : images) {
-                    producto.addImage(imageUrl);
-                }
-            }
+            // Update the valoracion field
+            existing.setValoracion(producto.getValoracion());
 
-            return productoRepository.save(producto);
+            // Update the images field
+            existing.setImages(producto.getImages());
+
+            // Update the descripcionCorta field
+            existing.setDescripcionCorta(producto.getDescripcionCorta());
+
+            // Update the categoria field
+            existing.setCategoria(producto.getCategoria());
+
+            // Update the caracteristicasProductos field
+            existing.setCaracteristicasProductos(producto.getCaracteristicasProductos());
+
+            return productoRepository.save(existing);
         } else {
             throw new EntityNotFoundException("Producto not found with ID: " + id);
         }

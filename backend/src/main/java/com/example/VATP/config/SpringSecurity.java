@@ -59,8 +59,8 @@ public class SpringSecurity {
                                 .requestMatchers("/register/**").permitAll()
                 ).formLogin(
                         form -> form
-                                .loginPage("/login")
-                                .loginProcessingUrl("/login")
+                                .loginPage("/api/login")
+                                .loginProcessingUrl("/api/login")
                                 .defaultSuccessUrl("http://www.google.com")
                                 .permitAll()
                 ).logout(

@@ -2,8 +2,10 @@ package com.example.VATP.service;
 
 import com.example.VATP.dto.LoginDTO;
 import com.example.VATP.dto.UserDto;
+import com.example.VATP.model.Producto;
 import com.example.VATP.model.Role;
 import com.example.VATP.model.User;
+import com.example.VATP.repository.ProductoRepository;
 import com.example.VATP.repository.RoleRepository;
 import com.example.VATP.repository.UserRepository;
 import com.example.VATP.utils.LoginMesage;
@@ -15,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,15 +26,18 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
 
+    private ProductoRepository productoRepository;
+
     private final EmailService emailService;
 
     public UserServiceImpl(UserRepository userRepository,
                            RoleRepository roleRepository,
                            PasswordEncoder passwordEncoder,
-                           EmailService emailService) {
+                           ProductoRepository productoRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.productoRepository = productoRepository;
         this.emailService = emailService;
     }
 
@@ -135,11 +139,51 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<UserDto> findAllUsersWithRoles() {
+        List<User> usersWithRoles = userRepository.findAll();
+        return usersWithRoles.stream()
+                .map(this::mapToUserDto)
+                .collect(Collectors.toList());
+    }
+
     private UserDto mapToUserDto(User user) {
         UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());
+
+        // Set the role ID
+        if (!user.getRoles().isEmpty()) {
+            userDto.setRoleId(user.getRoles().get(0).getId()); // Assuming a user has only one role
+        }
+
         return userDto;
     }
+
+    @Override
+    public void agregarProductoAFavoritos(Integer userId, Integer productoId) {
+        User user = userRepository.findById(userId).orElse(null);
+        Producto producto = productoRepository.findById(productoId).orElse(null);
+
+        if (user != null && producto != null) {
+            List<Producto> favoritos = user.getFavoritos();
+            favoritos.add(producto);
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    public void eliminarProductoDeFavoritos(Integer userId, Integer productoId) {
+        User user = userRepository.findById(userId).orElse(null);
+        Producto producto = productoRepository.findById(productoId).orElse(null);
+
+        if (user != null && producto != null) {
+            List<Producto> favoritos = user.getFavoritos();
+            favoritos.remove(producto);
+            userRepository.save(user);
+        }
+    }
+
 }

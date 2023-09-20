@@ -20,6 +20,11 @@ public interface UserService {
 
     UserDetails loadUserByUsername(String email) throws UsernameNotFoundException;
 
+    List<UserDto> findAllUsersWithRoles();
     void grantAdminPrivileges(String userEmail);
+
+    void agregarProductoAFavoritos(Integer userId, Integer productoId);
+
+    void eliminarProductoDeFavoritos(Integer userId, Integer productoId);
 
 }

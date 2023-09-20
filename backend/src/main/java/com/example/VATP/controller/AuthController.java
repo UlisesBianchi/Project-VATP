@@ -68,10 +68,30 @@ public class AuthController {
         return "registrationok";
     }
 
-    @GetMapping({ "/users" })
-    public String listRegisteredUsers(Model model) {
-        List<UserDto> users = this.userService.findAllUsers();
-        model.addAttribute("users", users);
-        return "users";
+    @GetMapping("/api/users")
+    public ResponseEntity<List<UserDto>> listRegisteredUsersWithRoles() {
+        List<UserDto> usersWithRoles = userService.findAllUsersWithRoles();
+        return ResponseEntity.ok(usersWithRoles);
     }
+    @PostMapping("/api/users/{userId}/favorites/{productId}")
+    public ResponseEntity<String> agregarProductoAFavoritos(@PathVariable Integer userId, @PathVariable Integer productId) {
+        try {
+            userService.agregarProductoAFavoritos(userId, productId);
+            return ResponseEntity.ok("Producto agregado a favoritos correctamente.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al agregar el producto a favoritos.");
+        }
+    }
+
+    @DeleteMapping("/api/users/{userId}/favorites/{productId}")
+    public ResponseEntity<String> eliminarProductoDeFavoritos(@PathVariable Integer userId, @PathVariable Integer productId) {
+        try {
+            userService.eliminarProductoDeFavoritos(userId, productId);
+            return ResponseEntity.ok("Producto eliminado de favoritos correctamente.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al eliminar el producto de favoritos.");
+        }
+    }
+
+
 }
