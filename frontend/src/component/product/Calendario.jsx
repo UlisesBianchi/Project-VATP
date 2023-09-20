@@ -1,21 +1,30 @@
 import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
 import { Box, Button, Typography } from "@mui/material";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
 
 const Calendario = () => {
   const navigate = useNavigate();
+  const {id} = useParams();
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   const handleReserveClick = () => {
+    console.log(selectedDate);
     if (isLoggedIn) {
-      navigate('/reserve');
+      if (selectedDate && id) {
+        navigate(`/reserve?date=${selectedDate}&productId=${id}`);
+      } else {
+        alert("Seleccione una fecha antes de reservar");
+      }
     } else {
       alert("Debe iniciar sesión para poder hacer una reserva");
       navigate('/login');
@@ -40,6 +49,7 @@ const Calendario = () => {
           <DemoContainer components={["DatePicker"]} sx={{ paddingTop: "0" }}>
             <DatePicker
               label="Seleccione la fecha"
+              onChange={handleDateChange}
               sx={{
                 width: { xl: "10vw" },
                 background: "white",
