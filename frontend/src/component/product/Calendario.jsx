@@ -8,9 +8,29 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Calendario = () => {
+
+//   const { id } = useParams()
+
+//   const [date, setDate] = useState([])
+
+
+
+
+//   useEffect(()=>{
+//     const url = `http://18.191.210.53:8082/disponibilidad/productoId=${productoId}`; 
+
+//     axios.get
+
+
+
+//   }, [id])
+
+// console.log(id);
   return (
     <>
       <Box
@@ -23,25 +43,6 @@ const Calendario = () => {
           padding: "0",
         }}
       >
-        {/* <Paper
-          component="form"
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            width: { xl: "10vw", height: "100%" },
-          }}
-        >
-          <IconButton sx={{ p: "10px" }} aria-label="menu">
-            <RestaurantIcon />
-          </IconButton>
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Elige tu categoria o experiencia"
-            inputProps={{ "aria-label": "search google maps" }}
-          />
-
-          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-        </Paper> */}
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DatePicker"]} sx={{ paddingTop: "0" }}>

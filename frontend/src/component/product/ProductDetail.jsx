@@ -115,6 +115,7 @@ const ProductDetail = () => {
         }}
       >
         <Box sx={{ width: "75vw" }}>
+          
           <Description descripcion={detail.descripcion} />
           <FeatureList caracteristica={caracteristica} />
           <Politicas />
