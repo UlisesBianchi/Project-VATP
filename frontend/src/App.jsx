@@ -29,7 +29,7 @@ function App() {
   const isAuthenticated = sessionStorage.getItem("token") !== null;
 
   const PrivateRoute = ({ element, path }) => {
-    if (isAuthenticated) {
+    if (localStorage.getItem("isLoggedIn") === "true") {
       return element;
     } else {
       alert("Debe iniciar sesion para utilizar esta funcionalidad");

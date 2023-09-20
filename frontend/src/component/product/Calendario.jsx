@@ -1,36 +1,12 @@
 import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
 import { Box, Button, Typography } from "@mui/material";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Calendario = () => {
-
-//   const { id } = useParams()
-
-//   const [date, setDate] = useState([])
-
-
-
-
-//   useEffect(()=>{
-//     const url = `http://18.191.210.53:8082/disponibilidad/productoId=${productoId}`; 
-
-//     axios.get
-
-
-
-//   }, [id])
-
-// console.log(id);
   return (
     <>
       <Box
@@ -48,6 +24,7 @@ const Calendario = () => {
           <DemoContainer components={["DatePicker"]} sx={{ paddingTop: "0" }}>
             <DatePicker
               label="Seleccione la fecha"
+              onChange={handleDateChange}
               sx={{
                 width: { xl: "10vw" },
                 background: "white",
@@ -57,7 +34,7 @@ const Calendario = () => {
             />
           </DemoContainer>
         </LocalizationProvider>
-
+        
         <Button
           variant="outlined"
           type="submit"
@@ -66,12 +43,11 @@ const Calendario = () => {
             background: "white",
             "&:hover": { background: "white", padding: "0" },
           }}
+          onClick={handleReserveClick}
         >
-          <Link to={'/reserve'}
-          style={{ color: '#E23333',fontFamily: "'Roboto', sans-serif", textDecoration: 'none'}}>
           Reservar
-          </Link>
         </Button>
+        
       </Box>
     </>
   );

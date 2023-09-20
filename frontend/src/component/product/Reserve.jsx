@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Grid } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
+import axios from 'axios';
+import ConfirmacionReserva from './ConfirmacionReserva';
+
 
 function Reserve() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+  const initialDate = searchParams.get('date') || '';
+  const productId = searchParams.get('productId') || '';
   const [formData, setFormData] = useState({
     nombre: '',
     correo: '',
-    fecha: '',
+    fecha: initialDate,
   });
 
   const handleChange = (e) => {
@@ -15,11 +25,31 @@ function Reserve() {
     });
   };
 
-  const handleSubmit = (e) => {
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí puedes manejar la lógica de enviar la reserva
-    console.log('Formulario enviado:', formData);
+
+    const formDataWithProductId = {
+      ...formData,
+      productId: productId // Agregar el productId al formData
+    };
+    try {
+      const response = await axios.post('http://18.191.210.53:8082/reservas/realizar', formDataWithProductId);
+
+      if (response.status === 200) {
+        alert('Reserva creada con éxito');
+        
+        navigate('/otra-pagina');
+      } else {
+        throw new Error('Error al crear la reserva');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error al crear la reserva');
+    }
   };
+    
+  
 
   return (
     <Container maxWidth="sm" sx={{marginTop:'2rem'}}>
@@ -53,12 +83,13 @@ function Reserve() {
               variant="outlined"
               type="date"
               name="fecha"
-              value={formData.fecha}
+              value={dayjs(formData.fecha).format('YYYY-MM-DD')}
               onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary">
+            <input type='hidden' name='productId' value={productId}/>
+            <Button type={handleSubmit} variant="contained" color="primary">
               Enviar Reserva
             </Button>
           </Grid>
@@ -68,4 +99,4 @@ function Reserve() {
   );
 }
 
-export default Reserve;
+export default Reserve;  
