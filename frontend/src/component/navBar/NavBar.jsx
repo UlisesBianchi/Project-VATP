@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   AppBar,
@@ -18,9 +18,13 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ContextGlobal } from "../utils/globalContext";
 
 const NavBar = () => {
   const navigate = useNavigate();
+
+  const { obj } = useContext(ContextGlobal);
 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
@@ -52,7 +56,34 @@ const NavBar = () => {
         ).lastName.charAt(0)}`
       : "";
 
-  const settings = ["Perfil", "Favoritos", "Dashboard", "Cerrar Sesion"];
+  const roleUser = () => {
+    // Obtener el usuario del localStorage
+    const userFromLocalStorage = JSON.parse(localStorage.getItem("user"));
+
+    // Verificar si se ha encontrado un usuario en el localStorage
+    if (userFromLocalStorage) {
+      // Obtener el userId del usuario
+      const userId = userFromLocalStorage.id;
+      console.log(userId);
+
+      console.log(obj.role);
+      // Buscar el usuario correspondiente en obj.role
+      const userInRole = obj.role.find((item) => item.id === userId);
+
+      // Si se encuentra el usuario en obj.role, devolver el roleId
+      if (userInRole) {
+        return userInRole.roleId;
+      }
+    }
+
+    return "Rol por defecto"; // Cambia esto según tus requerimientos
+  };
+
+  const roleId = roleUser();
+
+  console.log(roleId);
+
+  const settings = ["Perfil", "Favoritos", "Mis Reservas","Dashboard", "Cerrar Sesion"];
 
   // Función para realizar el logout
   const handleLogout = () => {
@@ -121,28 +152,42 @@ const NavBar = () => {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  {settings.map((setting) => (
-                    <MenuItem
-                      key={setting}
-                      onClick={
-                        setting === "Cerrar Sesion"
-                          ? handleOpenLogoutDialog
-                          : handleCloseUserMenu
-                      }
-                    >
-                      {setting === "Favoritos" ? (
-                        <Link to="/favorites">
-                          <Typography textAlign="center">Favoritos</Typography>
-                        </Link>
-                      ) : setting === "Perfil" ? (
-                        <Link to="/profiles">
-                          <Typography textAlign="center">Perfil</Typography>
-                        </Link>
-                      ) : (
-                        <Typography textAlign="center">{setting}</Typography>
-                      )}
-                    </MenuItem>
-                  ))}
+
+
+{settings.map((setting) => (
+  <MenuItem
+    key={setting}
+    onClick={
+      setting === "Cerrar Sesion"
+        ? handleOpenLogoutDialog
+        : handleCloseUserMenu
+    }
+  >
+    {setting === "Favoritos" ? (
+      <Link to="/favorites">
+        <Typography textAlign="center">Favoritos</Typography>
+      </Link>
+    ) : setting === "Perfil" ? (
+      <Link to="/profiles">
+        <Typography textAlign="center">Perfil</Typography>
+      </Link>
+    ) : setting === "Cerrar Sesion" ? ( // Mostrar "Cerrar Sesión" para este caso
+      <Typography textAlign="center">Cerrar Sesión</Typography>
+    ) : roleId === 2 && setting === "Dashboard" ? (
+      <Link to="/admin">
+        <Typography textAlign="center">Dashboard</Typography>
+      </Link>
+    ) : roleId !== 2 && setting === "Mis Reservas" ? (
+      <Link to="/reservations">
+        <Typography textAlign="center">Mis Reservas</Typography>
+      </Link>
+    ) : null
+  }
+
+  </MenuItem>
+))}
+
+
                 </Menu>
               </Box>
             ) : (

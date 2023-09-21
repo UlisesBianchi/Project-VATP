@@ -16,12 +16,13 @@ export const ContextProvider = ({ children }) => {
       ? JSON.parse(localStorage.getItem("user"))
       : null
   );
-  
+  const [role, setRole] = useState([])
 
   const navigate = useNavigate();
 
   const url = "http://18.191.210.53:8082/productos";
   const url2 = "http://18.191.210.53:8082/categorias";
+  const url3 = "http://18.191.210.53:8082/api/users"
 
   const login = async (email, password) => {
     try {
@@ -87,6 +88,13 @@ export const ContextProvider = ({ children }) => {
     });
   }, []);
 
+  useEffect(()=>{
+    axios.get(url3).then((roleRes)=>{
+      setRole(roleRes.data)
+    })
+  },[])
+  
+
   const obj = {
     product,
     category,
@@ -95,6 +103,7 @@ export const ContextProvider = ({ children }) => {
     login,
     user,
     handleLogout,
+    role
   };
 
   return (

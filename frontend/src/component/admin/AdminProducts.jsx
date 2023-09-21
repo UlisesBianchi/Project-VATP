@@ -1,13 +1,22 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { ContextGlobal } from "../utils/globalContext";
 import { DataGrid } from "@mui/x-data-grid";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const AdminProducts = () => {
   const { obj , AdminComponent } = useContext(ContextGlobal);
   const [products, setProducts] = useState(obj.product);
+  const navigate = useNavigate();
+  const url = "http://18.191.210.53:8082/productos";
+
+  useEffect(() => {
+    axios.get(url).then((res) => {
+      setProducts(res.data);
+    });
+  }, []);
+
 
   const handleDelete = async (productId) => {
     const confirmed = window.confirm("¿Estás seguro de que deseas eliminar este producto?");
@@ -23,6 +32,9 @@ const AdminProducts = () => {
       }
     }
   };
+  const handleEdit =(productId)=>{
+    navigate(`/admin/form-product/update/${productId}`)
+  }
 
   const columns = [
     {
@@ -63,6 +75,7 @@ const AdminProducts = () => {
       disableColumnMenu: true,
       align: "center",
       renderCell: (params) => (
+        <Box sx={{display: "flex"}}>
         <Button
           variant="contained"
           color="primary"
@@ -70,6 +83,14 @@ const AdminProducts = () => {
         >
           Eliminar
         </Button>
+        <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleEdit(params.row.id)}
+      >
+        Editar
+      </Button>
+      </Box>
       ),
     },
   ];
@@ -116,4 +137,4 @@ const AdminProducts = () => {
   );
 };
 
-export default AdminProducts;
+export default AdminProducts;

@@ -50,7 +50,9 @@ const Recomendation = () => {
   };
 
   const displayedProducts = filteredProducts.slice(0, showCount);
-  console.log(obj.product);
+
+  console.log(obj.role);
+ 
 
   return (
     <Box

@@ -1,30 +1,23 @@
-import { useState } from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  ImageList,
-  ImageListItem,
-  Typography,
-  Toolbar,
-  Modal,
-} from "@mui/material";
+import { useState } from 'react';
+import { Box, Grid, ImageList, ImageListItem, Modal, IconButton } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import Rating from './Rating';
 
 const ImageGallery = ({ images }) => {
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null); // Estado para el índice de la imagen seleccionada
-  const [openModal, setOpenModal] = useState(false); // Estado para saber si el modal está abierto
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
 
   const handleOpenModal = (index) => {
     setSelectedImageIndex(index);
     setOpenModal(true);
-  };
+  }
 
   const handleCloseModal = () => {
     setSelectedImageIndex(null);
     setOpenModal(false);
-  };
+  }
 
-  const allImages = [images[0], ...images.slice(1, 5)]; // Arreglo de todas las imágenes
+  const allImages = [images[0], ...images.slice(1, 5)];
 
   return (
     <Grid container spacing={2}>
@@ -42,8 +35,9 @@ const ImageGallery = ({ images }) => {
               height: "95%",
               borderRadius: "10px",
               marginTop: "10px",
+              cursor: "pointer",
             }}
-            onClick={() => handleOpenModal(0)} // Abrir modal con mainImage al hacer clic
+            onClick={() => handleOpenModal(0)}
           />
         </Box>
       </Grid>
@@ -65,43 +59,28 @@ const ImageGallery = ({ images }) => {
                 src={`${item}?w=220&h=220&fit=crop&auto=format`}
                 srcSet={`${item}?w=220&h=220&fit=crop&auto=format&dpr=2 2x`}
                 loading="lazy"
-                style={{ borderRadius: "10px", cursor: "pointer" }}
-                onClick={() => handleOpenModal(index + 1)} // Abrir modal con otras imágenes al hacer clic
+                style={{
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                  width: "100%",
+                }}
+                onClick={() => handleOpenModal(index + 1)}
               />
             </ImageListItem>
           ))}
         </ImageList>
       </Grid>
-      <Toolbar sx={{ display: "flex", justifyContent: "end" }}>
-        <Button
-          variant="contained"
-          color="primary"
-          size="medium"
-          sx={{
-            width: "10rem",
-            minWidth: "auto",
-            borderRadius: "10px",
-          }}
-          onClick={() => handleOpenModal(0)} // Abrir modal con mainImage al hacer clic
-        >
-          <Typography
-            sx={{
-              color: "white",
-            }}
-          >
-            Ver más
-          </Typography>
-        </Button>
-      </Toolbar>
 
-      {/* Modal */}
-      <Modal open={openModal} onClose={handleCloseModal}>
+      <Modal open={openModal} onClose={handleCloseModal} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Box>
+          <IconButton onClick={handleCloseModal} sx={{ position: 'absolute', top: 150, right: 150, color: 'primary' }}>
+            <CloseIcon />
+          </IconButton>
           <img
             src={allImages[selectedImageIndex]}
             style={{
-              maxWidth: "100%",
-              maxHeight: "100vh",
+              maxWidth: "100vw",
+              maxHeight: "75vh",
               margin: "auto",
               display: "block",
             }}

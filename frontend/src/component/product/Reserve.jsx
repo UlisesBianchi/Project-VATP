@@ -16,19 +16,33 @@ const Reserve = ()=> {
   console.log(id);
   console.log(fecha);
 
-  const url = "http://18.191.210.53:8082/reservas/realizar";
+  const url = "http://localhost8082/reservas/realizar";
 
 
   const sendForm = async (formData) => {
+
     try {
+      const { fecha, idUsuario, idProducto } = formData;
+      const requestData = {
+        fechaReserva: values.fecha,
+        usuarioId: idUsuario,
+        productos: {
+          id: product.id
+        },
+          
+      };
+  
       // Llama a la API con los datos del formulario
-      await axios.post(url, formData);
+      await axios.post("http://18.191.210.53:8082/reservas/realizar", requestData);
       alert("Reserva confirmada");
-      console.log(formData);
+      console.log(requestData);
     } catch (error) {
+      
       console.error("Error al enviar el formulario:", error);
     }
   };
+
+ 
 
   const userFromLocalStorage = localStorage.getItem("user");
 
@@ -57,8 +71,10 @@ const Reserve = ()=> {
     nombreExperiencia: product.nombre,
     idProducto: product.id,
     fecha: fecha || dayjs().format("YYYY-MM-DD"),
-    id_usuario: userId || "",
+    idUsuario: userId || "",
   };
+
+  
 
   const validationSchema = Yup.object({
     observaciones: Yup.string(),
@@ -151,22 +167,7 @@ const Reserve = ()=> {
               }}
             />
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="ID del producto"
-              variant="outlined"
-              name="idProducto"
-              value={product.id}
-              disabled
-              InputLabelProps={{
-                shrink: true, // Para que la etiqueta no se colapse
-              }}
-              InputProps={{
-                readOnly: true, // Para hacer el campo de solo lectura
-              }}
-            />
-          </Grid>
+         
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -174,7 +175,7 @@ const Reserve = ()=> {
               variant="outlined"
               type="date"
               name="fecha"
-              value={fecha} // Utiliza el valor inicial desde initialValues
+              value={values.fecha} // Utiliza el valor inicial desde initialValues
               onChange={handleChange}
             />
           </Grid>

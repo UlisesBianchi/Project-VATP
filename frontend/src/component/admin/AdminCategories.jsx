@@ -1,13 +1,22 @@
 import { Box, Button, Typography } from "@mui/material";
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { ContextGlobal } from "../utils/globalContext";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const AdminCategories = () => {
   const { obj, AdminComponent } = useContext(ContextGlobal);
   const [category, setCategory] = useState(obj.category);
+  const navigate = useNavigate();
+  const url2= "http://18.191.210.53:8082/categorias";
+
+  useEffect(() => {
+    axios.get(url2).then((categoryRes) => {
+      setCategory(categoryRes.data);
+    });
+  }, []);
+
 
   const handleDelete = async (categorytId) => {
     const confirmed = window.confirm(
@@ -29,6 +38,9 @@ const AdminCategories = () => {
       }
     }
   };
+  const handleEdit =(categoryId)=>{
+    navigate(`/admin/form-category/update/${categoryId}`)
+  }
 
   const columns = [
     {
@@ -68,6 +80,7 @@ const AdminCategories = () => {
       disableColumnMenu: true,
       align: "center",
       renderCell: (params) => (
+        <Box sx={{display: "flex"}}>
         <Button
           variant="contained"
           color="primary"
@@ -75,6 +88,14 @@ const AdminCategories = () => {
         >
           Eliminar
         </Button>
+        <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleEdit(params.row.id)}
+      >
+        Editar
+      </Button>
+      </Box>
       ),
     },
   ];

@@ -16,9 +16,11 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { ContextGlobal } from "../utils/globalContext";
+import { useParams } from "react-router-dom";
 
-const FormRegistrationProducts = () => {
-  const url = "http://18.191.210.53:8082/productos";
+const FormUpdateProducts = () => {
+  const { id } = useParams();
+  const url = `http://18.191.210.53:8082/productos/${id}`;
   const { AdminComponent, obj } = useContext(ContextGlobal);
 
   const [image1, setImage1] = useState("");
@@ -40,8 +42,8 @@ const FormRegistrationProducts = () => {
       console.log("Data being sent:", formData);
 
       // Enviar los datos al servidor
-      await axios.post(url, formData);
-      alert("Formulario enviado");
+      await axios.patch(url, formData);
+      alert("producto modificado con exito");
       console.log(formData);
     } catch (error) {
       console.error("Error al enviar el formulario:", error);
@@ -52,19 +54,18 @@ const FormRegistrationProducts = () => {
     useFormik({
       initialValues: {
         descripcion: "",
-        descripcionCorta:"",
+        descripcionCorta: "",
         nombre: "",
         precio: "",
         categoria: "",
         images: [],
-        valoracion: 0
-      },  
+      },
       onSubmit: sendForm,
       validationSchema: Yup.object({
         descripcion: Yup.string()
           .required("Campo obligatorio")
           .min(4, "Debe tener al menos 4 caracteres"),
-          descripcionCorta: Yup.string()
+        descripcionCorta: Yup.string()
           .required("Campo obligatorio")
           .min(4, "Debe tener al menos 4 caracteres"),
         nombre: Yup.string()
@@ -93,7 +94,7 @@ const FormRegistrationProducts = () => {
           gutterBottom
           color="primary"
         >
-          Agregar un producto
+          Editar un producto
         </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -166,7 +167,6 @@ const FormRegistrationProducts = () => {
                     multiline
                     sx={{ margin: "1vw 0 0 1vw", width: "180%" }}
                   />
-                  
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Typography
@@ -188,7 +188,6 @@ const FormRegistrationProducts = () => {
                     multiline
                     sx={{ margin: "1vw 0 0 1vw", width: "180%" }}
                   />
-                  
                 </Grid>
               </Grid>
             </Box>
@@ -386,7 +385,7 @@ const FormRegistrationProducts = () => {
               }}
             >
               <Button type="submit" variant="contained" color="primary">
-                Guardar
+                Guardar cambios
               </Button>
             </Grid>
           </Grid>
@@ -396,4 +395,4 @@ const FormRegistrationProducts = () => {
   );
 };
 
-export default FormRegistrationProducts;
+export default FormUpdateProducts;
