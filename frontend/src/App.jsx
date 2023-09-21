@@ -62,7 +62,7 @@ function App() {
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/customer attention" element={<CustomerAttention />} /> 
         <Route path="/help" element={<Help />} />
-        <Route path="/reserve" element={<Reserve />} />
+        <Route path="/reserve/:fecha/:id" element={<Reserve />} />
         <Route path="/*" element={<Error />} />
         <Route path="/results/date/:fecha" element={<ResultSearchDate />} />
         <Route path="/results/:productoId" element={<ResultSearchProduct />} />

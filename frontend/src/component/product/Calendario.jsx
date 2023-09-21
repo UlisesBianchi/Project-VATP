@@ -4,9 +4,33 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
 
 const Calendario = () => {
+  const navigate = useNavigate();
+  const {id} = useParams();
+  const [selectedDate, setSelectedDate] = useState(null);
+
+
+
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const handleReserveClick = () => {
+    
+    if (isLoggedIn) {
+      if (selectedDate && id) {
+        const formattedDate = selectedDate.toISOString().split("T")[0];
+        navigate(`/reserve/${formattedDate}/${id}`);
+      } else {
+        alert("Seleccione una fecha antes de reservar");
+      }
+    } else {
+      alert("Debe iniciar sesión para poder hacer una reserva");
+      navigate('/login');
+    }
+  };
+
+
   return (
     <>
       <Box
@@ -20,20 +44,23 @@ const Calendario = () => {
         }}
       >
 
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={["DatePicker"]} sx={{ paddingTop: "0" }}>
-            <DatePicker
-              label="Seleccione la fecha"
-              onChange={handleDateChange}
+<LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer
               sx={{
-                width: { xl: "10vw" },
                 background: "white",
-                height: "100%",
+                color: "primary",
+                padding: 0,
                 borderRadius: "4px",
               }}
-            />
-          </DemoContainer>
-        </LocalizationProvider>
+              components={["DatePicker"]}
+            >
+              <DatePicker
+                label="Selecciona una fecha"
+                value={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+              />
+            </DemoContainer>
+          </LocalizationProvider>
         
         <Button
           variant="outlined"

@@ -1,58 +1,79 @@
-import React, { useState } from 'react';
-import { TextField, Button, Container, Grid } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
-import axios from 'axios';
-import ConfirmacionReserva from './ConfirmacionReserva';
+import React, { useContext, useEffect, useState } from "react";
+import { TextField, Button, Container, Grid } from "@mui/material";
+import dayjs from "dayjs";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useParams } from "react-router-dom";
+
+import axios from "axios";
 
 
-function Reserve() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const searchParams = new URLSearchParams(location.search);
-  const initialDate = searchParams.get('date') || '';
-  const productId = searchParams.get('productId') || '';
-  const [formData, setFormData] = useState({
-    nombre: '',
-    correo: '',
-    fecha: initialDate,
-  });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
+const Reserve = ()=> {
   
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const { id, fecha } = useParams();
+  const [product, setProduct] = useState({});
 
-    const formDataWithProductId = {
-      ...formData,
-      productId: productId // Agregar el productId al formData
-    };
+  console.log(id);
+  console.log(fecha);
+
+  const url = "http://18.191.210.53:8082/reservas/realizar";
+
+
+  const sendForm = async (formData) => {
     try {
-      const response = await axios.post('http://18.191.210.53:8082/reservas/realizar', formDataWithProductId);
-
-      if (response.status === 200) {
-        alert('Reserva creada con éxito');
-        
-        navigate('/otra-pagina');
-      } else {
-        throw new Error('Error al crear la reserva');
-      }
+      // Llama a la API con los datos del formulario
+      await axios.post(url, formData);
+      alert("Reserva confirmada");
+      console.log(formData);
     } catch (error) {
-      console.error(error);
-      alert('Error al crear la reserva');
+      console.error("Error al enviar el formulario:", error);
     }
   };
-    
+
+  const userFromLocalStorage = localStorage.getItem("user");
+
+  const nombre = JSON.parse(userFromLocalStorage).firstName;
+  const apellido = JSON.parse(userFromLocalStorage).lastName;
+  const email = JSON.parse(userFromLocalStorage).email;
+  const userId = JSON.parse(userFromLocalStorage).id;
+
+  useEffect(() => {
+    const url = "http://18.191.210.53:8082/productos";
+    axios.get(url).then((res) => {
+      const selectedProduct = res.data.find((product) => product.id === parseInt(id));
+      if (selectedProduct) {
+        setProduct(selectedProduct);
+        console.log(selectedProduct);
+      }
+    });
+  }, [fecha, id]);
   
 
+  const initialValues = {
+    nombre: nombre || "",
+    apellido: apellido || "",
+    correo: email || "",
+    observaciones: "",
+    nombreExperiencia: product.nombre,
+    idProducto: product.id,
+    fecha: fecha || dayjs().format("YYYY-MM-DD"),
+    id_usuario: userId || "",
+  };
+
+  const validationSchema = Yup.object({
+    observaciones: Yup.string(),
+    fecha: Yup.date().required("La fecha de reserva es obligatoria"),
+  });
+
+  const { handleChange, handleSubmit, values } = useFormik({
+    initialValues,
+    onSubmit: sendForm,
+    validationSchema,
+  });
+
+
   return (
-    <Container maxWidth="sm" sx={{marginTop:'2rem'}}>
+    <Container maxWidth="sm" sx={{ marginTop: "2rem" }}>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -61,8 +82,30 @@ function Reserve() {
               label="Nombre"
               variant="outlined"
               name="nombre"
-              value={formData.nombre}
-              onChange={handleChange}
+              value={nombre}
+              disabled
+              InputLabelProps={{
+                shrink: true, // Para que la etiqueta no se colapse
+              }}
+              InputProps={{
+                readOnly: true, // Para hacer el campo de solo lectura
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Apellido"
+              variant="outlined"
+              name="apellido"
+              value={apellido}
+              disabled
+              InputLabelProps={{
+                shrink: true, // Para que la etiqueta no se colapse
+              }}
+              InputProps={{
+                readOnly: true, // Para hacer el campo de solo lectura
+              }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -72,8 +115,56 @@ function Reserve() {
               variant="outlined"
               type="email"
               name="correo"
-              value={formData.correo}
+              value={email}
+              disabled
+              InputLabelProps={{
+                shrink: true, // Para que la etiqueta no se colapse
+              }}
+              InputProps={{
+                readOnly: true, // Para hacer el campo de solo lectura
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Observaciones"
+              variant="outlined"
+              name="observaciones"
+              value={values.observaciones}
               onChange={handleChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Nombre de la experiencia"
+              variant="outlined"
+              name="nombreExperiencia"
+              value={product.nombre}
+              disabled
+              InputLabelProps={{
+                shrink: true, // Para que la etiqueta no se colapse
+              }}
+              InputProps={{
+                readOnly: true, // Para hacer el campo de solo lectura
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="ID del producto"
+              variant="outlined"
+              name="idProducto"
+              value={product.id}
+              disabled
+              InputLabelProps={{
+                shrink: true, // Para que la etiqueta no se colapse
+              }}
+              InputProps={{
+                readOnly: true, // Para hacer el campo de solo lectura
+              }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -83,13 +174,12 @@ function Reserve() {
               variant="outlined"
               type="date"
               name="fecha"
-              value={dayjs(formData.fecha).format('YYYY-MM-DD')}
+              value={fecha} // Utiliza el valor inicial desde initialValues
               onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12}>
-            <input type='hidden' name='productId' value={productId}/>
-            <Button type={handleSubmit} variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary">
               Enviar Reserva
             </Button>
           </Grid>
@@ -97,6 +187,6 @@ function Reserve() {
       </form>
     </Container>
   );
-}
+  }
 
-export default Reserve;  
+export default Reserve;

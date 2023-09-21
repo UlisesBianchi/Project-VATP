@@ -16,6 +16,8 @@ export const ContextProvider = ({ children }) => {
       ? JSON.parse(localStorage.getItem("user"))
       : null
   );
+  
+
   const navigate = useNavigate();
 
   const url = "http://18.191.210.53:8082/productos";
@@ -35,7 +37,7 @@ export const ContextProvider = ({ children }) => {
       );
 
       const responseData = response.data;
-      console.log(responseData);
+      
 
       if (responseData.message === "Email not exists") {
         alert("El correo electrónico no existe");
