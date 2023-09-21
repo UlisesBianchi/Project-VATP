@@ -103,8 +103,6 @@ public class Producto {
     }
 
 
-    // relacion con categoria
-
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     // SIN JSONIGNORE
@@ -140,7 +138,6 @@ public class Producto {
 
     @OneToMany(mappedBy = "productos", cascade = CascadeType.ALL, orphanRemoval = true)
     // @JsonIgnore
-    @JsonManagedReference
     private List<Reserva> reservas ;
 
     public List<Reserva> getReservas() {
@@ -150,21 +147,21 @@ public class Producto {
         this.reservas = reservas;
     }
 
-        @ElementCollection(fetch = FetchType.EAGER)
-        @CollectionTable(
-                name = "producto_images",
-                joinColumns = @JoinColumn(name = "producto_id")
-        )
-        @Column(name = "image_url")
-        private List<String> images = new ArrayList<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "producto_images",
+            joinColumns = @JoinColumn(name = "producto_id")
+    )
+    @Column(name = "image_url")
+    private List<String> images = new ArrayList<>();
 
-        public List<String> getImages() {
-            return images;
-        }
+    public List<String> getImages() {
+        return images;
+    }
 
-        public void setImages(List<String> images) {
-            this.images = images;
-        }
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
 
 
     public void addImage(String imageUrl) {
@@ -202,4 +199,8 @@ public class Producto {
 
 
 }
+
+
+
+
 

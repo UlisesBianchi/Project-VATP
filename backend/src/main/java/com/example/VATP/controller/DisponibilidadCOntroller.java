@@ -136,8 +136,4 @@ public class DisponibilidadController {
 
         return ResponseEntity.ok(Collections.emptyList());
     }
-    }
-
-
-
-
+}

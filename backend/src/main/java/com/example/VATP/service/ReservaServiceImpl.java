@@ -4,6 +4,7 @@ package com.example.VATP.service;
 import com.example.VATP.model.Producto;
 import com.example.VATP.model.ProductoDisponibilidad;
 import com.example.VATP.model.Reserva;
+import com.example.VATP.model.User;
 import com.example.VATP.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ public class ReservaServiceImpl implements ReservaService{
     @Autowired
     private ProductoService productoService;
 
+    @Autowired
+    private UserService userService;
 
     @Override
     public List<Reserva> obtenerReservasPorProducto(Integer id) {
@@ -36,6 +39,9 @@ public class ReservaServiceImpl implements ReservaService{
     public List<Reserva> buscarProductosPorFecha( LocalDate fechaReserva) {
         return reservaRepository.findByFechaReserva(fechaReserva);
     }
+
+
+
     @Override
     public List<Reserva> listarReserva() {return reservaRepository.findAll();}
 
@@ -49,29 +55,38 @@ public class ReservaServiceImpl implements ReservaService{
     public Reserva guardarReserva(Reserva reserva) {
         Integer productoId = reserva.getProductos().getId();
         LocalDate fechaReserva = reserva.getFechaReserva();
+        Integer usuarioId =reserva.getUsuario().getId();
         Reserva reservas = new Reserva();
 
-
+        Optional<User> optionalUser = userService.getUserById(usuarioId);
         Optional<Producto> optionalProducto = productoService.obtenerPorId(productoId);
 
-        if (optionalProducto.isPresent()) {
+        if (optionalProducto.isPresent() && optionalUser.isPresent()) {
             Producto producto = optionalProducto.get();
+            User user = optionalUser.get();
+
 
             // Check if there's available stock for the selected date
             Optional<ProductoDisponibilidad> availability = productoService.getProductAvailability(producto, fechaReserva);
+
             if (availability.isPresent() && availability.get().getAvailableUnits() > 0) {
                 // Decrement the available units for that date in the availability table
-               // productoService.decrementAvailability(availability.get());
                 productoService.decrementAvailability(availability.get());
-                // Create a new Reserva instance and save it
+
+
+
+                // Set the remaining fields in the Reserva object
+                reservas.setUsuario(user);
                 reservas.setProductos(producto);
                 reservas.setFechaReserva(fechaReserva);
-
             }
         }
 
         return reservaRepository.save(reservas);
     }
+
+
+
 
     @Override
     public Reserva actualizarReserva(Reserva reserva) {
@@ -85,3 +100,5 @@ public class ReservaServiceImpl implements ReservaService{
 
 
 }
+
+

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 public class ReservaRequestDTO {
     private Integer productoId; // ID of the product being reserved
+
+    private Integer usuarioId;
     private LocalDate fechaReserva;
 
     public Integer getProductoId() {
@@ -20,5 +22,13 @@ public class ReservaRequestDTO {
 
     public void setFechaReserva(LocalDate fechaReserva) {
         this.fechaReserva = fechaReserva;
+    }
+
+    public Integer getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Integer usuarioId) {
+        this.usuarioId = usuarioId;
     }
 }

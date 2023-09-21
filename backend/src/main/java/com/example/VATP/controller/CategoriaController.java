@@ -43,36 +43,31 @@ public class CategoriaController {
         return categoria.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Categoria> updateCategoria(@PathVariable Integer id, @RequestBody Categoria categoria) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<Categoria> updateCategoria(@PathVariable Integer id, @RequestBody Categoria categoriaUpdates) {
         Optional<Categoria> existingCategoria = categoriaService.obtenerCatPorId(id);
+
         if (existingCategoria.isPresent()) {
-            categoria.setId(id);
-            Categoria updatedCategoria = categoriaService.actualizarCategoria(categoria);
+            Categoria existingCategoriaObject = existingCategoria.get();
+
+            // Update individual fields based on what's provided in categoriaUpdates
+            if (categoriaUpdates.getNombre() != null) {
+                existingCategoriaObject.setNombre(categoriaUpdates.getNombre());
+            }
+
+            if (categoriaUpdates.getImagenUrl() != null) {
+                existingCategoriaObject.setImagenUrl(categoriaUpdates.getImagenUrl());
+            }
+
+            // Add more fields to update as needed
+
+            Categoria updatedCategoria = categoriaService.actualizarCategoria(existingCategoriaObject);
             return ResponseEntity.ok(updatedCategoria);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-/*
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategoria(@PathVariable Integer id) {
-
-        List<Producto> productosConCategoria = productoService.obtenerTodos();
-
-        for (Producto producto : productosConCategoria) {
-            Categoria categoriaProducto = producto.getCategoria();
-            if (categoriaProducto != null && Objects.equals(categoriaProducto.getId(), id)) {
-                productoService.eliminarProducto(producto.getId());
-            }
-        }
-
-        categoriaService.eliminarCategoria(id);
-
-        return ResponseEntity.noContent().build();
-    }*/
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategoria(@PathVariable Integer id) {

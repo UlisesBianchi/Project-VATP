@@ -82,7 +82,8 @@ public class ProductoService {
         newProducto.setNombre(productoRequestDTO.getNombre());
         newProducto.setPrecio(productoRequestDTO.getPrecio());
         newProducto.setDescripcion(productoRequestDTO.getDescripcion());
-
+        newProducto.setDescripcionCorta(productoRequestDTO.getDescripcionCorta());
+        newProducto.setValoracion(productoRequestDTO.getValoracion());
 
 
         // Fetch the Categoria object from the CategoriaService
