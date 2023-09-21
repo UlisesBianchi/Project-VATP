@@ -24,6 +24,12 @@ public class ReservaServiceImpl implements ReservaService{
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private EmailService emailService;
+
+    public ReservaServiceImpl() {
+    }
+
 
     @Override
     public List<Reserva> obtenerReservasPorProducto(Integer id) {
@@ -79,6 +85,9 @@ public class ReservaServiceImpl implements ReservaService{
                 reservas.setUsuario(user);
                 reservas.setProductos(producto);
                 reservas.setFechaReserva(fechaReserva);
+
+                emailService.sendReservaEmail(user.getEmail(), user.getFirstName(),producto.getNombre(),fechaReserva);
+
             }
         }
 
