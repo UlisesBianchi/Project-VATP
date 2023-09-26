@@ -26,34 +26,19 @@ public class Producto {
     @Column
     private String descripcionCorta;
 
-    @Column
-    private Integer valoracion;
 
-    public Integer getValoracion() {
-        return valoracion;
-    }
-
-    // Setter method to set the valoracion with range validation
-    public void setValoracion(Integer valoracion) {
-        if (valoracion >= 1 && valoracion <= 5) {
-            this.valoracion = valoracion;
-        } else {
-            System.out.println("Valoracion must be between 1 and 5.");
-            // You can choose to throw an exception or handle the error differently if needed.
-        }
-    }
 
     // constructores
     public Producto() {
     }
 
-    public Producto(Integer id, String nombre, double precio, String descripcion, String descripcionCorta, Integer valoracion, Categoria categoria, List<ProductoDisponibilidad> disponibilidades, List<Reserva> reservas, List<String> images, List<CaracteristicasProducto> caracteristicasProductos) {
+    public Producto(Integer id, String nombre, double precio, String descripcion, String descripcionCorta, Categoria categoria, List<ProductoDisponibilidad> disponibilidades, List<Reserva> reservas, List<String> images, List<CaracteristicasProducto> caracteristicasProductos) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
         this.descripcionCorta = descripcionCorta;
-        this.valoracion = valoracion;
+
         this.categoria = categoria;
         this.disponibilidades = disponibilidades;
         this.reservas = reservas;
@@ -103,8 +88,6 @@ public class Producto {
     }
 
 
-    // relacion con categoria
-
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     // SIN JSONIGNORE
@@ -140,7 +123,6 @@ public class Producto {
 
     @OneToMany(mappedBy = "productos", cascade = CascadeType.ALL, orphanRemoval = true)
     // @JsonIgnore
-    @JsonManagedReference
     private List<Reserva> reservas ;
 
     public List<Reserva> getReservas() {
@@ -150,21 +132,21 @@ public class Producto {
         this.reservas = reservas;
     }
 
-        @ElementCollection(fetch = FetchType.EAGER)
-        @CollectionTable(
-                name = "producto_images",
-                joinColumns = @JoinColumn(name = "producto_id")
-        )
-        @Column(name = "image_url")
-        private List<String> images = new ArrayList<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "producto_images",
+            joinColumns = @JoinColumn(name = "producto_id")
+    )
+    @Column(name = "image_url")
+    private List<String> images = new ArrayList<>();
 
-        public List<String> getImages() {
-            return images;
-        }
+    public List<String> getImages() {
+        return images;
+    }
 
-        public void setImages(List<String> images) {
-            this.images = images;
-        }
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
 
 
     public void addImage(String imageUrl) {
@@ -202,4 +184,8 @@ public class Producto {
 
 
 }
+
+
+
+
 

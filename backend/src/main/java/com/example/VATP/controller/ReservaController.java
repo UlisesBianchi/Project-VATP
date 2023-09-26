@@ -4,8 +4,10 @@ package com.example.VATP.controller;
 import com.example.VATP.dto.ReservaDTO;
 import com.example.VATP.model.Producto;
 import com.example.VATP.model.Reserva;
+import com.example.VATP.model.User;
 import com.example.VATP.service.ProductoService;
 import com.example.VATP.service.ReservaService;
+import com.example.VATP.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -24,10 +26,17 @@ public class ReservaController {
 
     @Autowired
     private final ReservaService reservaService;
+
+    @Autowired
+    private final UserService userService;
+
+
     @Autowired
     private final ProductoService productoService;
-    public ReservaController(ReservaService reservaService, ProductoService productoService) {
+
+    public ReservaController(ReservaService reservaService, UserService userService, ProductoService productoService) {
         this.reservaService = reservaService;
+        this.userService = userService;
         this.productoService = productoService;
     }
 
@@ -35,7 +44,21 @@ public class ReservaController {
     // crea una reserva y asigna un producto
     @PostMapping("/realizar")
     public ResponseEntity<Reserva> realizarReserva(@RequestBody Reserva reserva) {
-        Reserva guardarReserva  = reservaService.guardarReserva(reserva);
+        // Check if the usuarioId field is set in the request
+        if (reserva.getUsuarioId() != null) {
+            // Retrieve the User object based on the usuarioId
+            Optional<User> optionalUser = userService.getUserById(reserva.getUsuarioId());
+
+            if (optionalUser.isPresent()) {
+                User user = optionalUser.get();
+                reserva.setUsuario(user);
+            } else {
+                // Handle the case where the specified user does not exist
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+
+        Reserva guardarReserva = reservaService.guardarReserva(reserva);
         return ResponseEntity.ok(guardarReserva);
     }
 

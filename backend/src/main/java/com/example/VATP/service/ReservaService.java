@@ -3,6 +3,7 @@ package com.example.VATP.service;
 
 import com.example.VATP.model.Producto;
 import com.example.VATP.model.Reserva;
+import com.example.VATP.model.User;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,6 +17,7 @@ public interface ReservaService {
 
     List<Reserva> obtenerReservasEnFecha(Producto producto, LocalDate fechaReserva);
     List<Reserva> buscarProductosPorFecha( LocalDate fecha);
+
 
     Reserva guardarReserva(Reserva reserva);
 

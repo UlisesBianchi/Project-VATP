@@ -82,6 +82,7 @@ public class ProductoService {
         newProducto.setNombre(productoRequestDTO.getNombre());
         newProducto.setPrecio(productoRequestDTO.getPrecio());
         newProducto.setDescripcion(productoRequestDTO.getDescripcion());
+        newProducto.setDescripcionCorta(productoRequestDTO.getDescripcionCorta());
 
 
 
@@ -146,8 +147,6 @@ public class ProductoService {
             existing.setDescripcion(producto.getDescripcion());
             // Update other fields as needed
 
-            // Update the valoracion field
-            existing.setValoracion(producto.getValoracion());
 
             // Update the images field
             existing.setImages(producto.getImages());

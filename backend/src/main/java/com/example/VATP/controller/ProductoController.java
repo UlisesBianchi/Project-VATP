@@ -71,8 +71,6 @@ public class ProductoController {
                 productoToUpdate.setDescripcionCorta(productoRequestDTO.getDescripcionCorta());
             }
 
-            // Update the valoracion field without any checks
-            productoToUpdate.setValoracion(productoRequestDTO.getValoracion());
 
             if (productoRequestDTO.getCategoria() != null) {
                 productoToUpdate.setCategoria(productoRequestDTO.getCategoria());
