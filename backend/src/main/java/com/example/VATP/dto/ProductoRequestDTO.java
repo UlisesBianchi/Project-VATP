@@ -17,7 +17,7 @@ public class ProductoRequestDTO {
     private String descripcionCorta;
 
 
-    private Integer valoracion;
+
     private Categoria categoria; // Change to Categoria object
     private List<CaracteristicasProducto> caracteristicasProductos;
 
@@ -30,13 +30,6 @@ public class ProductoRequestDTO {
         this.descripcionCorta = descripcionCorta;
     }
 
-    public Integer getValoracion() {
-        return valoracion;
-    }
-
-    public void setValoracion(int valoracion) {
-        this.valoracion = valoracion;
-    }
 
     public Categoria getCategoria() {
         return categoria;

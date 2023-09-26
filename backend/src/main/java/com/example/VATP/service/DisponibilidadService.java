@@ -56,11 +56,6 @@ public class DisponibilidadService {
         // Use the repository method to find available dates with stock for the given product
         List<ProductoDisponibilidad> disponibilidades = productoDisponibilidadRepository.findAvailableDatesWithStockByProducto(producto);
 
-        // Filter out dates with stock = 0
-        disponibilidades = disponibilidades.stream()
-                .filter(disponibilidad -> disponibilidad.getAvailableUnits() > 0)
-                .collect(Collectors.toList());
-
         // Map the available dates with stock to DisponibilidadDTO objects
         return disponibilidades.stream()
                 .map(disponibilidad -> {
@@ -71,5 +66,4 @@ public class DisponibilidadService {
                     return dto;
                 })
                 .collect(Collectors.toList());
-    }
-}
+    }}
